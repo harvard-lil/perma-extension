@@ -1,0 +1,23 @@
+{
+  "name": "perma-extension",
+  "version": "2.0.0",
+  "description": "(Prototype) A browser extension for Perma.cc",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matteocargnelutti/perma-extension.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matteocargnelutti/perma-extension/issues"
+  },
+  "homepage": "https://github.com/matteocargnelutti/perma-extension#readme",
+  "devDependencies": {
+    "@types/chrome": "^0.0.190"
+  }
+}

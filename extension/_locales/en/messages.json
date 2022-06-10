@@ -1,0 +1,11 @@
+{
+  "app_title": {
+    "message": "Perma.cc"
+  },
+  "app_description": {
+    "message": "(Prototype)"
+  },
+  "app_github_url": {
+    "message": "https://github.com/matteocargnelutti/perma-extension"
+  }
+}
