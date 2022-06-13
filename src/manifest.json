@@ -25,10 +25,10 @@
     "extension_pages": "default-src 'self'; frame-ancestors 'none'; connect-src 'self' https://api.perma.cc https://api.perma.test;"
   },
   "background": {
-    "service_worker": "background/background.js",
+    "service_worker": "background/index.js",
     "type": "module"
   },
   "action": {
-    "default_popup": "popup/popup.html"
+    "default_popup": "popup/index.html"
   }
 }

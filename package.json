@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "prettier": "^2.6.2",
     "vite": "^2.9.9",
     "vite-plugin-static-copy": "^0.5.1"
   },

@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { defineConfig } from "vite";
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
@@ -10,8 +11,8 @@ export default defineConfig({
         {src: "src/manifest.json", dest: ""},
         {src: "src/assets", dest: ""},
         {src: "src/_locales", dest: ""},
-        {src: "src/popup/popup.html", dest: "popup"},
-        {src: "src/popup/popup.css", dest: "popup"},
+        {src: "src/popup/index.html", dest: "popup"},
+        {src: "src/popup/index.css", dest: "popup"},
       ]
     })
   ],
@@ -23,11 +24,12 @@ export default defineConfig({
 
     rollupOptions: {
       input: {
-        "popup": "src/popup/popup.js",
-        "background": "src/background/background.js"
+        "popup": "src/popup/index.js",
+        "background": "src/background/index.js"
       },
       output: {
-        entryFileNames: chunkInfo => `${chunkInfo.name}/${chunkInfo.name}.js`
+        // ex: dist/popup/index.js
+        entryFileNames: chunkInfo => `${chunkInfo.name}/${basename(chunkInfo.facadeModuleId)}`
       },
     }
 
