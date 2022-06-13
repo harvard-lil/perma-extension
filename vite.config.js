@@ -10,8 +10,8 @@ export default defineConfig({
         {src: "src/manifest.json", dest: ""},
         {src: "src/assets", dest: ""},
         {src: "src/_locales", dest: ""},
-        {src: "src/popup/index.html", dest: ""},
-        {src: "src/popup/index.css", dest: ""},
+        {src: "src/popup/popup.html", dest: "popup"},
+        {src: "src/popup/popup.css", dest: "popup"},
       ]
     })
   ],
