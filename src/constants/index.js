@@ -5,6 +5,7 @@
  * @license MIT
  * @description App-wide constants.
  */
+/// <reference types="@types/chrome" />
 
 /**
  * Identifiers for the runtime messages passed between the extension and its service worker. 

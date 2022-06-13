@@ -5,6 +5,7 @@
  * @license MIT
  * @description Entrypoint of the extension's service worker. Handles incoming runtime messages and time-based background tasks.
  */
+/// <reference types="@types/chrome" />
 import { BROWSER, MESSAGE_IDS } from "../constants";
 
 /**
@@ -12,17 +13,19 @@ import { BROWSER, MESSAGE_IDS } from "../constants";
  * This function runs for every incoming `runtime` message.
  * See constants.MESSAGE_IDS for details regarding the messages handled.
  *
- * @param {object} request
+ * @param {object} message
+ * @param {chrome.runtime.MessageSender} sender
+ * @param {function} sendResponse 
  * @returns {Promise}
  * @async
  */
-async function backgroundMessageHandler(request) {
+async function backgroundMessageHandler(message, sender, sendResponse) {
   // Ignore messages that don't have a `messageId` property.
-  if (!request.messageId) {
+  if (!message.messageId) {
     return;
   }
 
-  switch (request.messageId) {
+  switch (message.messageId) {
     case MESSAGE_IDS.AUTH_SIGN_IN:
       console.log("AUTH_SIGN_IN");
       break;
@@ -52,7 +55,7 @@ async function backgroundMessageHandler(request) {
       break;
 
     default:
-      throw new Error(`Service Worker does not recognize message id ${request.messageId}`);
+      throw new Error(`Service Worker does not recognize message id ${message.messageId}`);
       break;
   }
 

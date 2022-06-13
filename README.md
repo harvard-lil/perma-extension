@@ -8,6 +8,7 @@
 ## Summary
 - [Architecture](#architecture)
 - [Development Setup](#development-setup)
+- [Environment variables](#environment-variables)
 
 ---
 
@@ -34,10 +35,22 @@ flowchart RL
 ### Getting started
 - Make sure you have [the latest version of Node JS LTS](https://nodejs.org/en/) installed on your machine.
 - Run `npm install` to install runtime and dev dependencies.
-- Use `npm run dev` to start _"development"_ mode. 
-  - Since this is a browser extension, the idea here is to make new builds under `/dist` every time a file changes.
+- Use `npm run dev` to start _"development"_ mode. This effectively starts `vite build --watch`, creating a new build under `/dist` every time a file changes.
 
 ### Adding the work-in-progress extension to Google Chrome
 - Open a new tab to `chrome://extensions`
 - Make sure to activate the _"Developer Mode"_ toggle.
-- Click on _"Load unpacked"_ and navigate down to `perma-extension/dist`
+- Click on _"Load unpacked"_ and select the `dist` folder under `perma-extension`.
+
+[☝️ Back to summary](#summary)
+
+---
+
+## Environment Variables
+
+| Name | Required ? | Description |
+| --- | --- | --- |
+| `PERMA_API_TARGET` | No | If set to `"local"`, will try to connect to `api.perma.test:8000` instead of the production API. | 
+
+
+[☝️ Back to summary](#summary)
