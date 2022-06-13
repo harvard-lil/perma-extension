@@ -1,23 +1,17 @@
 {
-  "name": "perma-extension",
-  "version": "2.0.0",
-  "description": "(Prototype) A browser extension for Perma.cc",
-  "type": "module",
-  "main": "index.js",
+  "name": "src",
+  "private": true,
+  "version": "0.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/matteocargnelutti/perma-extension.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/matteocargnelutti/perma-extension/issues"
-  },
-  "homepage": "https://github.com/matteocargnelutti/perma-extension#readme",
   "devDependencies": {
-    "@types/chrome": "^0.0.190"
+    "vite": "^2.9.9",
+    "vite-plugin-static-copy": "^0.5.1"
+  },
+  "dependencies": {
+    "dexie": "^3.2.2"
   }
 }
