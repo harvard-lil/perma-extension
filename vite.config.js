@@ -1,3 +1,10 @@
+/**
+ * perma-extension
+ * @module vite.config
+ * @author The Harvard Library Innovation Lab
+ * @license MIT
+ * @description Vite configuration file. Split between two entry points: popup (extension itself) and background (service worker).
+ */
 import { basename } from "path";
 import { defineConfig } from "vite";
 import { viteStaticCopy } from 'vite-plugin-static-copy'
