@@ -6,3 +6,4 @@ extension/lib/*.js
 extension/lib/*.mjs
 extension/lib/*.map
 dist/
+tmp.js

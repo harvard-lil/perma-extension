@@ -33,7 +33,7 @@ flowchart RL
 ## Development Setup
 
 ### Getting started
-- Make sure you have [the latest version of Node JS LTS](https://nodejs.org/en/) installed on your machine.
+- Make sure you have [Node JS >= 17](https://nodejs.org/en/) installed on your machine.
 - Run `npm install` to install runtime and dev dependencies.
 - Use `npm run dev` to start _"development"_ mode. This effectively starts `vite build --watch`, creating a new build under `/dist` every time a file changes.
 
