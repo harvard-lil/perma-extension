@@ -48,9 +48,6 @@ flowchart RL
 
 ## Environment Variables
 
-| Name | Required ? | Description |
-| --- | --- | --- |
-| `PERMA_API_TARGET` | No | If set to `"local"`, will try to connect to `api.perma.test:8000` instead of the production API. | 
-
+> 🚧 TBD 
 
 [☝️ Back to summary](#summary)

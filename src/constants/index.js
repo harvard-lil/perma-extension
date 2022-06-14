@@ -57,19 +57,6 @@
 export const DATABASE_NAME = 'permaExtDb';
 
 /**
- * Base url for the Perma.cc API. 
- * Unless the `PERMA_API_TARGET` env variable is set to "local", will point to "https://api.perma.cc".
- * @constant
- */
-export const PERMA_API_URL = (() => {
-  if (typeof process !== "undefined" && process?.env?.PERMA_API_TARGET === "local") {
-    return "https://api.perma.test:8000";
-  }
-
-  return "https://api.perma.cc";
-})();
-
-/**
  * Proxy for accessing the browser API, which in the case of Chromium-based browser, is vendor-specific.
  * Will throw if ran outside of a browser extension context.
  * @constant 
