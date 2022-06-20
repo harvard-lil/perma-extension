@@ -6,6 +6,7 @@
  * @description App-wide constants.
  */
 /// <reference types="@types/chrome" />
+// @ts-check
 
 /**
  * Identifiers for the runtime messages passed between the extension and its service worker. 
@@ -62,14 +63,14 @@ export const DATABASE_NAME = 'permaExtDb';
  * @constant 
  */
 export const BROWSER = (() => {
-  if (typeof chrome !== "undefined") {
-    return chrome;
+  if ("chrome" in globalThis) {
+    return globalThis.chrome;
   }
 
-  if (typeof browser !== "undefined") {
-    return browser;
+  if ("browser" in globalThis) {
+    return globalThis.browser;
   }
 
-  throw new Exception("WebExtension API unavailable.");
+  throw new Error("WebExtension API unavailable.");
 })();
 

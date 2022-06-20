@@ -6,6 +6,8 @@
  * @description Entrypoint of the extension's service worker. Handles incoming runtime messages and time-based background tasks.
  */
 /// <reference types="@types/chrome" />
+// @ts-check
+
 import { BROWSER, MESSAGE_IDS } from "../constants";
 
 /**
