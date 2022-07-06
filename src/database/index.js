@@ -13,6 +13,29 @@ import * as appState from "./tables/appState.js";
 import * as logs from "./tables/logs.js";
 
 /**
+ * Reference to individual table modules, containing data classes and functions to help work with database tables.
+ * 
+ * These modules automatically connect to the app's database.
+ * 
+ * Usage example:
+ * ```
+ * import { database } from './database/index.js';
+ * 
+ * // Using a utility function
+ * const logs = await database.logs.getAll();
+ * 
+ * // Direct access to the database table (`Dexie.Table` reference)
+ * const table = database.logs.getTable();
+ * ```
+ * 
+ * See `database.tables` for more information about each table.
+ */
+export const database = {
+  appState,
+  logs,
+};
+
+/**
  * Local reference to a database instance.
  */
 let dbRef = null;
@@ -66,26 +89,3 @@ export async function deleteDatabase(databaseName = DATABASE_NAME) {
     console.log(`Database ${DATABASE_NAME} could not be deleted.`);
   }
 }
-
-/**
- * Reference to individual table modules, containing data classes and functions to help work with database tables.
- * 
- * These modules automatically connect to the app's database.
- * 
- * Usage example:
- * ```
- * import { database } from './database/index.js';
- * 
- * // Using a utility function
- * const logs = await database.logs.getAll();
- * 
- * // Direct access to the database table (`Dexie.Table` reference)
- * const table = database.logs.getTable();
- * ```
- * 
- * See `database.tables` for more information about each table.
- */
-export const database = {
-  appState,
-  logs,
-};

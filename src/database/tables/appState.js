@@ -141,7 +141,7 @@ export async function clearAll() {
  * @returns {Promise}
  * @async
  */
-export async function updateEntry(key, value) {
+export async function set(key, value) {
   let entry = new AppState();
   entry.key = key;
   entry.value = value;
