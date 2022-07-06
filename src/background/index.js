@@ -7,7 +7,7 @@
  */
 /// <reference types="@types/chrome" />
 // @ts-check
-
+import { PermaAPI } from "@harvard-lil/perma-js-sdk";
 import { BROWSER, MESSAGE_IDS } from "../constants";
 
 /**
@@ -42,6 +42,9 @@ async function backgroundMessageHandler(message, sender, sendResponse) {
 
     case MESSAGE_IDS.ARCHIVE_PULL_TIMELINE:
       console.log("ARCHIVE_PULL_TIMELINE");
+      const api = new PermaAPI();
+      const archives = await api.pullPublicArchives();
+      console.log(archives);
       break;
 
     case MESSAGE_IDS.ARCHIVE_CREATE_PUBLIC:
