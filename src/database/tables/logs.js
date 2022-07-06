@@ -17,8 +17,9 @@ import { getDatabase } from '../index.js';
  */
 export const INDEXES = "++id";
 
-class Log {
+export class Log {
   /**
+   * Auto-increment identifier. Leave blank when creating a new entry.
    * @type {number}
    */
   id;
@@ -30,23 +31,23 @@ class Log {
   isError = false;
 
   /**
-   * Must match with an entry from `_locales`.
+   * Should match with an entry from `browser.i18n`.
    * @type {string}
    */
   messageKey = "";
 
   /**
-   * Date at which the logged event ocurred.
+   * Date at which the log entry was added.
    * @type {Date}
    */
-  created = new Date();
+  createdAt = new Date();
 
   /** 
    * Saves the current `Log` entry in the database.
    * @returns {Promise}
    */
   save() {
-    return getTable().put(this, ["id"])
+    return getTable().put(this)
   }
 }
 
@@ -63,7 +64,7 @@ export function getTable() {
  * @returns {Promise<Log[]>}
  * @async
  */
- export async function getAll() {
+export async function getAll() {
   return await getTable().toArray();
 }
 
@@ -74,4 +75,30 @@ export function getTable() {
  */
 export async function getMostRecent() {
   return await getTable().orderBy("id").reverse().limit(1).toArray()
+}
+
+/**
+ * Clears the `logs` table.
+ * @returns {Promise<null>} 
+ * @async
+ */
+ export async function clearAll() {
+  return await getTable().clear();
+}
+
+/**
+ * Creates a new log entry.
+ * @param {string} messageKey - Should match a key from `browser.i18n`.
+ * @param {boolean} [isError=false]
+ * @return {Promise<Log>}
+ * @async
+ */
+export async function add(messageKey, isError = false) {
+  const entry = new Log();
+
+  entry.messageKey = String(messageKey);
+  entry.isError = Boolean(isError);
+
+  await entry.save();
+  return entry;
 }
