@@ -74,12 +74,14 @@ export async function deleteDatabase(databaseName = DATABASE_NAME) {
  * import { database } from './database/index.js';
  * 
  * // Using a utility function
- * const websites = await database.websites.getAll();
+ * const logs = await database.logs.getAll();
  * 
  * // Direct access to the database table (`Dexie.Table` reference)
- * const table = database.websites.getTable();
+ * const table = database.logs.getTable();
  * ```
  * 
  * See `database.tables` for more information about each table.
  */
-export const database = {};
+export const database = {
+  appState
+};

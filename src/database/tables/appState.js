@@ -1,12 +1,13 @@
 /**
- * netlify-monitor
+ * perma-extension
  * @module database/tables/appState
- * @author Matteo Cargnelutti
+ * @author The Harvard Library Innovation Lab
  * @license MIT
  * @description Data class and utility functions for the `appState` table.
  */
 /// <reference types="Dexie" />
 // @ts-check
+
 import { getDatabase } from '../index.js';
 
 /**
@@ -16,7 +17,7 @@ import { getDatabase } from '../index.js';
  *
  * Keys detail:
  * - `permaApiKey`: API key for Perma.cc, as provided by the user.
- * - `lastApiKeyCheck`: Timestamp (ms) at which the API key was checked for the last time.
+ * - `lastApiKeyCheck`: Date (+time) at which the API key was checked for the last time.
  * - `loadingBlocking`: If `true`, indicates that the app is currently performing an operation that should be considered blocking.
  * - `loadingBackground`: If `true`, indicates that the app is currently performing an operation that should be considered a non-blocking.
  * - `currentTabUrl`: Holds the url of the tab currently in focus.
@@ -26,7 +27,7 @@ import { getDatabase } from '../index.js';
  */
 export const KEYS = {
   "permaApiKey": String,
-  "lastApiKeyCheck": Number,
+  "lastApiKeyCheck": Date,
   "loadingBlocking": Boolean,
   "loadingBackground": Boolean,
   "currentTabUrl": String,
