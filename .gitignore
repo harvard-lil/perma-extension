@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 *.drawio.bkp
 *.drawio.dtmp
+*.dtmp
 extension/lib/*.js
 extension/lib/*.mjs
 extension/lib/*.map

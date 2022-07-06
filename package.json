@@ -15,6 +15,7 @@
     "vite-plugin-static-copy": "^0.5.1"
   },
   "dependencies": {
+    "@harvard-lil/perma-js-sdk": "^0.0.3",
     "dexie": "^3.2.2"
   }
 }

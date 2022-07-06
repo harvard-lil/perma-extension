@@ -71,6 +71,6 @@ export const BROWSER = (() => {
     return globalThis.browser;
   }
 
-  throw new Error("WebExtension API unavailable.");
+  throw new Error("WebExtensions API unavailable.");
 })();
 

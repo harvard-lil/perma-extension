@@ -28,6 +28,7 @@ export default defineConfig({
     outDir: "dist",
     sourcemap: true,
     devSourcemap: true,
+    minify: false,
 
     rollupOptions: {
       input: {
