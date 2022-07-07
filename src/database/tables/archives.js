@@ -79,16 +79,22 @@ export async function clearAll() {
 }
 
 /**
- * Pulls all entries by url, sorted by archiveCreationDate asc.
+ * Pulls all entries by url.
  * @param {string} url
+ * @param {boolean} [timelineMode=true] - If true, will sort entries by data.creation_timestamp desc.
  * @returns {Promise<Archive[]>} 
  * @async
  */
-export async function getByUrl(url) {
+export async function getByUrl(url, timelineMode = true) {
   url = new URL(url).href;
 
   const results = await getTable().where("url").equals(url).toArray();
-  results.sort((a, b) => new Date(a.data.creation_timestamp) - new Date(b.data.creation_timestamp));
+
+  if (timelineMode) {
+    results.sort(
+      (a, b) => new Date(b.data.creation_timestamp) - new Date(a.data.creation_timestamp)
+    );
+  }
 
   return results;
 }

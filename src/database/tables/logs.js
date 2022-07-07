@@ -61,11 +61,18 @@ export function getTable() {
 
 /**
  * Returns all entries from the `logs` table.
+ * @param {boolean} [timelineMode=true] - If true, will sort entries by createdAt desc.
  * @returns {Promise<Log[]>}
  * @async
  */
-export async function getAll() {
-  return await getTable().toArray();
+export async function getAll(timelineMode = true) {
+  const results = await getTable().toArray();
+
+  if (timelineMode) {
+    results.sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  return results;
 }
 
 /**
