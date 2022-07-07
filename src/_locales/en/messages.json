@@ -15,6 +15,12 @@
     "message": "Signed out."
   },
   "error_pulling_folders": {
-    "message": "Unable to folders list."
+    "message": "Unable to list folders."
+  },
+  "error_pulling_timeline": {
+    "message": "Unable to list archives for the current tab."
+  },
+  "error_creating_archive": {
+    "message": "Unable to create an archive for the current tab."
   }
 }

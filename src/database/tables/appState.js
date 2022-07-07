@@ -21,8 +21,6 @@ import { getDatabase } from '../index.js';
  * - `lastApiKeyCheck`: Date (+time) at which the API key was checked for the last time.
  * - `loadingBlocking`: If `true`, indicates that the app is currently performing an operation that should be considered blocking.
  * - `loadingBackground`: If `true`, indicates that the app is currently performing an operation that should be considered a non-blocking.
- * - `currentTabUrl`: Holds the url of the tab currently in focus.
- * - `currentTabTitle`: Holds the title of the tab currently in focus. 
  * - `permaFolders`: Sorted array containing key/value associations (id -> name) of folders the user can write into.
  * 
  * @constant
@@ -33,8 +31,6 @@ export const KEYS = {
   "lastApiKeyCheck": Date,
   "loadingBlocking": Boolean,
   "loadingBackground": Boolean,
-  "currentTabUrl": String,
-  "currentTabTitle": String,
   "permaFolders": Array
 };
 

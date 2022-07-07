@@ -46,15 +46,15 @@ async function backgroundMessageHandler(message, sender, sendResponse) {
       break;
 
     case MESSAGE_IDS.ARCHIVE_PULL_TIMELINE:
-      console.log("ARCHIVE_PULL_TIMELINE");
+      await archivePullTimeline(message["url"]);
       break;
 
     case MESSAGE_IDS.ARCHIVE_CREATE_PUBLIC:
-      console.log("ARCHIVE_CREATE_PUBLIC");
+      await archiveCreate(message["url"], message["parentFolderId"], false);
       break;
 
     case MESSAGE_IDS.ARCHIVE_CREATE_PRIVATE:
-      console.log("ARCHIVE_CREATE_PRIVATE");
+      await archiveCreate(message["url"], message["parentFolderId"], true);
       break;
 
     case MESSAGE_IDS.ARCHIVE_PRIVACY_STATUS_TOGGLE:
@@ -72,6 +72,7 @@ BROWSER.runtime.onMessage.addListener(backgroundMessageHandler);
 /**
  * Verifies and stores a Perma API key (`appState.permaApiKey`).
  * Called on `AUTH_SIGN_IN`.
+ * 
  * @param {string} apiKey 
  * @returns {Promise<void>}
  * @async
@@ -100,6 +101,7 @@ async function authSignIn(apiKey) {
 /**
  * Clears personal information from the database.
  * Called on `AUTH_SIGN_OUT`.
+ * 
  * @returns {Promise<void>}
  * @async
  */
@@ -113,7 +115,7 @@ async function authSignOut() {
 /**
  * Checks that the Perma API key stored in the database is valid. 
  * Clears user data (and throws) otherwise.
- * 
+ * Called on `AUTH_CHECK`.
  * @returns {Promise<void>}
  * @async
  */
@@ -134,8 +136,9 @@ async function authCheck() {
 /**
  * Pulls and stores the list of all the folders the user can write into. 
  * This data is stored in `appState.permaFolders`
+ * Called on `FOLDERS_PULL_LIST`.
  * 
- * Format:
+ * `permaFolders` format:
  * ```
  * [
  *   { id: 158296, name: 'Personal Links' },
@@ -179,6 +182,7 @@ async function foldersPullList() {
 
     const apiKey = await database.appState.get("permaApiKey");
     const api = new PermaAPI(String(apiKey.value));
+
     const folders = [];
 
     const top = await api.pullTopLevelFolders();
@@ -197,4 +201,74 @@ async function foldersPullList() {
   finally {
     await database.appState.set("loadingBlocking", false);
   }
+}
+
+
+/**
+ * Pulls and stores a list of previously-created archives for a given url.
+ * Clears user data (and throws) otherwise.
+ * Called on `ARCHIVE_PULL_TIMELINE`.
+ * 
+ * @param {string} url
+ * @returns {Promise<void>}
+ * @async
+ */
+ async function archivePullTimeline(url) {
+
+  try {
+    await database.appState.set("loadingBlocking", true);
+
+    const apiKey = await database.appState.get("permaApiKey");
+    const api = new PermaAPI(String(apiKey.value));
+
+    url = new URL(url).href; // Will throw if url is not valid.
+
+    const archives = await api.pullArchives(100, 0, url);
+
+    for (let archive of archives.objects) {
+      await database.archives.add(archive);
+    }
+  }
+  catch(err) {
+    await database.logs.add("error_pulling_timeline", true);
+    throw err;
+  }
+  finally {
+    await database.appState.set("loadingBlocking", false);
+  }
+
+}
+
+/**
+ * Creates a new archive.
+ * Automatically calls `archivePullTimeline` to update the timeline for the current tab.
+ * Called on `ARCHIVE_CREATE_PUBLIC` and `ARCHIVE_CREATE_PRIVATE`.
+ * 
+ * @param {string} url
+ * @param {?number} [parentFolderId=null]
+ * @param {boolean} [isPrivate=false]
+ * @returns {Promise<void>}
+ * @async
+ */
+async function archiveCreate(url, parentFolderId = null, isPrivate = false) {
+
+  try {
+    await database.appState.set("loadingBlocking", true);
+
+    const apiKey = await database.appState.get("permaApiKey");
+    const api = new PermaAPI(String(apiKey.value));
+
+    url = new URL(url).href; // Will throw if url is not valid.
+
+    await api.createArchive(url, {isPrivate, parentFolderId});
+    await archivePullTimeline(url); // Will update the timeline once the archive is created
+  }
+  catch(err) {
+    await database.logs.add("error_creating_archive", true);
+    throw err;
+  }
+  finally {
+    await database.appState.set("loadingBlocking", false);
+  }
+
 }

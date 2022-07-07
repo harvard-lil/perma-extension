@@ -7,7 +7,9 @@ document.querySelector("button").addEventListener("click", async(e) => {
   e.preventDefault();
 
   BROWSER.runtime.sendMessage({
-    messageId: MESSAGE_IDS.FOLDERS_PULL_LIST
+    messageId: MESSAGE_IDS.ARCHIVE_CREATE_PUBLIC,
+    url: "https://principles.green",
+    parentFolderId: "161020"
   });
 
 })

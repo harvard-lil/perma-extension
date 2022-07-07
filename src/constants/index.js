@@ -36,8 +36,8 @@
  * - `AUTH_CHECK`: Request to check that the API currently stored is (still) valid.
  * - `FOLDERS_PULL_LIST`: Request to pull the list of folders the user can create links into.
  * - `ARCHIVE_PULL_TIMELINE`: Request to pull the list of user-owned archives available for the given url (2nd param: `url`).
- * - `ARCHIVE_CREATE_PUBLIC`: Request to create a public archive for a given url (2nd param: `url`).
- * - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url (2nd param: `url`).
+ * - `ARCHIVE_CREATE_PUBLIC`: Request to create a public archive for a given url (2nd param: `url`, 3rd param: `parentFolderId`).
+ * - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url (2nd param: `url`, , 3rd param: `parentFolderId`).
  * - `ARCHIVE_PRIVACY_STATUS_TOGGLE: Request to toggle the privacy status of a given archive (2nd param: `guid`)
  * 
  * @constant 
