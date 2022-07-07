@@ -23,6 +23,7 @@ import { getDatabase } from '../index.js';
  * - `loadingBackground`: If `true`, indicates that the app is currently performing an operation that should be considered a non-blocking.
  * - `currentTabUrl`: Holds the url of the tab currently in focus.
  * - `currentTabTitle`: Holds the title of the tab currently in focus. 
+ * - `availableFolders`: Key / value association (id -> name) of folders the user can write into.
  * 
  * @constant
  */
@@ -34,6 +35,7 @@ export const KEYS = {
   "loadingBackground": Boolean,
   "currentTabUrl": String,
   "currentTabTitle": String,
+  "availableFolders": Object
 };
 
 /**
