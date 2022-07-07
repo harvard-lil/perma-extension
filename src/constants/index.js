@@ -31,26 +31,32 @@
  * ```
  * 
  * Message identifiers detail:
- * - `AUTH_SIGN_IN`: Request to register an API key (2nd param: `apiKey`).
+ * - `TAB_SWITCH`: Request to update the current tab of interest. Params: `url`, `title`.
+ * - `AUTH_SIGN_IN`: Request to register an API key. Params: `apiKey`.
  * - `AUTH_SIGN_OUT`: Request to remove the currently stored API key.
  * - `AUTH_CHECK`: Request to check that the API currently stored is (still) valid.
  * - `FOLDERS_PULL_LIST`: Request to pull the list of folders the user can create links into.
- * - `ARCHIVE_PULL_TIMELINE`: Request to pull the list of user-owned archives available for the given url (2nd param: `url`).
- * - `ARCHIVE_CREATE_PUBLIC`: Request to create a public archive for a given url (2nd param: `url`, 3rd param: `parentFolderId`).
- * - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url (2nd param: `url`, , 3rd param: `parentFolderId`).
- * - `ARCHIVE_PRIVACY_STATUS_TOGGLE: Request to toggle the privacy status of a given archive (2nd param: `guid`)
+ * - `FOLDERS_PICK_ONE`: Request to update the "default" target folder.
+ * - `ARCHIVE_PULL_TIMELINE`: Request to pull the list of user-owned archives available for the current url.
+ * - `ARCHIVE_CREATE_PUBLIC`: Request to create a public archive for a given url.
+ * - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url.
+ * - `ARCHIVE_PRIVACY_STATUS_TOGGLE: Request to toggle the privacy status of a given archive. Params: `guid`, `isPrivate`.
+ * - `ARCHIVE_DELETE: Request the deletion of an archive. Params: `guid`.
  * 
  * @constant 
  */
 export const MESSAGE_IDS = {
-  AUTH_SIGN_IN: 1,
-  AUTH_SIGN_OUT: 2,
-  AUTH_CHECK: 3,
-  FOLDERS_PULL_LIST: 4,
-  ARCHIVE_PULL_TIMELINE: 5,
-  ARCHIVE_CREATE_PUBLIC: 6,
-  ARCHIVE_CREATE_PRIVATE: 7,
-  ARCHIVE_PRIVACY_STATUS_TOGGLE: 8,
+  TAB_SWITCH: 1,
+  AUTH_SIGN_IN: 2,
+  AUTH_SIGN_OUT: 3,
+  AUTH_CHECK: 4,
+  FOLDERS_PULL_LIST: 5,
+  FOLDERS_PICK_ONE: 6,
+  ARCHIVE_PULL_TIMELINE: 7,
+  ARCHIVE_CREATE_PUBLIC: 8,
+  ARCHIVE_CREATE_PRIVATE: 9,
+  ARCHIVE_PRIVACY_STATUS_TOGGLE: 10,
+  ARCHIVE_DELETE: 11
 };
 
 /**

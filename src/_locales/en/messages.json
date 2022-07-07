@@ -22,5 +22,11 @@
   },
   "error_creating_archive": {
     "message": "Unable to create an archive for the current tab."
+  },
+  "error_picking_folder": {
+    "message": "Unable to pick this folder as a default."
+  },
+  "error_toggling_archive_privacy_status": {
+    "message": "Couldn't update archive status."
   }
 }
