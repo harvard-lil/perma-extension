@@ -44,7 +44,7 @@ export class Log {
 
   /** 
    * Saves the current `Log` entry in the database.
-   * @returns {Promise}
+   * @returns {Promise<number>} - Id of the new entry
    */
   save() {
     return getTable().put(this)
@@ -70,16 +70,17 @@ export async function getAll() {
 
 /**
  * Returns the most recent entry from the `log` table.
- * @return {Promise<Log>}
+ * @return {Promise<?Log>}
  * @async
  */
 export async function getMostRecent() {
-  return await getTable().orderBy("id").reverse().limit(1).toArray()
+  const entries = await getTable().orderBy("id").reverse().limit(1).toArray();
+  return entries.length > 0 ? entries[0] : null;
 }
 
 /**
  * Clears the `logs` table.
- * @returns {Promise<null>} 
+ * @returns {Promise<void>} 
  * @async
  */
  export async function clearAll() {

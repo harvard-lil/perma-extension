@@ -62,7 +62,7 @@ export class AppState {
    * Saves the current `AppState` entry in the database.
    * - If an entry already exists for the current key, the record will be replaced.
    * 
-   * @returns {Promise}
+   * @returns {Promise<number>} - Id of the entry that was created.
    */
    save() {
     const validKeys = Object.keys(KEYS);
@@ -118,7 +118,7 @@ export async function getAll() {
 /**
  * Return a specific entry from user entry by key.
  * @param {string} key - Must be a key of `database.tables.appState.KEYS`
- * @returns {Promise<AppState>}
+ * @returns {Promise<?AppState>}
  * @async
  */
 export async function getByKey(key) {
@@ -127,7 +127,7 @@ export async function getByKey(key) {
 
 /**
  * Clears the `appState` table.
- * @returns {Promise<null>} 
+ * @returns {Promise<void>} 
  * @async
  */
 export async function clearAll() {
@@ -138,12 +138,15 @@ export async function clearAll() {
  * Creates or updates a single entry in the `appState` table.
  * @param {string} key - Must be a key of `database.tables.appState.KEYS`.
  * @param {any} value 
- * @returns {Promise}
+ * @returns {Promise<AppState>}
  * @async
  */
 export async function set(key, value) {
   let entry = new AppState();
+  
   entry.key = key;
   entry.value = value;
-  return await entry.save();
+  
+  await entry.save();
+  return entry;
 }

@@ -37,6 +37,8 @@ export const database = {
 
 /**
  * Local reference to a database instance.
+ * 
+ * @type {?Dexie}
  */
 let dbRef = null;
 
