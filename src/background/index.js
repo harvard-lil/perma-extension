@@ -16,8 +16,8 @@ import { BROWSER, MESSAGE_IDS } from "../constants";
  * See constants.MESSAGE_IDS for details regarding the messages handled.
  *
  * @param {object} message
- * @param {chrome.runtime.MessageSender} sender
- * @param {function} sendResponse 
+ * @param {chrome.runtime.MessageSender} [sender]
+ * @param {function} [sendResponse]
  * @returns {Promise}
  * @async
  */

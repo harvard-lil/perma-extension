@@ -44,7 +44,7 @@ export const KEYS = {
 export const INDEXES = "&key";
 
 /**
- * Data class for the "appState" database store. Represent a single piece of app state information.
+ * Data class for the "appState" database store. Represents a single piece of app state information.
  */
 export class AppState {
   /** 

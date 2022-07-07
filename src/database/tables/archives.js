@@ -12,13 +12,16 @@ import { PermaAPI } from '@harvard-lil/perma-js-sdk';
 import { getDatabase } from '../index.js';
 
 /**
- * Describes the indexes used by the `appState` table. 
+ * Describes the indexes used by the `archives` table. 
  * See Dexie's documentation: https://dexie.org/docs/Version/Version.stores()#schema-syntax
  * @constant
  */
- export const INDEXES = "guid,url";
+export const INDEXES = "guid,url";
 
- export class Archive {
+/**
+ * Data class for the "archives" database store.
+ */
+export class Archive {
     /**
      * Should be taken from PermaArchive.guid.
      * @type {?string}
