@@ -17,6 +17,7 @@ import { getDatabase } from '../index.js';
  *
  * Keys detail:
  * - `permaApiKey`: API key for Perma.cc, as provided by the user.
+ * - `permaApiKeyChecked`: If true, indicates that the API key currently in store has been checked. 
  * - `lastApiKeyCheck`: Date (+time) at which the API key was checked for the last time.
  * - `loadingBlocking`: If `true`, indicates that the app is currently performing an operation that should be considered blocking.
  * - `loadingBackground`: If `true`, indicates that the app is currently performing an operation that should be considered a non-blocking.
@@ -27,6 +28,7 @@ import { getDatabase } from '../index.js';
  */
 export const KEYS = {
   "permaApiKey": String,
+  "permaApiKeyChecked": Boolean,
   "lastApiKeyCheck": Date,
   "loadingBlocking": Boolean,
   "loadingBackground": Boolean,
@@ -103,7 +105,7 @@ export class AppState {
  * @returns {Dexie.Table}
  */
 export function getTable() {
-  return getDatabase().appState;
+  return getDatabase()["appState"];
 }
 
 /**

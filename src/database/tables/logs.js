@@ -56,7 +56,7 @@ export class Log {
  * @returns {Dexie.Table}
  */
 export function getTable() {
-  return getDatabase().logs;
+  return getDatabase()["logs"];
 }
 
 /**

@@ -11,6 +11,7 @@ import Dexie from "dexie";
 import { DATABASE_NAME } from "../constants/index.js";
 import * as appState from "./tables/appState.js";
 import * as logs from "./tables/logs.js";
+import * as archives from "./tables/archives.js";
 
 /**
  * Reference to individual table modules, containing data classes and functions to help work with database tables.
@@ -32,6 +33,7 @@ import * as logs from "./tables/logs.js";
  */
 export const database = {
   appState,
+  archives,
   logs,
 };
 
@@ -62,13 +64,15 @@ export function getDatabase(databaseName = DATABASE_NAME) {
   // Create stores and associated indexes.
   dbRef.version(1).stores({
     appState: appState.INDEXES,
+    archives: archives.INDEXES,
     logs: logs.INDEXES
   });
 
   // Map tables to data classes.
   // This allows Dexie to return instances of these classes when pulling data out of the IndexedDB.
-  dbRef.appState.mapToClass(appState.AppState);
-  dbRef.logs.mapToClass(logs.Log);
+  dbRef["appState"].mapToClass(appState.AppState);
+  dbRef["archives"].mapToClass(archives.Archive);
+  dbRef["logs"].mapToClass(logs.Log);
 
   return dbRef;
 }
