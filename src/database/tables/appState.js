@@ -23,7 +23,7 @@ import { getDatabase } from '../index.js';
  * - `loadingBackground`: If `true`, indicates that the app is currently performing an operation that should be considered a non-blocking.
  * - `currentTabUrl`: Holds the url of the tab currently in focus.
  * - `currentTabTitle`: Holds the title of the tab currently in focus. 
- * - `availableFolders`: Key / value association (id -> name) of folders the user can write into.
+ * - `permaFolders`: Sorted array containing key/value associations (id -> name) of folders the user can write into.
  * 
  * @constant
  */
@@ -35,7 +35,7 @@ export const KEYS = {
   "loadingBackground": Boolean,
   "currentTabUrl": String,
   "currentTabTitle": String,
-  "availableFolders": Object
+  "permaFolders": Array
 };
 
 /**
@@ -51,7 +51,7 @@ export const INDEXES = "&key";
 export class AppState {
   /** 
    * Key used as an index to store this piece of user information.
-   * Must be a key of `database.tables.appState.KEYS`
+   * Must be a key of `database.appState.KEYS
    * @type {string} 
    */
   key;
@@ -121,11 +121,11 @@ export async function getAll() {
 
 /**
  * Return a specific entry from user entry by key.
- * @param {string} key - Must be a key of `database.tables.appState.KEYS`
+ * @param {string} key - Must be a key of `database.appState.KEYS
  * @returns {Promise<?AppState>}
  * @async
  */
-export async function getByKey(key) {
+export async function get(key) {
   return await getTable().get(key);
 }
 
@@ -140,7 +140,7 @@ export async function clearAll() {
 
 /**
  * Creates or updates a single entry in the `appState` table.
- * @param {string} key - Must be a key of `database.tables.appState.KEYS`.
+ * @param {string} key - Must be a key of `database.appState.KEYS.
  * @param {any} value 
  * @returns {Promise<AppState>}
  * @async

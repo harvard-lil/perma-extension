@@ -6,13 +6,8 @@ import { BROWSER, MESSAGE_IDS } from "../constants/index.js";
 document.querySelector("button").addEventListener("click", async(e) => {
   e.preventDefault();
 
-  const api = new PermaAPI();
+  BROWSER.runtime.sendMessage({
+    messageId: MESSAGE_IDS.FOLDERS_PULL_LIST
+  });
 
-  /*
-  for (let guid of ["6U2D-7AU6", "4BW9-MWXN"]) {
-    const archive = await api.pullPublicArchive(guid);
-    console.log(await database.archives.add(archive));
-  }*/
-
-  console.log(await database.archives.getByUrl("https://principles.green"));
 })

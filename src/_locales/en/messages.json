@@ -7,5 +7,14 @@
   },
   "app_github_url": {
     "message": "https://github.com/harvard-lil/perma-extension"
+  },
+  "status_invalid_api_key": {
+    "message": "The API key provided is not valid."
+  },
+  "status_signed_out": {
+    "message": "Signed out."
+  },
+  "error_pulling_folders": {
+    "message": "Unable to folders list."
   }
 }
