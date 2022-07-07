@@ -36,6 +36,10 @@ async function backgroundMessageHandler(message, sender, sendResponse) {
       console.log("AUTH_SIGN_OUT");
       break;
 
+    case MESSAGE_IDS.AUTH_CHECK:
+      console.log("AUTH_CHECK");
+      break;
+
     case MESSAGE_IDS.FOLDERS_PULL_LIST:
       console.log("FOLDERS_PULL_LIST");
       break;

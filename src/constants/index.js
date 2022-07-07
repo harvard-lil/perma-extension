@@ -33,6 +33,7 @@
  * Message identifiers detail:
  * - `AUTH_SIGN_IN`: Request to register an API key (2nd param: `apiKey`).
  * - `AUTH_SIGN_OUT`: Request to remove the currently stored API key.
+ * - `AUTH_CHECK`: Request to check that the API currently stored is (still) valid.
  * - `FOLDERS_PULL_LIST`: Request to pull the list of folders the user can create links into.
  * - `ARCHIVE_PULL_TIMELINE`: Request to pull the list of user-owned archives available for the given url (2nd param: `url`).
  * - `ARCHIVE_CREATE_PUBLIC`: Request to create a public archive for a given url (2nd param: `url`).
@@ -44,11 +45,12 @@
 export const MESSAGE_IDS = {
   AUTH_SIGN_IN: 1,
   AUTH_SIGN_OUT: 2,
-  FOLDERS_PULL_LIST: 3,
-  ARCHIVE_PULL_TIMELINE: 4,
-  ARCHIVE_CREATE_PUBLIC: 5,
-  ARCHIVE_CREATE_PRIVATE: 6,
-  ARCHIVE_PRIVACY_STATUS_TOGGLE: 7,
+  AUTH_CHECK: 3,
+  FOLDERS_PULL_LIST: 4,
+  ARCHIVE_PULL_TIMELINE: 5,
+  ARCHIVE_CREATE_PUBLIC: 6,
+  ARCHIVE_CREATE_PRIVATE: 7,
+  ARCHIVE_PRIVACY_STATUS_TOGGLE: 8,
 };
 
 /**
