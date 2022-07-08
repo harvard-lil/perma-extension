@@ -15,6 +15,7 @@ Data class and utility functions for the `appState` table.
     * [.INDEXES](#module_database/tables/appState.INDEXES)
     * [.getTable()](#module_database/tables/appState.getTable) ⇒ <code>Dexie.Table</code>
     * [.getAll()](#module_database/tables/appState.getAll) ⇒ <code>Promise.&lt;Array.&lt;AppState&gt;&gt;</code>
+    * [.getAllAsMap()](#module_database/tables/appState.getAllAsMap) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get(key)](#module_database/tables/appState.get) ⇒ <code>Promise.&lt;?AppState&gt;</code>
     * [.clearAll()](#module_database/tables/appState.clearAll) ⇒ <code>Promise.&lt;void&gt;</code>
     * [.set(key, value)](#module_database/tables/appState.set) ⇒ <code>Promise.&lt;AppState&gt;</code>
@@ -63,8 +64,8 @@ Keys detail:
 - `apiKey`: API key for Perma.cc, as provided by the user.
 - `apiKeyChecked`: If true, indicates that the API key currently in store has been checked. 
 - `lastApiKeyCheck`: Date (+time) at which the API key was checked for the last time.
-- `loadingBlocking`: If `true`, indicates that the app is currently performing an operation that should be considered blocking.
-- `loadingBackground`: If `true`, indicates that the app is currently performing an operation that should be considered a non-blocking.
+- `loadingBlocking`: If `true`, indicates that the app is currently performing an operation that should be considered blocking, UI wise.
+- `loadingBackground`: If `true`, indicates that the app is currently performing an operation that should be considered a non-blocking, UI wise.
 - `folders`: Sorted array containing key/value associations (id -> name) of folders the user can write into.
 - `currentFolder`: Id of the folder the user selected (last) as a destination.
 - `currentTabUrl`: Url of the current tab.
@@ -88,6 +89,12 @@ Returns a reference to the `appState` table from the database.
 
 ### database/tables/appState.getAll() ⇒ <code>Promise.&lt;Array.&lt;AppState&gt;&gt;</code>
 Returns all entries from the `appState` table.
+
+**Kind**: static method of [<code>database/tables/appState</code>](#module_database/tables/appState)  
+<a name="module_database/tables/appState.getAllAsMap"></a>
+
+### database/tables/appState.getAllAsMap() ⇒ <code>Promise.&lt;Object&gt;</code>
+Returns all entries from the `appState` table as a key / value association.
 
 **Kind**: static method of [<code>database/tables/appState</code>](#module_database/tables/appState)  
 <a name="module_database/tables/appState.get"></a>

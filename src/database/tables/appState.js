@@ -122,6 +122,21 @@ export async function getAll() {
 }
 
 /**
+ * Returns all entries from the `appState` table as a key / value association.
+ * @returns {Promise<Object>}
+ * @async
+ */
+export async function getAllAsMap() {
+  const all = {};
+  
+  for (let entry of await getAll()) {
+    all[entry.key] = entry.value;
+  }
+
+  return all;
+}
+
+/**
  * Return a specific entry from user entry by key.
  * @param {string} key - Must be a key of `database.appState.KEYS
  * @returns {Promise<?AppState>}
