@@ -3,13 +3,17 @@
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   padding: 0px;
   margin: 0px;
+  font-size: 1rem;
 }
 
 :root {
   --main-color: white;
   --main-color-: rgb(246, 248, 241);
+  --main-color--: rgb(226, 228, 223);
 
   --opposite-color: rgb(34, 34, 34);
+  --opposite-color-: rgb(56, 56, 56);
+  --opposite-color--: rgb(80, 80, 80);
 
   --action-color: rgb(45, 118, 238);
   --action-color-: rgb(0, 146, 255);
@@ -19,7 +23,7 @@
   --error-color: rgb(247, 255, 111);
 
   --extension-width: 25rem;
-  --extension-height: 35rem;
+  --extension-height: 40rem;
   --body-border-width: 0.25rem;
 }
 
@@ -32,11 +36,24 @@ html {
 body {
   width: var(--extension-width);
   height: var(--extension-height);
-  border: var(--body-border-width) solid var(--main-color-);
+  border: var(--body-border-width) solid var(--main-color--);
   background-color: var(--main-color);
   color: var(--opposite-color);
   overflow: hidden;
 
   display: flex;
   flex-direction: column;
+
+  animation: body-fade-in 0.25s normal forwards ease-in-out;
+}
+
+@keyframes body-fade-in {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+  }
 }

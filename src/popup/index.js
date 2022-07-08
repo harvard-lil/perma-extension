@@ -8,10 +8,10 @@
 // @ts-check
 import "./components/ArchiveForm.js";
 import "./components/ArchiveTimeline.js";
-import "./components/StatusBar.js";
+import "./components/StatusBar.js"; 
 
 import { BROWSER, MESSAGE_IDS } from "../constants/index.js";
-
+ 
 /**
  * Send `TAB_SWITCH` message on popup open
  */
@@ -24,3 +24,4 @@ document.addEventListener("DOMContentLoaded", async(e) => {
     title: tab.title
   });
 });
+

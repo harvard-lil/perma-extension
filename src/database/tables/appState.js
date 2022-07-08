@@ -27,7 +27,7 @@ import { getDatabase } from '../index.js';
  * - `currentTabTitle`: Title of the current tab.
  * 
  * @constant
- */
+ */ 
 export const KEYS = {
   "apiKey": String,
   "apiKeyChecked": Boolean,

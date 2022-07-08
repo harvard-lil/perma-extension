@@ -13,7 +13,6 @@ export class StatusBar extends HTMLElement {
 
   renderInnerHTML() {
     this.innerHTML = /*html*/`
-      <h2>Status bar</h2>
     `;
   }
 

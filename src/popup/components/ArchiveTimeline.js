@@ -13,7 +13,6 @@ export class ArchiveTimeline extends HTMLElement {
 
   renderInnerHTML() {
     this.innerHTML = /*html*/`
-      <h2>Timeline</h2>
     `;
   }
 

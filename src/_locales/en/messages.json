@@ -37,5 +37,8 @@
   },
   "error_toggling_archive_privacy_status": {
     "message": "Couldn't update archive status."
+  },
+  "create_a_new_perma_link": {
+    "message": "Create a new Perma Link"
   }
 }

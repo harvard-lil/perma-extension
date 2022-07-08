@@ -1,5 +1,5 @@
 archive-timeline {
   display: block;
   flex: 1.5;
-  background-color: aquamarine;
+  border-top: 1px solid var(--main-color-);
 }

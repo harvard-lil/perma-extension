@@ -5,17 +5,20 @@
  * @license MIT
  * @description `<archive-form>` custom element. 
  */
-import { liveQuery, Observable } from "dexie";
+import { liveQuery } from "dexie";
 import { database } from "../../database/index.js";
+import { BROWSER } from "../../constants/index.js"
 
 /**
  * Custom Element: `<archive-form>`. 
  * Allows users to sign-in and create archives.
  * 
  * Available HTML attributes:
- * - `is-authenticated`: Switches between the sign-in form and the archive creation form if "true". 
- * - `loading`: Locks UI if "true".
- * 
+ * - `authenticated`
+ * - `loading`
+ * - `tab-url`
+ * - `tab-title`
+ *  
  * Notes:
  * - Reacts to changes in the `appState` table.
  */
@@ -68,7 +71,7 @@ export class ArchiveForm extends HTMLElement {
    * Determines which HTML attributes should be observed by `attributeChangedCallback`.
    */
   static get observedAttributes() { 
-    return ["is-authenticated", "loading"];
+    return ["authenticated", "loading", "tab-url", "tab-title"];
   }
 
   /**
@@ -77,22 +80,41 @@ export class ArchiveForm extends HTMLElement {
    */
   handleAppStateUpdate(state) {
     if ("apiKeyChecked" in state) {
-      this.setAttribute("is-authenticated", state.apiKeyChecked);
+      this.setAttribute("authenticated", state.apiKeyChecked);
     }
 
     if ("loadingBlocking" in state) {
       this.setAttribute("loading", state.loadingBlocking);
     }
+
+    if ("currentTabUrl" in state) {
+      this.setAttribute("tab-url", state.currentTabUrl);
+    }
+
+    if ("currentTabTitle" in state) {
+      this.setAttribute("tab-title", state.currentTabTitle);
+    }
   }
 
   /**
-   * Replaces the content of this Node.
+   * 
    */
   renderInnerHTML() {
     this.innerHTML = /*html*/`
-      <h2>Form</h2>
-    `;
-  }
+    <h1>
+      <img src="../assets/infinity-orange.svg" alt="Perma.cc"/>
+      <span>${BROWSER.i18n.getMessage("create_a_new_perma_link")}<span>
+    </h1>
 
-}
+    <div class="tab-summary">
+      <strong>${this.getAttribute("tab-title")}</strong>
+      <span>${this.getAttribute("tab-url")}</span>
+    </div>
+    `;
+
+    // + If authenticated: complete archive creation form
+    // + Otherwise: Sign in form + "Create an archive on Perma.cc" fallback link 
+  }
+ 
+} 
 customElements.define('archive-form', ArchiveForm);
