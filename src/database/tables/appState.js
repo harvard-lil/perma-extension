@@ -19,8 +19,8 @@ import { getDatabase } from '../index.js';
  * - `apiKey`: API key for Perma.cc, as provided by the user.
  * - `apiKeyChecked`: If true, indicates that the API key currently in store has been checked. 
  * - `lastApiKeyCheck`: Date (+time) at which the API key was checked for the last time.
- * - `loadingBlocking`: If `true`, indicates that the app is currently performing an operation that should be considered blocking.
- * - `loadingBackground`: If `true`, indicates that the app is currently performing an operation that should be considered a non-blocking.
+ * - `loadingBlocking`: If `true`, indicates that the app is currently performing an operation that should be considered blocking, UI wise.
+ * - `loadingBackground`: If `true`, indicates that the app is currently performing an operation that should be considered a non-blocking, UI wise.
  * - `folders`: Sorted array containing key/value associations (id -> name) of folders the user can write into.
  * - `currentFolder`: Id of the folder the user selected (last) as a destination.
  * - `currentTabUrl`: Url of the current tab.

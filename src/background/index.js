@@ -149,7 +149,7 @@ async function authSignIn(apiKey) {
  */
 async function authSignOut() {
   await database.archives.clearAll();
-  await database.logs.clearAll();
+  //await database.logs.clearAll();
   await database.appState.clearAll();
   await database.logs.add("status_signed_out");
 }

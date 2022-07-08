@@ -1,0 +1,5 @@
+status-bar {
+  display: block;
+  flex: 0.25;
+  background-color: red;
+}
