@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docgen": "cd scripts && ./docgen.sh"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.190",
+    "jsdoc-to-markdown": "^7.1.1",
     "prettier": "^2.6.2",
     "vite": "^2.9.9",
     "vite-plugin-static-copy": "^0.5.1"

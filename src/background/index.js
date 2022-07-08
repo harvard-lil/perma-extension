@@ -14,7 +14,7 @@ import { database } from "../database";
 /**
  * Handles incoming messages.
  * This function runs for every incoming `runtime` message.
- * See constants.MESSAGE_IDS for details regarding the messages handled.
+ * See `constants.MESSAGE_IDS` for details regarding the messages handled.
  *
  * @param {Object} message
  * @param {chrome.runtime.MessageSender} [sender]
