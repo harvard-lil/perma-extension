@@ -13,7 +13,6 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 /**
  * Creates the CSS bundle for the `popup`.
  * Merges `index.css` with all the components-specific CSS files.
- * 
  */
 const popupCSSBundle = () => {
   let config;

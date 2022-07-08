@@ -127,11 +127,13 @@ async function authSignIn(apiKey) {
     await api.pullUser(); // Will throw if API key is invalid
     await database.appState.set("apiKey", apiKey);
     await database.appState.set("apiKeyChecked", true);
+
+    await database.logs.add("status_signed_in");
   }
   catch(err) {
     await database.appState.set("apiKey", "");
     await database.appState.set("apiKeyChecked", false);
-    await database.logs.add("status_invalid_api_key", true);
+    await database.logs.add("error_verifying_api_key", true);
     throw err;
   }
   finally {
@@ -149,7 +151,7 @@ async function authSignIn(apiKey) {
  */
 async function authSignOut() {
   await database.archives.clearAll();
-  //await database.logs.clearAll();
+  await database.logs.clearAll();
   await database.appState.clearAll();
   await database.logs.add("status_signed_out");
 }
@@ -333,6 +335,8 @@ async function archiveCreate(isPrivate = false) {
       parentFolderId: currentFolder.value
     });
 
+    await database.logs.add("status_archive_created");
+
     await archivePullTimeline(); // Will update the timeline once the archive is created
   }
   catch(err) {
@@ -391,6 +395,8 @@ async function archiveDelete(guid) {
     const api = new PermaAPI(String(apiKey.value));
 
     await api.deleteArchive(guid);
+
+    await database.logs.add("status_archive_deleted");
     
     await archivePullTimeline(); // Will update the timeline once the archive is created
   }
