@@ -156,6 +156,20 @@ export async function clearAll() {
 }
 
 /**
+ * Deletes user-related information from the `appState` table.
+ * @returns {Promise<void>} 
+ * @async
+ */
+ export async function clearUserInfo() {
+  return await getTable().bulkDelete([
+    "apiKey",
+    "apiKeyChecked",
+    "currentFolder",
+    "folders"
+  ]);
+}
+
+/**
  * Creates or updates a single entry in the `appState` table.
  * @param {string} key - Must be a key of `database.appState.KEYS.
  * @param {any} value 

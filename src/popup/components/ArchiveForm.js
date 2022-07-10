@@ -33,7 +33,7 @@ export class ArchiveForm extends HTMLElement {
   
   /**
    * Upon injection into the DOM:
-   * - Start observing changes on the `appState` table.
+   * - Start observing changes in the `appState` table.
    * - First render.
    */
   connectedCallback() {
@@ -76,23 +76,23 @@ export class ArchiveForm extends HTMLElement {
 
   /**
    * Updates HTML attributes based on changes in the `appState` table.
-   * @param {Object} state - From `database.appState.getAllAsMap()`
+   * @param {Object} newAppState - From `database.appState.getAllAsMap()`
    */
-  handleAppStateUpdate(state) {
-    if ("apiKeyChecked" in state) {
-      this.setAttribute("authenticated", state.apiKeyChecked);
+  handleAppStateUpdate(newAppState) {
+    if ("apiKeyChecked" in newAppState) {
+      this.setAttribute("authenticated", newAppState.apiKeyChecked);
     }
 
-    if ("loadingBlocking" in state) {
-      this.setAttribute("loading", state.loadingBlocking);
+    if ("loadingBlocking" in newAppState) {
+      this.setAttribute("loading", newAppState.loadingBlocking);
     }
 
-    if ("currentTabUrl" in state) {
-      this.setAttribute("tab-url", state.currentTabUrl);
+    if ("currentTabUrl" in newAppState) {
+      this.setAttribute("tab-url", newAppState.currentTabUrl);
     }
 
-    if ("currentTabTitle" in state) {
-      this.setAttribute("tab-title", state.currentTabTitle);
+    if ("currentTabTitle" in newAppState) {
+      this.setAttribute("tab-title", newAppState.currentTabTitle);
     }
   }
 

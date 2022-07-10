@@ -103,6 +103,16 @@ export async function getByUrl(url, timelineMode = true) {
 }
 
 /**
+ * Deletes all entries matching a given url.
+ * @param {string} url
+ * @return {Promise<void>}
+ */
+export async function deleteByUrl(url) {
+  const archives = await getByUrl(url);
+  return await getTable().bulkDelete(archives.map((archive) => archive.guid));
+}
+
+/**
  * Adds an entry to the `archives` table.
  * @param {PermaArchive} archiveData 
  * @returns {Promise<Archive>}

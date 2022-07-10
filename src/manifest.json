@@ -14,7 +14,8 @@
   "permissions": [
     "alarms",
     "notifications",
-    "tabs"
+    "tabs",
+    "storage"
   ],
   "host_permissions": [
     "https://api.perma.cc/*",

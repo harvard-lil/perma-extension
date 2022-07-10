@@ -17,66 +17,88 @@ import { database } from "../database";
  * See `constants.MESSAGE_IDS` for details regarding the messages handled.
  *
  * @param {Object} message
- * @param {chrome.runtime.MessageSender} [sender]
- * @param {function} [sendResponse]
- * @returns {Promise}
- * @async
+ * @param {chrome.runtime.MessageSender} sender
+ * @param {function} sendResponse
  */
-async function backgroundMessageHandler(message, sender, sendResponse) {
+function backgroundMessageHandler(message, sender, sendResponse) {
   // Ignore messages that don't have a `messageId` property.
   if (!message.messageId) {
-    return;
+    return sendResponse(false);
   }
 
   switch (message.messageId) {
     case MESSAGE_IDS.TAB_SWITCH:
-      await tabSwitch(message["url"], message["title"]);  
+      tabSwitch(message["url"], message["title"])
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     case MESSAGE_IDS.AUTH_SIGN_IN:
-      await authSignIn(message["apiKey"]);
+      authSignIn(message["apiKey"])
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     case MESSAGE_IDS.AUTH_SIGN_OUT:
-      await authSignOut();
+      authSignOut()
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     case MESSAGE_IDS.AUTH_CHECK:
-      await authCheck();
+      authCheck()
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     case MESSAGE_IDS.FOLDERS_PULL_LIST:
-      await foldersPullList();
+      foldersPullList()
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     case MESSAGE_IDS.FOLDERS_PICK:
-      await foldersPick(message["folderId"]);
+      foldersPick(message["folderId"])
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     case MESSAGE_IDS.ARCHIVE_PULL_TIMELINE:
-      await archivePullTimeline();
+      archivePullTimeline()
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     case MESSAGE_IDS.ARCHIVE_CREATE_PUBLIC:
-      await archiveCreate(false);
+      archiveCreate(false)
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     case MESSAGE_IDS.ARCHIVE_CREATE_PRIVATE:
-      await archiveCreate(true);
+      archiveCreate(true)
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     case MESSAGE_IDS.ARCHIVE_PRIVACY_STATUS_TOGGLE:
-      await archiveTogglePrivacyStatus(message["guid"], message["isPrivate"]);
+      archiveTogglePrivacyStatus(message["guid"], message["isPrivate"])
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     case MESSAGE_IDS.ARCHIVE_DELETE:
-      await archiveDelete(message["guid"]);
+      archiveDelete(message["guid"])
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
       break;
 
     default:
       throw new Error(`Service Worker does not recognize message id ${message.messageId}`);
       break;
   }
+
+  return true;
 }
 BROWSER.runtime.onMessage.addListener(backgroundMessageHandler);
 
@@ -151,8 +173,8 @@ async function authSignIn(apiKey) {
  */
 async function authSignOut() {
   await database.archives.clearAll();
-  await database.logs.clearAll();
-  await database.appState.clearAll();
+  //await database.logs.clearAll();
+  await database.appState.clearUserInfo();
   await database.logs.add("status_signed_out");
 }
 
@@ -172,10 +194,10 @@ async function authCheck() {
   }
   // If the verification fails, clear any user-related data.
   catch(err) {
+    //console.error(err);
     authSignOut();
     throw err;
   }
-
 }
 
 /**
@@ -263,6 +285,7 @@ async function foldersPick(folderId) {
   }
   catch(err) {
     await database.logs.add("error_picking_folder", true);
+    //console.error(err);
     throw err;
   }
 }
@@ -290,12 +313,16 @@ async function archivePullTimeline() {
 
     const archives = await api.pullArchives(100, 0, currentTabUrl.value);
 
+    // If the request was successful, delete existing archives for this url from the database
+    await database.archives.deleteByUrl(currentTabUrl.value);
+
     for (let archive of archives.objects) {
       await database.archives.add(archive);
     }
   }
   catch(err) {
     await database.logs.add("error_pulling_timeline", true);
+    //console.error(err);
     throw err;
   }
   finally {
@@ -341,6 +368,7 @@ async function archiveCreate(isPrivate = false) {
   }
   catch(err) {
     await database.logs.add("error_creating_archive", true);
+    //console.error(err);
     throw err;
   }
   finally {
@@ -371,6 +399,7 @@ async function archiveTogglePrivacyStatus(guid, isPrivate = false) {
   }
   catch(err) {
     await database.logs.add("error_toggling_archive_privacy_status", true);
+    //console.error(err);
     throw err;
   }
   finally {
@@ -402,6 +431,7 @@ async function archiveDelete(guid) {
   }
   catch(err) {
     await database.logs.add("error_deleting_archive", true);
+    //console.error(err);
     throw err;
   }
   finally {
