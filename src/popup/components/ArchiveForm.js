@@ -5,8 +5,6 @@
  * @license MIT
  * @description `<archive-form>` custom element. 
  */
-import { liveQuery } from "dexie";
-import { database } from "../../database/index.js";
 import { BROWSER } from "../../constants/index.js";
 
 /**
@@ -18,39 +16,22 @@ import { BROWSER } from "../../constants/index.js";
  * - `loading`
  * - `tab-url`
  * - `tab-title`
- *  
- * Notes:
- * - Reacts to changes in the `appState` table.
  */
 export class ArchiveForm extends HTMLElement {
-
   /**
-   * `appState` indexedDb table observer (Dexie.liveQuery).
-   * https://dexie.org/docs/liveQuery()
-   * @type {Observable} 
+   * Determines which HTML attributes should be observed by `attributeChangedCallback`.
    */
-  appStateObserver = null;
-  
+  static get observedAttributes() { 
+    return ["authenticated", "loading", "tab-url", "tab-title"];
+  }
+
   /**
    * Upon injection into the DOM:
    * - Start observing changes in the `appState` table.
    * - First render.
    */
   connectedCallback() {
-    this.appStateObserver = liveQuery(database.appState.getAllAsMap).subscribe({
-      next: this.handleAppStateUpdate.bind(this),
-      error: (error) => console.log(error),
-    });
-
     this.renderInnerHTML();
-  }
-
-  /**
-   * Upon ejection from the DOM:
-   * - Disconnect `appState` table observer.
-   */
-  disconnectedCallback() {
-    this.authObserver.unsubscribe();
   }
 
   /**
@@ -65,13 +46,6 @@ export class ArchiveForm extends HTMLElement {
     if(newValue !== oldValue) {
       this.renderInnerHTML();
     }
-  }
-
-  /**
-   * Determines which HTML attributes should be observed by `attributeChangedCallback`.
-   */
-  static get observedAttributes() { 
-    return ["authenticated", "loading", "tab-url", "tab-title"];
   }
 
   /**

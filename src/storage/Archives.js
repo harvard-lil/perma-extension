@@ -60,10 +60,6 @@ export class Archives {
    */
   async save() {
     // Checks and validates `this.#byUrl`
-    const filteredByUrl = {};
-
-    console.log(this.#byUrl);
-
     for (let [url, archives] of Object.entries(this.#byUrl)) {
       try {
         new URL(url); // Will throw if invalid
