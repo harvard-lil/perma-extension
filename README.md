@@ -17,11 +17,11 @@
 ```mermaid
 flowchart RL
     A[Service Worker]
-    B[(Indexed DB)]
+    B[(browser.storage)]
     C[Popup UI]
     D[Perma.cc API]
     A <--> B 
-    B --> |Live Queries| C
+    B --> |"onChange" events| C
     C -.-> |Runtime Messages| A
     D <--> |HTTP| A 
 ```
