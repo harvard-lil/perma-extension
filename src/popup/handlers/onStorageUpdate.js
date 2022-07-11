@@ -6,6 +6,10 @@ import { CurrentTab } from "../../storage/CurrentTab.js";
 import { Status } from "../../storage/Status.js";
 import { Auth } from "../../storage/Auth.js";
 
+/**
+ * 
+ * @param {*} changes 
+ */
 export async function onStorageUpdate(changes = {}) {
   console.log(changes);
 
