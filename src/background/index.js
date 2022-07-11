@@ -7,9 +7,10 @@
  */
 /// <reference types="@types/chrome" />
 // @ts-check
+
 import { PermaAPI } from "@harvard-lil/perma-js-sdk";
-import { BROWSER, MESSAGE_IDS } from "../constants";
-import { database } from "../database";
+import { BROWSER, MESSAGE_IDS } from "../constants/index.js";
+import { Auth, Status, CurrentTab, Folders, Archives } from "../storage/index.js";
 
 /**
  * Handles incoming messages.
@@ -103,13 +104,11 @@ function backgroundMessageHandler(message, sender, sendResponse) {
 BROWSER.runtime.onMessage.addListener(backgroundMessageHandler);
 
 /**
- * Updates `appState.currentTabUrl` and `appState.currentTabTitle` if:
- * - Provided and valid.
- * - `appState.loadingBlocking` and `appState.loadingBackground` are not true.
- * 
+ * Updates the current tab in storage.
+ * Will not go through if the extension is busy.
  * Called on `TAB_SWITCH`.
  * 
- * @param {string} url
+ * @param {string} url - Must be a valid url
  * @param {string} title
  * @param {Promise<void>}
  * @async
@@ -118,23 +117,21 @@ async function tabSwitch(url, title) {
   url = new URL(url).href; // Will throw if invalid;
   title = String(title);
 
-  const loadingBlocking = await database.appState.get("loadingBlocking");
-  const loadingBackground = await database.appState.get("loadingBackground");
+  const status = await Status.fromStorage();
+  const currentTab = await CurrentTab.fromStorage();
 
-  if (loadingBlocking && loadingBlocking.value === true) {
+  // Do not update tab if the extension is busy
+  if (status.isLoading === true) {
     return;
   }
 
-  if (loadingBackground && loadingBackground.value === true) {
-    return;
-  }
-
-  await database.appState.set("currentTabUrl", url);
-  await database.appState.set("currentTabTitle", title);
+  currentTab.url = url;
+  currentTab.title = title;
+  await currentTab.save();
 }
 
 /**
- * Verifies and stores a Perma API key (`appState.apiKey`).
+ * Verifies and stores a Perma API key.
  * Called on `AUTH_SIGN_IN`.
  * 
  * @param {string} apiKey 
@@ -142,44 +139,62 @@ async function tabSwitch(url, title) {
  * @async
  */
 async function authSignIn(apiKey) {
+  const status = await Status.fromStorage();
+  const auth = await Auth.fromStorage();
+
   try {
-    await database.appState.set("loadingBlocking", true);
+    status.isLoading = true;
+    await status.save();
 
     const api = new PermaAPI(String(apiKey)); // Will throw if API key is invalid
     await api.pullUser(); // Will throw if API key is invalid
-    await database.appState.set("apiKey", apiKey);
-    await database.appState.set("apiKeyChecked", true);
 
-    await database.logs.add("status_signed_in");
+    auth.apiKey = apiKey;
+    auth.isChecked = true;
+
+    status.message = "status_signed_in";
   }
   catch(err) {
-    await database.appState.set("apiKey", "");
-    await database.appState.set("apiKeyChecked", false);
-    await database.logs.add("error_verifying_api_key", true);
-    throw err;
+    auth.apiKey = "";
+    auth.isChecked = true;
+
+    status.message = "error_verifying_api_key";
   }
   finally {
-    await database.appState.set("lastApiKeyCheck", new Date());
-    await database.appState.set("loadingBlocking", false);
+    status.isLoading = false;
+    auth.lastCheck = new Date();
+
+    await status.save();
+    await auth.save();
   }
 }
 
 /**
- * Clears personal information from the database.
+ * Clears personal information from storage.
  * Called on `AUTH_SIGN_OUT`.
  * 
  * @returns {Promise<void>}
  * @async
  */
 async function authSignOut() {
-  await database.archives.clearAll();
-  //await database.logs.clearAll();
-  await database.appState.clearUserInfo();
-  await database.logs.add("status_signed_out");
+  const auth = await Auth.fromStorage();
+  await auth.reset();
+
+  const folders = await Folders.fromStorage();
+  await folders.reset();
+
+  const archives = await Archives.fromStorage();
+  await archives.reset();
+
+  const status = await Status.fromStorage();
+  await status.reset();
+
+  status.message = "status_signed_out";
+  await status.save();
 }
 
 /**
- * Checks that the Perma API key stored in the database is valid. 
+ * Checks that the Perma API key currently stored is valid (if any). 
  * Clears user data (and throws) otherwise.
  * Called on `AUTH_CHECK`.
  * 
@@ -188,8 +203,13 @@ async function authSignOut() {
  */
 async function authCheck() {
   try {
-    const apiKey = await database.appState.get("apiKey"); // Is there an API key in the database?
-    const api = new PermaAPI(String(apiKey.value)); // Will throw if API key is invalid
+    const auth = await Auth.fromStorage();
+
+    if (!auth.apiKey || auth.apiKey == "") {
+      throw new Error("No API key provided.");
+    }
+
+    const api = new PermaAPI(String(auth.apiKey)); // Will throw if API key is invalid
     await api.pullUser(); // Will throw if API key is invalid
   }
   // If the verification fails, clear any user-related data.
@@ -202,24 +222,9 @@ async function authCheck() {
 
 /**
  * Pulls and stores the list of all the folders the user can write into. 
- * This data is stored in `appState.folders`
  * Called on `FOLDERS_PULL_LIST`.
  * 
- * `folders` format:
- * ```
- * [
- *   { id: 158296, name: 'Personal Links' },
- *   { id: 161019, name: '- Foo' },
- *   { id: 161022, name: '- Lorem' },
- *   { id: 161020, name: '-- Bar' },
- *   { id: 161021, name: '-- Baz' },
- *   { id: 161023, name: '-- Ipsum' },
- *   { id: 161026, name: '--- Amet' },
- *   { id: 161024, name: '--- Dolor' },
- *   { id: 161025, name: '--- Sit' },
- *   { id: 161029, name: '---- Consequentur' }
- * ]
- * ```
+ * See `storage.Folders.#available` for information regarding the expected format.
  * 
  * @returns {Promise<void>}
  * @async
@@ -236,6 +241,10 @@ async function foldersPullList() {
     const children = await api.pullFolderChildren(folderId);
   
     for (let child of children.objects) {
+      if (child.read_only === true) {
+        continue;
+      }
+
       folders.push({id: child.id, name: `${"-".repeat(depth)} ${child.name}`});
   
       if (child.has_children) {
@@ -244,34 +253,65 @@ async function foldersPullList() {
     }
   }
 
+  const status = await Status.fromStorage();
+  const auth = await Auth.fromStorage();
+  const folders = await Folders.fromStorage();
+
   try {
-    await database.appState.set("loadingBlocking", true);
+    status.isLoading = true;
+    await status.save();
 
-    const apiKey = await database.appState.get("apiKey");
-    const api = new PermaAPI(String(apiKey.value));
+    const api = new PermaAPI(String(auth.apiKey));
 
-    const folders = [];
+    const allFolders = [];
+    const topFolder = await api.pullTopLevelFolders();
 
-    const top = await api.pullTopLevelFolders();
-
-    for (let folder of top.objects) {
-      folders.push({id: folder.id, name: folder.name});
-      await recursivePull(folder.id, folders, api, 1);
+    for (let folder of topFolder.objects) {
+      allFolders.push({id: folder.id, name: folder.name});
+      await recursivePull(folder.id, allFolders, api, 1);
     }
 
-    await database.appState.set("folders", folders);
+    folders.available = allFolders;
+
+    // Check if current value for `folders.pick` is still available.
+    // Default to first folder or null otherwise
+    if (folders.pick !== null) {
+      let found = false;
+
+      for (let folder of allFolders) {
+        if (folder.id === folders.pick) {
+          found = true;
+          break;
+        }
+      }
+
+      if (found === false) {
+        folders.pick = null;
+      }
+    }
+
+    if (folders.pick === null) {
+      // Pick first folder as default
+      if (folders.available && folders.available.length > 0) {
+        folders.pick = folders.available[0]["id"];
+      }
+    }
+
   }
   catch(err) {
-    await database.logs.add("error_pulling_folders", true);
+    status.message = "error_pulling_folders";
     throw err;
   }
   finally {
-    await database.appState.set("loadingBlocking", false);
+    status.isLoading = false;
+    await status.save();
+
+    await folders.save();
   }
 }
 
 /**
- * Sets `appState.currentFolder`.
+ * Stores the default folder id for future archives. 
  * Called on `FOLDERS_PICK`.
  * 
  * @param {number} folderId
@@ -279,14 +319,35 @@ async function foldersPullList() {
  * @async
  */
 async function foldersPick(folderId) {
+  const status = await Status.fromStorage();
+  const folders = await Folders.fromStorage();
+
   try {
     new PermaAPI().validateFolderId(folderId); // Will throw if `folderId` is not a suitable folder id.
-    await database.appState.set("currentFolder", folderId);
+    
+    // Check that folderId exists in available folders
+    let found = false;
+    for (let folder of folders.available) {
+      if (folder.id === folderId) {
+        found = true;
+        break;
+      }
+    }
+
+    if (found == false) {
+      throw new Error("`folderId` does not match a folder the user has write access to.");
+    }
+
+    folders.pick = folderId;
   }
   catch(err) {
-    await database.logs.add("error_picking_folder", true);
+    status.message = "error_picking_folder";
     //console.error(err);
     throw err;
+  }
+  finally {
+    await status.save();
+    await folders.save();
   }
 }
 
@@ -299,40 +360,40 @@ async function foldersPick(folderId) {
  * @async
  */
 async function archivePullTimeline() {
+  const status = await Status.fromStorage();
+  const auth = await Auth.fromStorage();
+  const currentTab = await CurrentTab.fromStorage();
+  const archives = await Archives.fromStorage();
+
   try {
-    await database.appState.set("loadingBlocking", true);
+    status.isLoading = true;
+    await status.save();
 
-    const apiKey = await database.appState.get("apiKey");
-    const api = new PermaAPI(String(apiKey.value));
+    const api = new PermaAPI(String(auth.apiKey));
 
-    const currentTabUrl = await database.appState.get("currentTabUrl");
-
-    if (!currentTabUrl || currentTabUrl.value) {
-      throw new Error("`currentTabUrl` is not set.");
+    if (!currentTab.url) {
+      throw new Error("`currentTab.url` is not set.");
     }
 
-    const archives = await api.pullArchives(100, 0, currentTabUrl.value);
-
-    // If the request was successful, delete existing archives for this url from the database
-    await database.archives.deleteByUrl(currentTabUrl.value);
-
-    for (let archive of archives.objects) {
-      await database.archives.add(archive);
-    }
+    const archivesFromAPI = await api.pullArchives(100, 0, currentTab.url);
+    archives.byUrl[currentTab.url] = archivesFromAPI.objects;
   }
   catch(err) {
-    await database.logs.add("error_pulling_timeline", true);
+    status.message = "error_pulling_timeline";
     //console.error(err);
     throw err;
   }
   finally {
-    await database.appState.set("loadingBlocking", false);
+    status.isLoading = false;
+
+    await archives.save();
+    await status.save();
   }
 }
 
 /**
  * Creates a new archive.
- * Automatically calls `archivePullTimeline` to update the timeline for the current tab.
+ * Automatically updates timeline for the current tab.
  * Called on `ARCHIVE_CREATE_PUBLIC` and `ARCHIVE_CREATE_PRIVATE`.
  * 
  * @param {boolean} [isPrivate=false]
@@ -340,45 +401,44 @@ async function archivePullTimeline() {
  * @async
  */
 async function archiveCreate(isPrivate = false) {
+  const status = await Status.fromStorage();
+  const auth = await Auth.fromStorage();
+  const currentTab = await CurrentTab.fromStorage();
+  const folders = await Folders.fromStorage();
+
   try {
-    await database.appState.set("loadingBlocking", true);
+    status.isLoading = true;
+    await status.save();
 
-    const apiKey = await database.appState.get("apiKey");
-    const api = new PermaAPI(String(apiKey.value));
+    const api = new PermaAPI(String(auth.apiKey));
 
-    const currentTabUrl = await database.appState.get("currentTabUrl");
-    const currentFolder = await database.appState.get("currentFolder");
-
-    if (!currentTabUrl || currentTabUrl.value) {
-      throw new Error("`currentTabUrl` is not set.");
+    if (!currentTab.url) {
+      throw new Error("`currentTab.url` is not set.");
     }
 
-    if (!currentFolder || currentFolder.value) {
-      throw new Error("`currentFolder` is not set.");
-    }
-
-    await api.createArchive(currentTabUrl.value, {
+    await api.createArchive(currentTab.url, {
       isPrivate: Boolean(isPrivate), 
-      parentFolderId: currentFolder.value
+      parentFolderId: folders.pick
     });
 
-    await database.logs.add("status_archive_created");
+    status.message = "status_archive_created";
 
     await archivePullTimeline(); // Will update the timeline once the archive is created
   }
   catch(err) {
-    await database.logs.add("error_creating_archive", true);
+    status.message = "error_creating_archive";
     //console.error(err);
     throw err;
   }
   finally {
-    await database.appState.set("loadingBlocking", false);
+    status.isLoading = false;
+    await status.save();
   }
 }
 
 /**
  * Tries to toggle the privacy status of a given archive.
- * Automatically calls `archivePullTimeline` to update the timeline for the current tab.
+ * Automatically updates timeline for the current tab.
  * Called on `ARCHIVE_PRIVACY_STATUS_TOGGLE`.
  * 
  * @param {string} guid
@@ -387,29 +447,33 @@ async function archiveCreate(isPrivate = false) {
  * @async
  */
 async function archiveTogglePrivacyStatus(guid, isPrivate = false) {
-  try {
-    await database.appState.set("loadingBlocking", true);
+  const status = await Status.fromStorage();
+  const auth = await Auth.fromStorage();
 
-    const apiKey = await database.appState.get("apiKey");
-    const api = new PermaAPI(String(apiKey.value));
+  try {
+    status.isLoading = true;
+    await status.save();
+
+    const api = new PermaAPI(String(auth.apiKey));
 
     await api.editArchive(guid, {isPrivate: Boolean(isPrivate)});
     
     await archivePullTimeline(); // Will update the timeline once the archive is created
   }
   catch(err) {
-    await database.logs.add("error_toggling_archive_privacy_status", true);
+    status.message = "error_toggling_archive_privacy_status";
     //console.error(err);
     throw err;
   }
   finally {
-    await database.appState.set("loadingBlocking", false);
+    status.isLoading = false;
+    await status.save();
   }
 }
 
 /**
  * Tries to delete an archive.
- * Automatically calls `archivePullTimeline` to update the timeline for the current tab.
+ * Automatically updates timeline for the current tab.
  * Called on `ARCHIVE_DELETE`.
  * 
  * @param {string} guid
@@ -417,24 +481,30 @@ async function archiveTogglePrivacyStatus(guid, isPrivate = false) {
  * @async
  */
 async function archiveDelete(guid) {
-  try {
-    await database.appState.set("loadingBlocking", true);
+  const status = await Status.fromStorage();
+  const auth = await Auth.fromStorage();
+  const currentTab = await CurrentTab.fromStorage();
+  const folders = await Folders.fromStorage();
 
-    const apiKey = await database.appState.get("apiKey");
-    const api = new PermaAPI(String(apiKey.value));
+  try {
+    status.isLoading = true;
+    await status.save();
+
+    const api = new PermaAPI(String(auth.apiKey));
 
     await api.deleteArchive(guid);
 
-    await database.logs.add("status_archive_deleted");
+    status.message = "status_archive_deleted";
     
     await archivePullTimeline(); // Will update the timeline once the archive is created
   }
   catch(err) {
-    await database.logs.add("error_deleting_archive", true);
+    status.message = "error_deleting_archive";
     //console.error(err);
     throw err;
   }
   finally {
-    await database.appState.set("loadingBlocking", false);
+    status.isLoading = false;
+    await status.save();
   }
 }

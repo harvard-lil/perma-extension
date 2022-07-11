@@ -11,6 +11,7 @@ import "./components/ArchiveTimeline.js";
 import "./components/StatusBar.js"; 
 
 import { BROWSER, MESSAGE_IDS } from "../constants/index.js";
+import { Auth, Archives } from "../storage/index.js";
 
 /**
  * Trickle-down state-to-props management here?
@@ -29,11 +30,23 @@ document.addEventListener("DOMContentLoaded", async(e) => {
   await new Promise((resolve) => {
     BROWSER.runtime.sendMessage({
       messageId: MESSAGE_IDS.TAB_SWITCH,
-      url: tab.url,
-      title: tab.title,
+      url: tab.url, // Needs to be sanitized
+      title: tab.title, // Needs to be sanitized
     },
     (response) => resolve(response));
   });
+
+  const archives = await Archives.fromStorage();
+  archives.byUrl = {
+    "https://lil.harvard.edu": [
+      {
+        "guid": 12,
+        "url": "https://lil.harvard.edu"
+      }
+    ]
+  }
+  await archives.save();
+
 
   // [2] Determine if user is authenticated.
   // - If `appState.apiKeyChecked` is `true` and the last check was than an hour ago. Assume user is logged in.

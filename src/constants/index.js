@@ -40,7 +40,7 @@
  * - `ARCHIVE_PULL_TIMELINE`: Request to pull the list of user-owned archives available for the current url.
  * - `ARCHIVE_CREATE_PUBLIC`: Request to create a public archive for a given url.
  * - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url.
- * - `ARCHIVE_PRIVACY_STATUS_TOGGLE: Request to toggle the privacy status of a given archive. Params: `guid`, `isPrivate`.
+ * - `ARCHIVE_PRIVACY_STATUS_TOGGLE`: Request to toggle the privacy status of a given archive. Params: `guid`, `isPrivate`.
  * - `ARCHIVE_DELETE: Request the deletion of an archive. Params: `guid`.
  * 
  * @constant 

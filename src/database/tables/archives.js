@@ -39,10 +39,10 @@ export class Archive {
      */
     data = null;
  
-   /** 
-    * Saves the current `Log` entry in the database.
-    * @returns {Promise<number>} - Id of the new entry
-    */
+    /** 
+     * Saves the current `Log` entry in the database.
+     * @returns {Promise<number>} - Id of the new entry
+     */
     save() {
       // `guid` must be a valid archive id
       new PermaAPI().validateArchiveId(String(this.guid)); // Throws if not valid.

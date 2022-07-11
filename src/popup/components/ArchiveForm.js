@@ -7,7 +7,7 @@
  */
 import { liveQuery } from "dexie";
 import { database } from "../../database/index.js";
-import { BROWSER } from "../../constants/index.js"
+import { BROWSER } from "../../constants/index.js";
 
 /**
  * Custom Element: `<archive-form>`. 

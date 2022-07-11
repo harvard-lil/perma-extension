@@ -70,7 +70,7 @@ export class AppState {
    * 
    * @returns {Promise<number>} - Id of the entry that was created.
    */
-   save() {
+  save() {
     const validKeys = Object.keys(KEYS);
 
     if (!this.key || typeof this.key !== 'string') {
