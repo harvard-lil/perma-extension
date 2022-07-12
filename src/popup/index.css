@@ -1,3 +1,4 @@
+/* Reset */
 * {
   box-sizing: border-box;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -6,6 +7,7 @@
   font-size: 1rem;
 }
 
+/* Global-scope CSS Variables */
 :root {
   --main-color: white;
   --main-color-: rgb(246, 248, 241);
@@ -16,19 +18,21 @@
   --opposite-color--: rgb(80, 80, 80);
 
   --action-color: rgb(45, 118, 238);
-  --action-color-: rgb(0, 146, 255);
+  --action-color-: rgb(30, 96, 201);
 
   --special-color: rgb(221, 103, 26);
 
-  --error-color: rgb(247, 255, 111);
+  --highlight-color: rgb(247, 255, 111);
+  --highlight-color-: rgb(250, 254, 174);
+  --highlight-color--: rgb(252, 254, 209);
 
   --extension-width: 25rem;
-  --extension-height: 40rem;
+  --extension-height: 35rem;
   --body-border-width: 0.25rem;
 }
 
 html {
-  font-size: 14px;
+  font-size: 0.9em;
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -52,8 +56,43 @@ body {
   to { opacity: 1 }
 }
 
+/* Generics */
+button {
+  border: 0px;
+  background-color: var(--action-color);
+  color: var(--main-color);
+  padding: 0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 1rem;
+  border: 0px;
+  border-radius: 0.15rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease-in-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  body {
-    animation: none;
+  button {
+    transition: none;
   }
+}
+
+button:hover, button:focus {
+  background-color: var(--action-color-);
+}
+
+a {
+  color: var(--action-color);
+  transition: color 0.25s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a {
+    transition: none;
+  }
+}
+
+a:hover {
+  color: var(--action-color-);
+  text-decoration: none;
 }

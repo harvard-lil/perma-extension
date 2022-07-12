@@ -4,11 +4,16 @@ archive-form {
   text-align: center;
 }
 
+/* This element takes the space left by <archive-timeline> when the user is not authenticated */
+archive-form[authenticated="false"] {
+  flex: 2.75;
+}
+
 archive-form * {
   max-width: 100%;
 }
 
-/* Title */
+/* Heading */
 archive-form h1 {
   padding: 1rem;
   padding-top: 2rem;
@@ -22,20 +27,22 @@ archive-form h1 img {
 }
 
 archive-form h1 span {
-  font-size: 1.85rem;
+  font-size: 1.65rem;
   letter-spacing: -0.125rem;
 }
 
-/* Tab summary */
-archive-form .tab-summary {
+/* Current tab summary */
+archive-form #current-tab-summary {
   padding: 1rem;
   padding-left: 2rem;
   padding-right: 2rem;
   background-color: var(--main-color-);
+  border-top: 1px solid var(--main-color--);
+  border-bottom: 1px solid var(--main-color--);
 }
 
-archive-form .tab-summary strong,
-archive-form .tab-summary span {
+archive-form #current-tab-summary strong,
+archive-form #current-tab-summary span {
   display: block;
   margin: auto;
   width: 26ch;
@@ -44,14 +51,65 @@ archive-form .tab-summary span {
   text-overflow: ellipsis;
 }
 
-archive-form .tab-summary strong {
+archive-form #current-tab-summary strong {
   font-size: 1.35rem;
   letter-spacing: -0.1rem;
   padding-bottom: 0.25rem;
 }
 
-archive-form .tab-summary span {
+archive-form #current-tab-summary span {
   color: var(--opposite-color--);
   width: 38ch;
 }
 
+/* Properties shared by both sign-in and archive creation form */
+archive-form > form {
+  padding: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  background-color: var(--main-color);
+}
+
+/* Sign-in form */
+archive-form > form[action="#sign-in"] {
+}
+
+archive-form > form[action="#sign-in"] label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  letter-spacing: -0.5px; /* Behold: half a pixel */
+}
+
+archive-form > form[action="#sign-in"] input {
+  display: block;
+  width: 100%;
+  background-color: transparent;
+  border: 0px;
+  border-bottom: 2px solid var(--main-color--);
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+archive-form > form[action="#sign-in"] input::placeholder {
+  color: var(--opposite-color--);
+  text-align: left;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: -0.5px;
+}
+
+archive-form > form[action="#sign-in"] button {
+  display: block;
+  margin: auto;
+  margin-bottom: 1rem;
+}
+
+archive-form > form[action="#sign-in"] a {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}

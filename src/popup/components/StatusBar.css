@@ -1,5 +1,46 @@
 status-bar {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   flex: 0.25;
-  border-top: 1px solid var(--main-color-);
+  border-top: 1px solid var(--main-color--);
+  background-color: var(--main-color-);
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+status-bar > p {
+  padding-top: 0.85rem;
+  width: 30ch;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.5px;
+  color: var(--opposite-color-);
+}
+
+status-bar > button {
+  padding: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  height: 2rem;
+  margin-top: 0.45rem;
+}
+
+status-bar > img {
+  height: 1.65rem;
+  margin-top: 0.66rem;
+  opacity: 0.7;
+  animation: status-bar-spinner 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes status-bar-spinner {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  status-bar > img {
+    animation: none;
+  }
 }

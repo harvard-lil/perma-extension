@@ -3,3 +3,9 @@ archive-timeline {
   flex: 1.5;
   border-top: 1px solid var(--main-color-);
 }
+
+/* This element is not displayed when the user is not authenticated */
+archive-timeline[authenticated="false"] {
+  display: none;
+  flex: 0;
+}

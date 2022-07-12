@@ -5,6 +5,8 @@
  * @license MIT
  * @description `<archive-form>` custom element. 
  */
+// @ts-check
+
 import { BROWSER } from "../../constants/index.js";
 
 /**
@@ -19,7 +21,7 @@ import { BROWSER } from "../../constants/index.js";
  */
 export class ArchiveForm extends HTMLElement {
   /**
-   * Determines which HTML attributes should be observed by `attributeChangedCallback`.
+   * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
   static get observedAttributes() { 
     return ["authenticated", "loading", "tab-url", "tab-title"];
@@ -49,45 +51,78 @@ export class ArchiveForm extends HTMLElement {
   }
 
   /**
-   * Updates HTML attributes based on changes in the `appState` table.
-   * @param {Object} newAppState - From `database.appState.getAllAsMap()`
-   */
-  handleAppStateUpdate(newAppState) {
-    if ("apiKeyChecked" in newAppState) {
-      this.setAttribute("authenticated", newAppState.apiKeyChecked);
-    }
-
-    if ("loadingBlocking" in newAppState) {
-      this.setAttribute("loading", newAppState.loadingBlocking);
-    }
-
-    if ("currentTabUrl" in newAppState) {
-      this.setAttribute("tab-url", newAppState.currentTabUrl);
-    }
-
-    if ("currentTabTitle" in newAppState) {
-      this.setAttribute("tab-title", newAppState.currentTabTitle);
-    }
-  }
-
-  /**
    * 
    */
   renderInnerHTML() {
-    this.innerHTML = /*html*/`
-    <h1>
-      <img src="../assets/infinity-orange.svg" alt="Perma.cc"/>
-      <span>${BROWSER.i18n.getMessage("create_a_new_perma_link")}<span>
-    </h1>
+    const getMessage = BROWSER.i18n.getMessage;
+    const getAttribute = this.getAttribute.bind(this);
+    let html = ``;
 
-    <div class="tab-summary">
-      <strong>${this.getAttribute("tab-title")}</strong>
-      <span>${this.getAttribute("tab-url")}</span>
+    //
+    // Heading
+    //
+    html += /*html*/`
+    <h1>
+      <a href="https://perma.cc" 
+         target="_blank" 
+         rel="noopener noreferer" 
+         title="${getMessage("archive_form_heading_link_caption")}" 
+         aria-label="${getMessage("archive_form_heading_link_caption")}">
+        <img src="../assets/infinity-orange.svg" alt="Perma.cc"/>
+      </a>
+      
+      <span>${getMessage("archive_form_heading")}<span>
+    </h1>`;
+
+    //
+    // Current tab summary 
+    //
+    html += /*html*/`
+    <div id="current-tab-summary">
+      <strong>${getAttribute("tab-title")}</strong>
+      <span>${getAttribute("tab-url")}</span>
     </div>
     `;
 
-    // + If authenticated: complete archive creation form
-    // + Otherwise: Sign in form + "Create an archive on Perma.cc" fallback link 
+    //
+    // If authenticated: Complete archive creation form
+    // 
+    if (getAttribute("authenticated") === 'true') {
+      html += /*html*/``;
+    }
+    //
+    // If not authenticated: Sign-in form
+    //
+    else {
+      html += /*html*/`
+      <form action="#sign-in">
+
+        <input type="password" 
+               name="api-key" 
+               id="api-key" 
+               minlength="40"
+               maxlength="40"
+               aria-label="${getMessage("sign_in_form_api_key_input_label")}"
+               placeholder="${getMessage("sign_in_form_api_key_input_label")}"/>
+
+        <button>${getMessage("sign_in_form_sign_in_button_label")}</button>
+
+        <a href="${getMessage("sign_in_form_sign_in_api_key_help_url")}" 
+          target="_blank" 
+          rel="noopener noreferer">
+          ${getMessage("sign_in_form_sign_in_api_key_help_caption")}
+        </a>
+
+        <a href="${getMessage("sign_in_form_sign_in_guest_link_url") + getAttribute("tab-url")}" 
+          target="_blank" 
+          rel="noopener noreferer">
+          ${getMessage("sign_in_form_sign_in_guest_link_caption")}
+        </a>
+      </form>
+      `;
+    }
+
+    this.innerHTML = html;
   }
  
 } 

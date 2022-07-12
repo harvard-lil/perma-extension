@@ -3,10 +3,14 @@
     "message": "Perma.cc"
   },
   "app_description": {
-    "message": "(Prototype)"
+    "message": "Create and manage Perma.cc links directly from the browser."
   },
   "app_github_url": {
     "message": "https://github.com/harvard-lil/perma-extension"
+  },
+
+  "status_default": {
+    "message": "Ready."
   },
   "status_signed_in": {
     "message": "Signed in."
@@ -21,24 +25,59 @@
     "message": "Archive deleted."
   },
   "error_verifying_api_key": {
-    "message": "The API key provided is not valid."
+    "message": "API key is invalid."
   },
   "error_pulling_folders": {
-    "message": "Unable to list folders."
+    "message": "Couldn't list folders."
   },
   "error_pulling_timeline": {
-    "message": "Unable to list archives for the current tab."
+    "message": "Couldn't pull related archives."
   },
   "error_creating_archive": {
-    "message": "Unable to create an archive for the current tab."
+    "message": "Couldn't create archive."
   },
   "error_picking_folder": {
-    "message": "Unable to pick this folder as a default."
+    "message": "Couldn't set default folder."
   },
   "error_toggling_archive_privacy_status": {
-    "message": "Couldn't update archive status."
+    "message": "Couldn't edit archive."
   },
-  "create_a_new_perma_link": {
+
+  "archive_form_heading": {
     "message": "Create a new Perma Link"
+  },
+
+  "archive_form_heading_link_caption": {
+    "message": "Open Perma.cc in a new tab."
+  },
+  "archive_form_heading_link_url": {
+    "message": "https://perma.cc"
+  },
+
+  "sign_in_form_api_key_input_label" : {
+    "message": "🗝️ Enter your API key to get started."
+  },
+  "sign_in_form_sign_in_button_label": {
+    "message": "Sign in"
+  },
+  "sign_in_form_sign_in_guest_link_caption": {
+    "message": "Archive this page on Perma.cc directly"
+  },
+  "sign_in_form_sign_in_guest_link_url": {
+    "message": "https://perma.cc/service/bookmarklet-create/?v=1&url="
+  },
+  "sign_in_form_sign_in_api_key_help_caption": {
+    "message": "Help me find my API key"
+  },
+  "sign_in_form_sign_in_api_key_help_url": {
+    "message": "https://perma.cc/settings/tools#:~:text=Create%20Perma%20Link.%22-,API,-API%20Key"
+  },
+
+
+  "status_bar_loading_alt": {
+    "message": "The extension is busy."
+  },
+  "status_bar_sign_out_button_caption": {
+    "message": "Sign out"
   }
 }
