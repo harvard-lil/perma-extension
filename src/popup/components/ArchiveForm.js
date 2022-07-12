@@ -14,22 +14,21 @@ import { BROWSER } from "../../constants/index.js";
  * Allows users to sign-in and create archives.
  * 
  * Available HTML attributes:
- * - `authenticated`
- * - `loading`
- * - `tab-url`
- * - `tab-title`
+ * - `authenticated`: If "true", will show the archive creation form. Will show the sign-in form otherwise.
+ * - `loading`: If "true", will "block" any form element.
+ * - `url`: Url of the current tab.
+ * - `title`: Title of the current tab.
  */
 export class ArchiveForm extends HTMLElement {
   /**
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
   static get observedAttributes() { 
-    return ["authenticated", "loading", "tab-url", "tab-title"];
+    return ["authenticated", "loading", "url", "title"];
   }
 
   /**
    * Upon injection into the DOM:
-   * - Start observing changes in the `appState` table.
    * - First render.
    */
   connectedCallback() {
@@ -51,7 +50,7 @@ export class ArchiveForm extends HTMLElement {
   }
 
   /**
-   * 
+   * Assembles a template and injects it into `innerHTML`
    */
   renderInnerHTML() {
     const getMessage = BROWSER.i18n.getMessage;
