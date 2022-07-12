@@ -1,16 +1,26 @@
-// [!] Quick test
+/**
+ * perma-extension
+ * @module popup/handlers/onPopupOpen
+ * @author The Harvard Library Innovation Lab
+ * @license MIT
+ * @description Function run when the popup UI is open. 
+ */
 // @ts-check
-/// <reference types="@types/chrome" />
 
 import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
-import { onStorageUpdate } from "./onStorageUpdate.js";
-
 import { Status } from "../../storage/Status.js";
 import { Auth } from "../../storage/Auth.js";
+import { onStorageUpdate } from "./onStorageUpdate.js";
 
 /**
+ * Function run when the popup UI is open.
+ * - Updates tab-related information
+ * - Hydrates the app (first hydration)
+ * - Checks authentication if needed
+ * - Updates list of available folders and available archives for the current url
  * 
- * @param {*} e 
+ * Called on `DOMContentLoaded`.
+ * @param {Event} e 
  */
 export async function onPopupOpen(e) {
   /** @type {?Auth} */
@@ -22,7 +32,7 @@ export async function onPopupOpen(e) {
   // Pull current tab info
   const [tab] = await BROWSER.tabs.query({ active: true, lastFocusedWindow: true });
 
-  // [1] Send `TAB_SWITCH` runtime message to update `appState` with current tab info.
+  // [1] Send `TAB_SWITCH` runtime message to update storage with current tab info.
   // This needs to be awaited
   await new Promise((resolve) => {
     BROWSER.runtime.sendMessage({
@@ -33,16 +43,16 @@ export async function onPopupOpen(e) {
     (response) => resolve(response));
   }); 
 
-  // [2] Force `onStorageUpdate` on popup open as a way to hydrate the app + pull status and auth info from storage.
+  // [2] Call `onStorageUpdate` on popup open as a way to hydrate the app.
   await onStorageUpdate();
 
-  // Stop here if the extension is busy
+  // [3] Stop here if the extension is busy
   status = await Status.fromStorage();
   if (status.isLoading === true) {
     return;
   }
 
-  // [3] Determine if user is authenticated.
+  // [4] Determine if user is authenticated.
   // - If `auth.isChecked` is `true` and the last check was than an hour ago. Assume user is logged in.
   // - Otherwise, send `AUTH_CHECK` to check against the API.
   auth = await Auth.fromStorage();
@@ -56,7 +66,7 @@ export async function onPopupOpen(e) {
     });
   }
 
-  // [4] If authenticated and not busy: 
+  // [5] If authenticated and not busy: 
   // - Send `FOLDERS_PULL_LIST` to refresh the list of available folders
   // - Send `ARCHIVE_PULL_TIMELINE` to fetch user-created archives for the current tab.
   auth = await Auth.fromStorage(); 

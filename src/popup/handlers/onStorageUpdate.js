@@ -1,4 +1,11 @@
-// [!] Quick test
+// [!] WIP
+/**
+ * perma-extension
+ * @module popup/handlers/onStorageUpdate
+ * @author The Harvard Library Innovation Lab
+ * @license MIT
+ * @description Function run when `browser.storage.local` is updated. 
+ */
 // @ts-check
 /// <reference types="@types/chrome" />
 
@@ -10,14 +17,14 @@ import { Folders } from "../../storage/Folders.js";
 
 /**
  * 
- * @param {*} changes 
+ * @param {chrome.storage.StorageChange} [changes={}] - See https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/StorageChange  
  */
 export async function onStorageUpdate(changes = {}) {
   console.log(changes);
 
   // (To think-through): If `changes` is empty, assume `currentTab`, `status` and `auth` have changed.
 
-  // Quick test
+  // [!] Quick test
   const currentTab = await CurrentTab.fromStorage();
   const status = await Status.fromStorage();
   const auth = await Auth.fromStorage();
