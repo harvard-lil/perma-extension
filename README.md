@@ -21,7 +21,7 @@ flowchart RL
     C[Popup UI]
     D[Perma.cc API]
     A <--> B 
-    B --> |"onChange" events| C
+    B --> |onChanged events| C
     C -.-> |Runtime Messages| A
     D <--> |HTTP| A 
 ```
