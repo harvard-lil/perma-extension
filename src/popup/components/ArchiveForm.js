@@ -7,7 +7,7 @@
  */
 // @ts-check
 
-import { BROWSER } from "../../constants/index.js";
+import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
 
 /**
  * Custom Element: `<archive-form>`. 
@@ -20,6 +20,12 @@ import { BROWSER } from "../../constants/index.js";
  * - `title`: Title of the current tab.
  */
 export class ArchiveForm extends HTMLElement {
+
+  constructor() {
+    super();
+    this.handleSignInFormSubmit = this.handleSignInFormSubmit.bind(this);
+  }
+  
   /**
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
@@ -47,6 +53,18 @@ export class ArchiveForm extends HTMLElement {
     if(newValue !== oldValue) {
       this.renderInnerHTML();
     }
+  }
+
+  /**
+   * 
+   */
+  async handleSignInFormSubmit(e) {
+    e.preventDefault();
+
+    BROWSER.runtime.sendMessage({
+      messageId: MESSAGE_IDS.AUTH_SIGN_IN,
+      apiKey: this.querySelector("input[name='api-key']")?.value
+    });
   }
 
   /**
@@ -99,6 +117,7 @@ export class ArchiveForm extends HTMLElement {
                id="api-key" 
                minlength="40"
                maxlength="40"
+               required
                aria-label="${getMessage("sign_in_form_api_key_input_label")}"
                placeholder="${getMessage("sign_in_form_api_key_input_label")}"/>
 
@@ -124,6 +143,12 @@ export class ArchiveForm extends HTMLElement {
     //
     // [2] Bind event listeners
     //
+
+    // Sign-in form submit
+    this.querySelector('form[action="#sign-in"]')?.addEventListener(
+      "submit",
+      this.handleSignInFormSubmit
+    );
 
     //
     // [3] Side effects

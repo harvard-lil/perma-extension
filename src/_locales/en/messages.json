@@ -25,22 +25,22 @@
     "message": "Archive deleted."
   },
   "error_verifying_api_key": {
-    "message": "API key is invalid."
+    "message": "⚠️ API key is invalid."
   },
   "error_pulling_folders": {
-    "message": "Couldn't list folders."
+    "message": "⚠️ Couldn't list folders."
   },
   "error_pulling_timeline": {
-    "message": "Couldn't pull related archives."
+    "message": "⚠️ Couldn't pull related archives."
   },
   "error_creating_archive": {
-    "message": "Couldn't create archive."
+    "message": "⚠️ Couldn't create archive."
   },
   "error_picking_folder": {
-    "message": "Couldn't set default folder."
+    "message": "⚠️ Couldn't set default folder."
   },
   "error_toggling_archive_privacy_status": {
-    "message": "Couldn't edit archive."
+    "message": "⚠️ Couldn't edit archive."
   },
 
   "archive_form_heading": {

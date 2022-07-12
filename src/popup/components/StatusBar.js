@@ -7,7 +7,7 @@
  */
 // @ts-check
 
-import { BROWSER } from "../../constants/index.js";
+import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
 
 /**
  * Custom Element: `<status-bar>`. 
@@ -19,6 +19,12 @@ import { BROWSER } from "../../constants/index.js";
  * - `message`: Should be a key accessible via `browser.i18n`.
  */
 export class StatusBar extends HTMLElement {
+
+  constructor() {
+    super();
+    this.handleSignOutClick = this.handleSignOutClick.bind(this);
+  }
+
   /**
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
@@ -47,6 +53,15 @@ export class StatusBar extends HTMLElement {
       this.renderInnerHTML();
     }
   }
+
+  /**
+   * 
+   */
+   async handleSignOutClick(e) {
+    e.preventDefault();
+    BROWSER.runtime.sendMessage({messageId: MESSAGE_IDS.AUTH_SIGN_OUT});
+  }
+
 
   /**
    * Assembles a template and injects it into `innerHTML`
@@ -87,6 +102,9 @@ export class StatusBar extends HTMLElement {
     //
     // [2] Bind event listeners
     //
+
+    // Sign-out button click
+    this.querySelector("button")?.addEventListener("click", this.handleSignOutClick);
   }
 
 }
