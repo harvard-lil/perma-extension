@@ -19,7 +19,10 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * - `message`: Should be a key accessible via `browser.i18n`.
  */
 export class StatusBar extends HTMLElement {
-
+  /**
+   * On instantiation: 
+   * - Bind local methods to `this` so they can easily be passed around
+   */
   constructor() {
     super();
     this.handleSignOutClick = this.handleSignOutClick.bind(this);
@@ -55,13 +58,13 @@ export class StatusBar extends HTMLElement {
   }
 
   /**
-   * 
+   * On "click" on the "Sign out" button:
+   * - Send `AUTH_SIGN)_OUT` message to the service worker.
    */
    async handleSignOutClick(e) {
     e.preventDefault();
     BROWSER.runtime.sendMessage({messageId: MESSAGE_IDS.AUTH_SIGN_OUT});
   }
-
 
   /**
    * Assembles a template and injects it into `innerHTML`

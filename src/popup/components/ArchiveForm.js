@@ -20,12 +20,15 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * - `title`: Title of the current tab.
  */
 export class ArchiveForm extends HTMLElement {
-
+  /**
+   * On instantiation: 
+   * - Bind local methods to `this` so they can easily be passed around
+   */
   constructor() {
     super();
     this.handleSignInFormSubmit = this.handleSignInFormSubmit.bind(this);
   }
-  
+
   /**
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
@@ -56,7 +59,8 @@ export class ArchiveForm extends HTMLElement {
   }
 
   /**
-   * 
+   * On "submit" of the "Sign in" form:
+   * - Send `AUTH_SIGN_IN` message to the service worker.
    */
   async handleSignInFormSubmit(e) {
     e.preventDefault();
