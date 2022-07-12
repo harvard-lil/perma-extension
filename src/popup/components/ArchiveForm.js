@@ -61,14 +61,25 @@ export class ArchiveForm extends HTMLElement {
   /**
    * On "submit" of the "Sign in" form:
    * - Send `AUTH_SIGN_IN` message to the service worker.
+   * - If successful, also call `FOLDERS_PULL_LIST` and `ARCHIVE_PULL_TIMELINE`.
    */
   async handleSignInFormSubmit(e) {
     e.preventDefault();
 
-    BROWSER.runtime.sendMessage({
-      messageId: MESSAGE_IDS.AUTH_SIGN_IN,
-      apiKey: this.querySelector("input[name='api-key']")?.value
+    const signedIn = await new Promise((resolve) => {
+      BROWSER.runtime.sendMessage(
+        {
+          messageId: MESSAGE_IDS.AUTH_SIGN_IN,
+          apiKey: this.querySelector("input[name='api-key']")?.value,
+        },
+        (response) => resolve(response)
+      );
     });
+
+    if (signedIn === true) {
+      BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.FOLDERS_PULL_LIST });
+      BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.ARCHIVE_PULL_TIMELINE });
+    }
   }
 
   /**

@@ -35,11 +35,12 @@ export async function authSignIn(apiKey) {
     status.message = "status_signed_in";
   }
   catch(err) {
-    //console.log(err);
     auth.apiKey = "";
     auth.isChecked = false;
 
     status.message = "error_verifying_api_key";
+    //console.log(err);
+    throw err;
   }
   finally {
     status.isLoading = false;
