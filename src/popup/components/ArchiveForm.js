@@ -50,16 +50,19 @@ export class ArchiveForm extends HTMLElement {
   }
 
   /**
-   * Assembles a template and injects it into `innerHTML`
+   * Assembles a template and injects it into `innerHTML`.
+   * Binds event listeners to the elements that were injected.
    */
   renderInnerHTML() {
     const getMessage = BROWSER.i18n.getMessage;
     const getAttribute = this.getAttribute.bind(this);
-    let html = ``;
 
     //
-    // Heading
+    // [1] Prepare and inject template
     //
+    let html = ``;
+
+    // Heading
     html += /*html*/`
     <h1>
       <a href="https://perma.cc" 
@@ -73,25 +76,20 @@ export class ArchiveForm extends HTMLElement {
       <span>${getMessage("archive_form_heading")}<span>
     </h1>`;
 
-    //
     // Current tab summary 
-    //
     html += /*html*/`
     <div id="current-tab-summary">
-      <strong>${getAttribute("tab-title")}</strong>
-      <span>${getAttribute("tab-url")}</span>
+      <strong>${getAttribute("title")}</strong>
+      <span>${getAttribute("url")}</span>
     </div>
     `;
 
-    //
     // If authenticated: Complete archive creation form
-    // 
     if (getAttribute("authenticated") === 'true') {
-      html += /*html*/``;
+      html += /*html*/`
+      `;
     }
-    //
     // If not authenticated: Sign-in form
-    //
     else {
       html += /*html*/`
       <form action="#sign-in">
@@ -112,7 +110,7 @@ export class ArchiveForm extends HTMLElement {
           ${getMessage("sign_in_form_sign_in_api_key_help_caption")}
         </a>
 
-        <a href="${getMessage("sign_in_form_sign_in_guest_link_url") + getAttribute("tab-url")}" 
+        <a href="${getMessage("sign_in_form_sign_in_guest_link_url") + getAttribute("url")}" 
           target="_blank" 
           rel="noopener noreferer">
           ${getMessage("sign_in_form_sign_in_guest_link_caption")}
@@ -122,6 +120,21 @@ export class ArchiveForm extends HTMLElement {
     }
 
     this.innerHTML = html;
+
+    //
+    // [2] Bind event listeners
+    //
+
+    //
+    // [3] Side effects
+    //
+
+    // Disable all form elements while the app is loading
+    if (getAttribute("loading") === "true") {
+      for (let element of this.querySelectorAll("button, input")) {
+        element.setAttribute("disabled", "disabled");
+      }
+    }
   }
  
 } 

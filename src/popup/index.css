@@ -81,6 +81,12 @@ button:hover, button:focus {
   background-color: var(--action-color-);
 }
 
+button:disabled {
+  background-color: var(--action-color-);
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
 a {
   color: var(--action-color);
   transition: color 0.25s ease-in-out;
