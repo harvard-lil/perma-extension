@@ -8,6 +8,7 @@ jsdoc2md ../src/background/authSignIn.js > ../doc/background/authSignIn.md;
 jsdoc2md ../src/background/authSignOut.js > ../doc/background/authSignOut.md;
 jsdoc2md ../src/background/foldersPick.js > ../doc/background/foldersPick.md;
 jsdoc2md ../src/background/foldersPullList.js > ../doc/background/foldersPullList.md;
+jsdoc2md ../src/background/statusMessageClear.js > ../doc/background/statusMessageClear.md;
 jsdoc2md ../src/background/tabSwitch.js > ../doc/background/tabSwitch.md;
 
 jsdoc2md ../src/constants/index.js > ../doc/constants/index.md;
@@ -26,4 +27,3 @@ jsdoc2md ../src/popup/components/AppHeader.js > ../doc/popup/components/AppHeade
 jsdoc2md ../src/popup/components/ArchiveForm.js > ../doc/popup/components/ArchiveForm.md;
 jsdoc2md ../src/popup/components/ArchiveTimeline.js > ../doc/popup/components/ArchiveTimeline.md;
 jsdoc2md ../src/popup/components/StatusBar.js > ../doc/popup/components/StatusBar.md;
-

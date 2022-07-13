@@ -1,4 +1,3 @@
-// [!] WIP
 /**
  * perma-extension
  * @module popup/handlers/onStorageUpdate
@@ -16,40 +15,81 @@ import { Archives } from "../../storage/Archives.js";
 import { Folders } from "../../storage/Folders.js";
 
 /**
- * 
+ * Reacts to changes in storage and feeds data to the UI.
  * @param {chrome.storage.StorageChange} [changes={}] - See https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/StorageChange  
  */
 export async function onStorageUpdate(changes = {}) {
-  console.log(changes);
+  const updatedKeys = Object.keys(changes);
+  //console.log(updatedKeys);
 
-  // (To think-through): If `changes` is empty, assume `currentTab`, `status` and `auth` have changed.
-
-  // [!] Quick test
-  const currentTab = await CurrentTab.fromStorage();
-  const status = await Status.fromStorage();
-  const auth = await Auth.fromStorage();
-  const folders = await Folders.fromStorage();
-  const archives = await Archives.fromStorage();
-
+  //
+  // Elements to feed info to
+  //
   const appHeader = document.querySelector("body > app-header");
   const archiveForm = document.querySelector("body > archive-form");
   const archiveTimeline = document.querySelector("body > archive-timeline");
   const statusBar = document.querySelector("body > status-bar");
 
-  appHeader?.setAttribute("tab-url", currentTab.url);
-  appHeader?.setAttribute("tab-title", currentTab.title);
+  // If `changes` is empty, assume everything needs to be pulled from storage.
+  if (updatedKeys.length === 0 ) {
+    updatedKeys.push(
+      CurrentTab.KEY,
+      Status.KEY,
+      Auth.KEY,
+      Archives.KEY,
+      Folders.KEY
+    );
+  }
 
-  archiveForm?.setAttribute("tab-url", currentTab.url);
-  archiveForm?.setAttribute("tab-title", currentTab.title);
-  archiveForm?.setAttribute("is-loading", status.isLoading);
-  archiveForm?.setAttribute("is-authenticated", auth.isChecked);
-  archiveForm?.setAttribute("folders-list", JSON.stringify(folders.available));
-  archiveForm?.setAttribute("folders-pick", folders.pick);
+  console.log(updatedKeys);
 
-  statusBar?.setAttribute("is-loading", status.isLoading);
-  statusBar?.setAttribute("is-authenticated", auth.isChecked);
-  statusBar?.setAttribute("message", status.message);
+  // Changes to CurrentTab
+  if (updatedKeys.indexOf(CurrentTab.KEY) > -1) {
+    console.log("Hm ...")
+    const currentTab = await CurrentTab.fromStorage();
 
-  archiveTimeline?.setAttribute("is-loading", status.isLoading);
-  archiveTimeline?.setAttribute("is-authenticated", auth.isChecked);
+    appHeader?.setAttribute("tab-url", currentTab.url);
+    appHeader?.setAttribute("tab-title", currentTab.title);
+
+    archiveForm?.setAttribute("tab-url", currentTab.url);
+    archiveForm?.setAttribute("tab-title", currentTab.title);
+  }
+
+  // Changes to Status
+  if (updatedKeys.indexOf(Status.KEY) > -1) {
+    const status = await Status.fromStorage();
+
+    archiveForm?.setAttribute("is-loading", status.isLoading);
+
+    statusBar?.setAttribute("is-loading", status.isLoading);
+    statusBar?.setAttribute("message", status.message);
+
+    archiveTimeline?.setAttribute("is-loading", status.isLoading);
+  }
+
+  // Changes to Auth
+  if (updatedKeys.indexOf(Auth.KEY) > -1) {
+    const auth = await Auth.fromStorage();
+
+    archiveForm?.setAttribute("is-authenticated", auth.isChecked);
+
+    statusBar?.setAttribute("is-authenticated", auth.isChecked);
+  
+    archiveTimeline?.setAttribute("is-authenticated", auth.isChecked);
+  }
+
+  // Changes to Archives
+  if (updatedKeys.indexOf(Archives.KEY) > -1) {
+    //const archives = await Archives.fromStorage();
+  }
+
+  // Changes to Folders
+  if (updatedKeys.indexOf(Folders.KEY) > -1) {
+    const folders = await Folders.fromStorage();
+
+    archiveForm?.setAttribute("folders-list", JSON.stringify(folders.available));
+    archiveForm?.setAttribute("folders-pick", folders.pick);
+  }
+  
+
 }
