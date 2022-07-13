@@ -1,0 +1,56 @@
+app-header {
+  display: block;
+  grid-area: header;
+}
+
+/* Title */
+app-header > h1 {
+  padding: 1rem;
+  padding-top: 2rem;
+  text-align: center;
+}
+
+app-header > h1 img {
+  max-width: 25%; 
+  display: block;
+  margin: auto;
+  padding-bottom: 0.5rem;
+}
+
+app-header > h1 span {
+  font-size: 1.65rem;
+  letter-spacing: -0.125rem;
+}
+
+/* Current tab summary */
+app-header > div {
+  text-align: center;
+  padding: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  background-color: var(--main-color-);
+  border-top: 1px solid var(--main-color--);
+  border-bottom: 1px solid var(--main-color--);
+}
+
+app-header > div strong,
+app-header > div span {
+  display: block;
+  margin: auto;
+  width: 26ch;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+app-header > div strong {
+  font-size: 1.35rem;
+  letter-spacing: -0.1rem;
+  padding-bottom: 0.25rem;
+}
+
+app-header > div span {
+  color: var(--opposite-color--);
+  width: 38ch;
+}
+

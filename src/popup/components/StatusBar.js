@@ -14,8 +14,8 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * Informs users on the extension's current state (is loading, error messages ...).
  * 
  * Available HTML attributes:
- * - `authenticated`: If "true", will show the "Sign out" button if not loading.
- * - `loading`: If "true", will show a loading spinner.
+ * - `is-authenticated`: If "true", will show the "Sign out" button if not loading.
+ * - `is-loading`: If "true", will show a loading spinner.
  * - `message`: Should be a key accessible via `browser.i18n`.
  */
 export class StatusBar extends HTMLElement {
@@ -32,7 +32,7 @@ export class StatusBar extends HTMLElement {
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
   static get observedAttributes() { 
-    return ["authenticated", "loading", "message"];
+    return ["is-authenticated", "is-loading", "message"];
   }
 
   /**
@@ -88,12 +88,12 @@ export class StatusBar extends HTMLElement {
       </p>`;
 
     // Sign-out button (only if authenticated and not loading) 
-    if (getAttribute("authenticated") === 'true' && getAttribute("loading") !== 'true') {
+    if (getAttribute("is-authenticated") === 'true' && getAttribute("is-loading") !== 'true') {
       html += /*html*/`<button>${getMessage("status_bar_sign_out_button_caption")}</button>`;
     }
 
     // Loading icon
-    if (getAttribute("loading") === 'true') {
+    if (getAttribute("is-loading") === 'true') {
       html += /*html*/`
       <img src="../assets/loading.svg" 
            alt="${getMessage("status_bar_loading_alt")}"/>

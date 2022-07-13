@@ -14,10 +14,12 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * Allows users to sign-in and create archives.
  * 
  * Available HTML attributes:
- * - `authenticated`: If "true", will show the archive creation form. Will show the sign-in form otherwise.
- * - `loading`: If "true", will "block" any form element.
- * - `url`: Url of the current tab.
- * - `title`: Title of the current tab.
+ * - `is-authenticated`: If "true", will show the archive creation form. Will show the sign-in form otherwise.
+ * - `is-loading`: If "true", will "block" any form element.
+ * - `tab-url`: Url of the current tab.
+ * - `tab-title`: Title of the current tab.
+ * - `folders-list`: JSON-serialized storage entry for "folders.available", if available. Should contain an array of objects (id, depth, name).
+ * - `folders-pick`: Id of the folder the user has picked as a default, if any. 
  */
 export class ArchiveForm extends HTMLElement {
   /**
@@ -33,7 +35,7 @@ export class ArchiveForm extends HTMLElement {
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
   static get observedAttributes() { 
-    return ["authenticated", "loading", "url", "title"];
+    return ["is-authenticated", "is-loading", "tab-url", "tab-title", "folders-list", "folders-pick"];
   }
 
   /**
@@ -95,38 +97,24 @@ export class ArchiveForm extends HTMLElement {
     //
     let html = ``;
 
-    // Heading
-    html += /*html*/`
-    <h1>
-      <a href="https://perma.cc" 
-         target="_blank" 
-         rel="noopener noreferer" 
-         title="${getMessage("archive_form_heading_link_caption")}" 
-         aria-label="${getMessage("archive_form_heading_link_caption")}">
-        <img src="../assets/infinity-orange.svg" alt="Perma.cc"/>
-      </a>
-      
-      <span>${getMessage("archive_form_heading")}<span>
-    </h1>`;
-
-    // Current tab summary 
-    html += /*html*/`
-    <div id="current-tab-summary">
-      <strong>${getAttribute("title")}</strong>
-      <span>${getAttribute("url")}</span>
-    </div>
-    `;
-
     // If authenticated: Complete archive creation form
-    if (getAttribute("authenticated") === 'true') {
+    if (getAttribute("is-authenticated") === 'true') {
       html += /*html*/`
+      <form action="#create-archive">
+
+        <select name="folder-pick">
+          <option name="">(Default folder)</option>
+        </select>
+
+        <button>Archive</button>
+
+      </form>
       `;
     }
     // If not authenticated: Sign-in form
     else {
       html += /*html*/`
       <form action="#sign-in">
-
         <input type="password" 
                name="api-key" 
                id="api-key" 
@@ -144,7 +132,7 @@ export class ArchiveForm extends HTMLElement {
           ${getMessage("sign_in_form_sign_in_api_key_help_caption")}
         </a>
 
-        <a href="${getMessage("sign_in_form_sign_in_guest_link_url") + getAttribute("url")}" 
+        <a href="${getMessage("sign_in_form_sign_in_guest_link_url") + getAttribute("tab-url")}" 
           target="_blank" 
           rel="noopener noreferer">
           ${getMessage("sign_in_form_sign_in_guest_link_caption")}
@@ -170,7 +158,7 @@ export class ArchiveForm extends HTMLElement {
     //
 
     // Disable all form elements while the app is loading
-    if (getAttribute("loading") === "true") {
+    if (getAttribute("is-loading") === "true") {
       for (let element of this.querySelectorAll("button, input")) {
         element.setAttribute("disabled", "disabled");
       }

@@ -1,65 +1,15 @@
 archive-form {
   display: block;
-  flex: 1.25;
-  text-align: center;
+  grid-area: main-top;
 }
 
 /* This element takes the space left by <archive-timeline> when the user is not authenticated */
 archive-form[authenticated="false"] {
-  flex: 2.75;
+  grid-area: main-top / main-bottom;
 }
 
 archive-form * {
   max-width: 100%;
-}
-
-/* Heading */
-archive-form h1 {
-  padding: 1rem;
-  padding-top: 2rem;
-}
-
-archive-form h1 img {
-  max-width: 25%; 
-  display: block;
-  margin: auto;
-  padding-bottom: 0.5rem;
-}
-
-archive-form h1 span {
-  font-size: 1.65rem;
-  letter-spacing: -0.125rem;
-}
-
-/* Current tab summary */
-archive-form #current-tab-summary {
-  padding: 1rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  background-color: var(--main-color-);
-  border-top: 1px solid var(--main-color--);
-  border-bottom: 1px solid var(--main-color--);
-}
-
-archive-form #current-tab-summary strong,
-archive-form #current-tab-summary span {
-  display: block;
-  margin: auto;
-  width: 26ch;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-archive-form #current-tab-summary strong {
-  font-size: 1.35rem;
-  letter-spacing: -0.1rem;
-  padding-bottom: 0.25rem;
-}
-
-archive-form #current-tab-summary span {
-  color: var(--opposite-color--);
-  width: 38ch;
 }
 
 /* Properties shared by both sign-in and archive creation form */
@@ -112,4 +62,5 @@ archive-form > form[action="#sign-in"] a {
   display: block;
   font-size: 1rem;
   margin-bottom: 0.5rem;
+  text-align: center;
 }

@@ -9,6 +9,7 @@
 /// <reference types="@types/chrome" />
 import { BROWSER } from "../constants/index.js";
 
+import "./components/AppHeader.js";
 import "./components/ArchiveForm.js";
 import "./components/ArchiveTimeline.js";
 import "./components/StatusBar.js"; 

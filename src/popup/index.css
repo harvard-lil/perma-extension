@@ -45,9 +45,16 @@ body {
   color: var(--opposite-color);
   overflow: hidden;
 
-  display: flex;
-  flex-direction: column;
-
+  display: grid;
+  grid-template-areas: "header"
+                       "main-top"
+                       "main-bottom"
+                       "footer";
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.75fr repeat(2, 1fr) 3.25rem;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  
   animation: body-fade-in 0.25s normal forwards ease-in-out;
 }
 

@@ -31,19 +31,23 @@ export async function onStorageUpdate(changes = {}) {
   const folders = await Folders.fromStorage();
   const archives = await Archives.fromStorage();
 
+  const appHeader = document.querySelector("body > app-header");
   const archiveForm = document.querySelector("body > archive-form");
-  const statusBar = document.querySelector("body > status-bar");
   const archiveTimeline = document.querySelector("body > archive-timeline");
+  const statusBar = document.querySelector("body > status-bar");
 
-  archiveForm?.setAttribute("url", currentTab.url);
-  archiveForm?.setAttribute("title", currentTab.title);
-  archiveForm?.setAttribute("loading", status.isLoading);
-  archiveForm?.setAttribute("authenticated", auth.isChecked);
+  appHeader?.setAttribute("tab-url", currentTab.url);
+  appHeader?.setAttribute("tab-title", currentTab.title);
 
-  statusBar?.setAttribute("loading", status.isLoading);
-  statusBar?.setAttribute("authenticated", auth.isChecked);
+  archiveForm?.setAttribute("tab-url", currentTab.url);
+  archiveForm?.setAttribute("tab-title", currentTab.title);
+  archiveForm?.setAttribute("is-loading", status.isLoading);
+  archiveForm?.setAttribute("is-authenticated", auth.isChecked);
+
+  statusBar?.setAttribute("is-loading", status.isLoading);
+  statusBar?.setAttribute("is-authenticated", auth.isChecked);
   statusBar?.setAttribute("message", status.message);
 
-  archiveTimeline?.setAttribute("loading", status.isLoading);
-  archiveTimeline?.setAttribute("authenticated", auth.isChecked);
+  archiveTimeline?.setAttribute("is-loading", status.isLoading);
+  archiveTimeline?.setAttribute("is-authenticated", auth.isChecked);
 }

@@ -1,11 +1,10 @@
 archive-timeline {
   display: block;
-  flex: 1.5;
-  border-top: 1px solid var(--main-color-);
+  grid-area: main-bottom;
 }
 
 /* This element is not displayed when the user is not authenticated */
 archive-timeline[authenticated="false"] {
   display: none;
-  flex: 0;
+  grid-area: unset;
 }
