@@ -123,14 +123,25 @@ export class ArchiveForm extends HTMLElement {
     //
     let html = ``;
 
-    // If authenticated: Complete archive creation form
     if (getAttribute("is-authenticated") === "true") {
       html += /*html*/ `
       <form action="#create-archive">
-        <select name="folders-pick" aria-label="Select a folder to save the archive into">
-          <option value="">Default</option>
-          ${this.generateFoldersPickOptions()}
-        </select>
+
+        <fieldset>
+          <label for="folders-pick">${getMessage("create_archive_form_select_intro")}</label>
+          <select name="folders-pick"
+                  id="folders-pick" 
+                  aria-label="${getMessage("create_archive_form_select_label")}">
+            <option value="">${getMessage("create_archive_form_select_default")}</option>
+            ${this.generateFoldersPickOptions()}
+          </select>
+        </fieldset>
+
+        <button data-action="create-archive-public"
+                aria-label="${getMessage("create_archive_form_button_label")}"
+                title="${getMessage("create_archive_form_button_label")}">
+          ${getMessage("create_archive_form_button_caption")}
+        </button>
       </form>
       `;
     }

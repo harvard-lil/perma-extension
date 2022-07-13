@@ -56,15 +56,15 @@ export class AppHeader extends HTMLElement {
     // Heading
     this.innerHTML = /*html*/`
     <h1>
-      <a href="https://perma.cc" 
-        target="_blank" 
-        rel="noopener noreferer" 
-        title="${getMessage("archive_form_heading_link_caption")}" 
-        aria-label="${getMessage("archive_form_heading_link_caption")}">
+      <a href="${getMessage("app_header_link_url")}" 
+         target="_blank" 
+         rel="noopener noreferer" 
+         title="${getMessage("app_header_link_label")}" 
+         aria-label="${getMessage("app_header_link_label")}">
         <img src="../assets/infinity-orange.svg" alt="Perma.cc"/>
       </a>
       
-      <span>${getMessage("archive_form_heading")}<span>
+      <span>${getMessage("app_header_title")}<span>
     </h1>
     
     <div>

@@ -64,3 +64,43 @@ archive-form > form[action="#sign-in"] a {
   margin-bottom: 0.5rem;
   text-align: center;
 }
+
+/* Create archive form */
+archive-form > form[action="#create-archive"] {
+  text-align: right;
+}
+
+archive-form > form[action="#create-archive"] > fieldset {
+  border: 0px;
+}
+
+archive-form > form[action="#create-archive"] > fieldset label {
+  color: var(--opposite-color-);
+  font-size: 0.95rem;
+  letter-spacing: -0.5px;
+  display: block;
+  margin-bottom: 0.25rem;
+  text-align: left;
+}
+
+archive-form > form[action="#create-archive"] > fieldset select {
+  appearance: none;
+  padding: 1rem;
+  font-size: 1rem;
+  color: var(--opposite-color);
+  letter-spacing: -0.5px;
+  background-color: var(--main-color);
+  border: 1px solid var(--main-color--);
+  border-radius: 0.15rem;
+  position: relative;
+  top: 0px;
+  width: 100%;
+  display: block;
+}
+
+archive-form > form[action="#create-archive"] > button {
+  display: inline-block;
+  align-self: right;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}

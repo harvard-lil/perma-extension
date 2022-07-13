@@ -43,14 +43,13 @@
     "message": "⚠️ Couldn't edit archive."
   },
 
-  "archive_form_heading": {
+  "app_header_title": {
     "message": "Create a new Perma Link"
   },
-
-  "archive_form_heading_link_caption": {
+  "app_header_link_label": {
     "message": "Open Perma.cc in a new tab."
   },
-  "archive_form_heading_link_url": {
+  "app_header_link_url": {
     "message": "https://perma.cc"
   },
 
@@ -73,6 +72,21 @@
     "message": "https://perma.cc/settings/tools#:~:text=Create%20Perma%20Link.%22-,API,-API%20Key"
   },
 
+  "create_archive_form_select_intro": {
+    "message": "The archive will be created under:"
+  },
+  "create_archive_form_select_label": {
+    "message": "Select a folder to save the archive into."
+  },
+  "create_archive_form_select_default": {
+    "message": "Default folder."
+  },
+  "create_archive_form_button_caption": {
+    "message": "Archive"
+  },
+  "create_archive_form_button_label": {
+    "message": "Create a public archive for the current page."
+  },
 
   "status_bar_loading_alt": {
     "message": "The extension is busy."
