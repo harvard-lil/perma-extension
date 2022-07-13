@@ -41,7 +41,8 @@
  * - `ARCHIVE_CREATE_PUBLIC`: Request to create a public archive for a given url.
  * - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url.
  * - `ARCHIVE_PRIVACY_STATUS_TOGGLE`: Request to toggle the privacy status of a given archive. Params: `guid`, `isPrivate`.
- * - `ARCHIVE_DELETE: Request the deletion of an archive. Params: `guid`.
+ * - `ARCHIVE_DELETE`: Request the deletion of an archive. Params: `guid`.
+ * - `STATUS_MESSAGE_CLEAR`: Clears the latest status message.
  * 
  * @constant 
  */
@@ -56,7 +57,8 @@ export const MESSAGE_IDS = {
   ARCHIVE_CREATE_PUBLIC: 8,
   ARCHIVE_CREATE_PRIVATE: 9,
   ARCHIVE_PRIVACY_STATUS_TOGGLE: 10,
-  ARCHIVE_DELETE: 11
+  ARCHIVE_DELETE: 11,
+  STATUS_MESSAGE_CLEAR: 12
 };
 
 /**

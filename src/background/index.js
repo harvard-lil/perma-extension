@@ -18,6 +18,7 @@ import { authSignIn } from "./authSignIn.js";
 import { authSignOut } from "./authSignOut.js";
 import { foldersPick } from "./foldersPick.js";
 import { foldersPullList } from "./foldersPullList.js";
+import { statusMessageClear } from "./statusMessageClear.js";
 import { tabSwitch } from "./tabSwitch.js";
 
 /**
@@ -98,6 +99,12 @@ function backgroundMessageHandler(message, sender, sendResponse) {
 
     case MESSAGE_IDS.ARCHIVE_DELETE:
       archiveDelete(message["guid"])
+        .then(() => sendResponse(true))
+        .catch(() => sendResponse(false));
+      break;
+
+    case MESSAGE_IDS.STATUS_MESSAGE_CLEAR:
+      statusMessageClear()
         .then(() => sendResponse(true))
         .catch(() => sendResponse(false));
       break;

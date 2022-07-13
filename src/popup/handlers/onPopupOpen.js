@@ -77,4 +77,9 @@ export async function onPopupOpen(e) {
     BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.ARCHIVE_PULL_TIMELINE });
   }
 
+  // [6] Schedule cleanup of status message
+  setTimeout(() => {
+    BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.STATUS_MESSAGE_CLEAR });
+  }, 3000);
+
 }
