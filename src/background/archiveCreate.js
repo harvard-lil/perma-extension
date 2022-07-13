@@ -28,6 +28,7 @@ export async function archiveCreate(isPrivate = false) {
 
   try {
     status.isLoading = true;
+    status.message = "status_in_progress";
     await status.save();
 
     const api = new PermaAPI(String(auth.apiKey));

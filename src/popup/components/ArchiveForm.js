@@ -28,9 +28,14 @@ export class ArchiveForm extends HTMLElement {
    */
   constructor() {
     super();
+
+    this.generateSignInForm = this.generateSignInForm.bind(this);
+    this.generateCreateArchiveForm = this.generateCreateArchiveForm.bind(this);
+    this.generateFoldersPickOptions = this.generateFoldersPickOptions.bind(this);
+
     this.handleSignInFormSubmit = this.handleSignInFormSubmit.bind(this);
     this.handleFolderSelectChange = this.handleFolderSelectChange.bind(this);
-    this.generateFoldersPickOptions = this.generateFoldersPickOptions.bind(this);
+    this.handleCreateArchiveClick = this.handleCreateArchiveClick.bind(this);
   }
 
   /**
@@ -111,6 +116,17 @@ export class ArchiveForm extends HTMLElement {
   }
 
   /**
+   * On "click" of the "Create archive" button.
+   * - Send `ARCHIVE_CREATE_PUBLIC` message to the service worker.
+   *  
+   * @param {Event} e
+   */
+  async handleCreateArchiveClick(e) {
+    e.preventDefault();
+    BROWSER.runtime.sendMessage({messageId: MESSAGE_IDS.ARCHIVE_CREATE_PUBLIC});
+  }
+
+  /**
    * Assembles a template and injects it into `innerHTML`.
    * Binds event listeners to the elements that were injected.
    */
@@ -121,61 +137,15 @@ export class ArchiveForm extends HTMLElement {
     //
     // [1] Prepare and inject template
     //
-    let html = ``;
 
+    // If authenticated: Archive creation form
     if (getAttribute("is-authenticated") === "true") {
-      html += /*html*/ `
-      <form action="#create-archive">
-
-        <fieldset>
-          <label for="folders-pick">${getMessage("create_archive_form_select_intro")}</label>
-          <select name="folders-pick"
-                  id="folders-pick" 
-                  aria-label="${getMessage("create_archive_form_select_label")}">
-            <option value="">${getMessage("create_archive_form_select_default")}</option>
-            ${this.generateFoldersPickOptions()}
-          </select>
-        </fieldset>
-
-        <button data-action="create-archive-public"
-                aria-label="${getMessage("create_archive_form_button_label")}"
-                title="${getMessage("create_archive_form_button_label")}">
-          ${getMessage("create_archive_form_button_caption")}
-        </button>
-      </form>
-      `;
+      this.innerHTML = this.generateCreateArchiveForm();
     }
     // If not authenticated: Sign-in form
     else {
-      html += /*html*/ `
-      <form action="#sign-in">
-        <input type="password" 
-               name="api-key" 
-               id="api-key" 
-               minlength="40"
-               maxlength="40"
-               required
-               aria-label="${getMessage("sign_in_form_api_key_input_label")}"
-               placeholder="${getMessage("sign_in_form_api_key_input_label")}"/>
-
-        <button>${getMessage("sign_in_form_sign_in_button_label")}</button>
-
-        <a href="${getMessage("sign_in_form_sign_in_api_key_help_url")}" 
-          target="_blank" 
-          rel="noopener noreferer">
-          ${getMessage("sign_in_form_sign_in_api_key_help_caption")}
-        </a>
-
-        <a href="${getMessage("sign_in_form_sign_in_guest_link_url") + getAttribute("tab-url")}" 
-          target="_blank" 
-          rel="noopener noreferer">
-          ${getMessage("sign_in_form_sign_in_guest_link_caption")}
-        </a>
-      </form>
-      `;
+      this.innerHTML = this.generateSignInForm();
     }
-
-    this.innerHTML = html;
 
     //
     // [2] Bind event listeners
@@ -193,21 +163,91 @@ export class ArchiveForm extends HTMLElement {
       this.handleFolderSelectChange
     );
 
+    // Create archive form: Create a public archive
+    this.querySelector('form[action="#create-archive"] button')?.addEventListener(
+      "click",
+      this.handleCreateArchiveClick
+    );
+
     //
     // [3] Side effects
     //
 
     // Disable all form elements when the app is loading
     if (getAttribute("is-loading") === "true") {
-      for (let element of this.querySelectorAll("button, input")) {
+      for (let element of this.querySelectorAll("button, input, select")) {
         element.setAttribute("disabled", "disabled");
       }
     }
   }
 
   /**
+   * Generates the sign-in form.
+   * @returns {string} HTML
+   */
+  generateSignInForm() {
+    const getMessage = BROWSER.i18n.getMessage;
+    const getAttribute = this.getAttribute.bind(this);
+
+    return /*html*/`
+    <form action="#sign-in">
+      <input type="password" 
+             name="api-key" 
+             id="api-key" 
+             minlength="40"
+             maxlength="40"
+             required
+             aria-label="${getMessage("sign_in_form_api_key_input_label")}"
+             placeholder="${getMessage("sign_in_form_api_key_input_label")}"/>
+
+      <button>${getMessage("sign_in_form_sign_in_button_label")}</button>
+
+      <a href="${getMessage("sign_in_form_sign_in_api_key_help_url")}" 
+        target="_blank" 
+        rel="noopener noreferer">
+        ${getMessage("sign_in_form_sign_in_api_key_help_caption")}
+      </a>
+
+      <a href="${getMessage("sign_in_form_sign_in_guest_link_url") + getAttribute("tab-url")}" 
+        target="_blank" 
+        rel="noopener noreferer">
+        ${getMessage("sign_in_form_sign_in_guest_link_caption")}
+      </a>
+    </form>
+    `;
+  }
+
+  /**
+   * Generates the archive creation form.
+   * @returns {string} HTML
+   */
+  generateCreateArchiveForm() {
+    const getMessage = BROWSER.i18n.getMessage;
+
+    return /*html*/ `
+    <form action="#create-archive">
+
+      <fieldset>
+        <label for="folders-pick">${getMessage("create_archive_form_select_intro")}</label>
+        <select name="folders-pick"
+                id="folders-pick" 
+                aria-label="${getMessage("create_archive_form_select_label")}">
+          <option value="">${getMessage("create_archive_form_select_default")}</option>
+          ${this.generateFoldersPickOptions()}
+        </select>
+      </fieldset>
+
+      <button data-action="create-archive-public"
+              aria-label="${getMessage("create_archive_form_button_label")}"
+              title="${getMessage("create_archive_form_button_label")}">
+        ${getMessage("create_archive_form_button_caption")}
+      </button>
+    </form>
+    `;
+  }
+
+  /**
    * Generates a list of `<option>` using the values of the `folders-list` and `folders-pick` attributes.
-   * 
    * @returns {string} HTML
    */
   generateFoldersPickOptions() {

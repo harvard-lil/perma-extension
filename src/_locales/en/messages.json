@@ -18,6 +18,9 @@
   "status_signed_out": {
     "message": "Signed out."
   },
+  "status_in_progress": {
+    "message": "In progress ..."
+  },
   "status_archive_created": {
     "message": "Archive created."
   },
