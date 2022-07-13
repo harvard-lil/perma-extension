@@ -26,20 +26,20 @@ export class Folders {
   #pick = null;
 
   /**
-   * List of all the folders the user can write into.
+   * List of all the folders the user can write into, sorted hierarchically.
    * 
    * Format: 
    * [
-   *   { id: 158296, name: 'Personal Links' },
-   *   { id: 161019, name: '- Foo' },
-   *   { id: 161022, name: '- Lorem' },
-   *   { id: 161020, name: '-- Bar' },
-   *   { id: 161021, name: '-- Baz' },
-   *   { id: 161023, name: '-- Ipsum' },
-   *   { id: 161026, name: '--- Amet' },
-   *   { id: 161024, name: '--- Dolor' },
-   *   { id: 161025, name: '--- Sit' },
-   *   { id: 161029, name: '---- Consequentur' }
+   *   { id: 158296, depth: 0, name: 'Personal Links' },
+   *   { id: 161019, depth: 1, name: 'Foo' },
+   *   { id: 161022, depth: 1, name: 'Lorem' },
+   *   { id: 161020, depth: 2, name: 'Bar' },
+   *   { id: 161021, depth: 2, name: 'Baz' },
+   *   { id: 161023, depth: 2, name: 'Ipsum' },
+   *   { id: 161026, depth: 3, name: 'Amet' },
+   *   { id: 161024, depth: 3, name: 'Dolor' },
+   *   { id: 161025, depth: 3, name: 'Sit' },
+   *   { id: 161029, depth: 4, name: 'Consequentur' }
    * ]
    * @type {Object[]}
    */
@@ -83,12 +83,15 @@ export class Folders {
     const availableFiltered = [];
 
     for (let entry of this.#available) {
-      if (!("id" in entry) || !("name" in entry)) {
-        throw new Error("`available` must be an array of objects containing at least `id` and `name`.")
+      if (!("id" in entry) || !("name" in entry) || !("depth" in entry)) {
+        throw new Error(
+          "`available` must be an array of objects containing at least `id` and `name`."
+        );
       }
 
       availableFiltered.push({
         id: parseInt(entry.id),
+        depth: parseInt(entry.depth),
         name: entry.name,
       });
     }

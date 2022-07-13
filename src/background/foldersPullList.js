@@ -12,7 +12,7 @@ import { Auth, Status, Folders } from "../storage/index.js";
 
 /**
  * Handler for the `FOLDERS_PULL_LIST` runtime message:
- * Pulls and stores the list of all the folders the user can write into. 
+ * Pulls and stores the list of all the folders the user can write into, sorted hierarchically.
  * 
  * See `storage.Folders.#available` for information regarding the expected format.
  * 
@@ -35,7 +35,11 @@ export async function foldersPullList() {
 
     // Pull sorted list of folders the user has access to, in the format expected by Folders.available.
     for (let folder of topFolder.objects) {
-      allFolders.push({id: folder.id, name: folder.name});
+      allFolders.push({
+        id: folder.id,
+        depth: 0,
+        name: folder.name,
+      });
       await recursivePull(folder.id, allFolders, api, 1);
     }
 
@@ -93,7 +97,11 @@ async function recursivePull(folderId, folders, api, depth=1) {
       continue;
     }
 
-    folders.push({id: child.id, name: `${"-".repeat(depth)} ${child.name}`});
+    folders.push({
+      id: child.id,
+      depth: depth,
+      name: child.name,
+    });
 
     if (child.has_children) {
       await recursivePull(child.id, folders, api, depth+1);
