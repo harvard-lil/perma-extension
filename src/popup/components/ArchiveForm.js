@@ -101,13 +101,7 @@ export class ArchiveForm extends HTMLElement {
     if (getAttribute("is-authenticated") === 'true') {
       html += /*html*/`
       <form action="#create-archive">
-
-        <select name="folder-pick">
-          <option name="">(Default folder)</option>
-        </select>
-
-        <button>Archive</button>
-
+        
       </form>
       `;
     }
@@ -157,7 +151,7 @@ export class ArchiveForm extends HTMLElement {
     // [3] Side effects
     //
 
-    // Disable all form elements while the app is loading
+    // Disable all form elements when the app is loading
     if (getAttribute("is-loading") === "true") {
       for (let element of this.querySelectorAll("button, input")) {
         element.setAttribute("disabled", "disabled");
