@@ -36,7 +36,7 @@
  * - `AUTH_SIGN_OUT`: Request to remove the currently stored API key.
  * - `AUTH_CHECK`: Request to check that the API currently stored is (still) valid.
  * - `FOLDERS_PULL_LIST`: Request to pull the list of folders the user can create links into.
- * - `FOLDERS_PICK_ONE`: Request to update the "default" target folder.
+ * - `FOLDERS_PICK_ONE`: Request to update the "default" target folder. Params: `folderId`.
  * - `ARCHIVE_PULL_TIMELINE`: Request to pull the list of user-owned archives available for the current url.
  * - `ARCHIVE_CREATE_PUBLIC`: Request to create a public archive for a given url.
  * - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url.

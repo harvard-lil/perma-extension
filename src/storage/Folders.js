@@ -120,10 +120,10 @@ export class Folders {
   }
 
   /**
-   * @param {any} newValue - Will be run through `parseInt`.
+   * @param {?any} newValue - Will be run through `parseInt`.
    */
   set pick(newValue) {
-    this.#pick = parseInt(newValue);
+    this.#pick = newValue === null ? null : parseInt(newValue);
   }
 
   get pick() {

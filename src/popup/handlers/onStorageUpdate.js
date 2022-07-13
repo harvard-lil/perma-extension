@@ -43,6 +43,8 @@ export async function onStorageUpdate(changes = {}) {
   archiveForm?.setAttribute("tab-title", currentTab.title);
   archiveForm?.setAttribute("is-loading", status.isLoading);
   archiveForm?.setAttribute("is-authenticated", auth.isChecked);
+  archiveForm?.setAttribute("folders-list", JSON.stringify(folders.available));
+  archiveForm?.setAttribute("folders-pick", folders.pick);
 
   statusBar?.setAttribute("is-loading", status.isLoading);
   statusBar?.setAttribute("is-authenticated", auth.isChecked);

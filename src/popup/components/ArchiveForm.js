@@ -23,19 +23,28 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  */
 export class ArchiveForm extends HTMLElement {
   /**
-   * On instantiation: 
+   * On instantiation:
    * - Bind local methods to `this` so they can easily be passed around
    */
   constructor() {
     super();
     this.handleSignInFormSubmit = this.handleSignInFormSubmit.bind(this);
+    this.handleFolderSelectChange = this.handleFolderSelectChange.bind(this);
+    this.generateFoldersPickOptions = this.generateFoldersPickOptions.bind(this);
   }
 
   /**
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
-  static get observedAttributes() { 
-    return ["is-authenticated", "is-loading", "tab-url", "tab-title", "folders-list", "folders-pick"];
+  static get observedAttributes() {
+    return [
+      "is-authenticated",
+      "is-loading",
+      "tab-url",
+      "tab-title",
+      "folders-list",
+      "folders-pick",
+    ];
   }
 
   /**
@@ -48,14 +57,14 @@ export class ArchiveForm extends HTMLElement {
 
   /**
    * On HTML attribute update:
-   * - Re-render if value changed. 
-   * 
-   * @param {string} name 
-   * @param {*} oldValue 
-   * @param {*} newValue 
+   * - Re-render if value changed.
+   *
+   * @param {string} name
+   * @param {*} oldValue
+   * @param {*} newValue
    */
   attributeChangedCallback(name, oldValue, newValue) {
-    if(newValue !== oldValue) {
+    if (newValue !== oldValue) {
       this.renderInnerHTML();
     }
   }
@@ -64,6 +73,8 @@ export class ArchiveForm extends HTMLElement {
    * On "submit" of the "Sign in" form:
    * - Send `AUTH_SIGN_IN` message to the service worker.
    * - If successful, also call `FOLDERS_PULL_LIST` and `ARCHIVE_PULL_TIMELINE`.
+   * 
+   * @param {Event} e
    */
   async handleSignInFormSubmit(e) {
     e.preventDefault();
@@ -85,6 +96,21 @@ export class ArchiveForm extends HTMLElement {
   }
 
   /**
+   * On "change" of the "folders pick" selector.
+   * - Send `FOLDERS_PICK_ONE` message to the service worker.
+   *  
+   * @param {Event} e
+   */
+  async handleFolderSelectChange(e) {
+    e.preventDefault();
+
+    BROWSER.runtime.sendMessage({
+      messageId: MESSAGE_IDS.FOLDERS_PICK_ONE,
+      folderId: this.querySelector("select[name='folders-pick']")?.value,
+    });
+  }
+
+  /**
    * Assembles a template and injects it into `innerHTML`.
    * Binds event listeners to the elements that were injected.
    */
@@ -98,16 +124,19 @@ export class ArchiveForm extends HTMLElement {
     let html = ``;
 
     // If authenticated: Complete archive creation form
-    if (getAttribute("is-authenticated") === 'true') {
-      html += /*html*/`
+    if (getAttribute("is-authenticated") === "true") {
+      html += /*html*/ `
       <form action="#create-archive">
-        
+        <select name="folders-pick" aria-label="Select a folder to save the archive into">
+          <option value="">Default</option>
+          ${this.generateFoldersPickOptions()}
+        </select>
       </form>
       `;
     }
     // If not authenticated: Sign-in form
     else {
-      html += /*html*/`
+      html += /*html*/ `
       <form action="#sign-in">
         <input type="password" 
                name="api-key" 
@@ -141,10 +170,16 @@ export class ArchiveForm extends HTMLElement {
     // [2] Bind event listeners
     //
 
-    // Sign-in form submit
+    // Sign-in form: Submit
     this.querySelector('form[action="#sign-in"]')?.addEventListener(
       "submit",
       this.handleSignInFormSubmit
+    );
+
+    // Create archive form: Pick default folder
+    this.querySelector('form[action="#create-archive"] select')?.addEventListener(
+      "change",
+      this.handleFolderSelectChange
     );
 
     //
@@ -158,6 +193,32 @@ export class ArchiveForm extends HTMLElement {
       }
     }
   }
- 
+
+  /**
+   * Generates a list of `<option>` using the values of the `folders-list` and `folders-pick` attributes.
+   * 
+   * @returns {string} HTML
+   */
+  generateFoldersPickOptions() {
+    let foldersList = this.getAttribute("folders-list");
+    let foldersPick = this.getAttribute("folders-pick");
+
+    if (!foldersList) {
+      return "";
+    }
+
+    let html = "";
+
+    for (let folder of JSON.parse(foldersList)) {
+      let selected = foldersPick && parseInt(foldersPick) === folder?.id ? "selected" : "";
+      let name = `${"-".repeat(folder.depth)} ${folder.name}`;
+
+      html += /*html*/ `
+      <option ${selected} value="${folder?.id}" aria-label="${name}">${name}</option>
+      `;
+    }
+
+    return html;
+  }
 } 
 customElements.define('archive-form', ArchiveForm);

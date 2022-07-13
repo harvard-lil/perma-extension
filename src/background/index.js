@@ -66,7 +66,7 @@ function backgroundMessageHandler(message, sender, sendResponse) {
         .catch(() => sendResponse(false));
       break;
 
-    case MESSAGE_IDS.FOLDERS_PICK:
+    case MESSAGE_IDS.FOLDERS_PICK_ONE:
       foldersPick(message["folderId"])
         .then(() => sendResponse(true))
         .catch(() => sendResponse(false));
