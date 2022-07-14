@@ -20,7 +20,6 @@ import { Folders } from "../../storage/Folders.js";
  */
 export async function onStorageUpdate(changes = {}) {
   const updatedKeys = Object.keys(changes);
-  //console.log(updatedKeys);
 
   //
   // Elements to feed info to
@@ -41,11 +40,8 @@ export async function onStorageUpdate(changes = {}) {
     );
   }
 
-  console.log(updatedKeys);
-
   // Changes to CurrentTab
   if (updatedKeys.indexOf(CurrentTab.KEY) > -1) {
-    console.log("Hm ...")
     const currentTab = await CurrentTab.fromStorage();
 
     appHeader?.setAttribute("tab-url", currentTab.url);

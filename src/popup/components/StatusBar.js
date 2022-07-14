@@ -38,9 +38,19 @@ export class StatusBar extends HTMLElement {
   /**
    * Upon injection into the DOM:
    * - First render.
+   * - Enforce singleton pattern
    */
   connectedCallback() {
     this.renderInnerHTML();
+
+    let instancesCount = 0;
+    for (let instances of document.querySelectorAll("status-bar")) {
+      instancesCount += 1;
+
+      if (instancesCount > 1) {
+        instances.remove();
+      }
+    }
   }
 
   /**

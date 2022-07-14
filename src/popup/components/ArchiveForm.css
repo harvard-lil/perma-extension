@@ -3,7 +3,7 @@ archive-form {
   grid-area: main-top;
 }
 
-/* This element takes the space left by <archive-timeline> when the user is not authenticated */
+/* This element takes the space left by `<archive-timeline>` when the user is not authenticated */
 archive-form[authenticated="false"] {
   grid-area: main-top / main-bottom;
 }
