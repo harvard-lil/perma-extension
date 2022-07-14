@@ -93,7 +93,8 @@ export class StatusBar extends HTMLElement {
     // Status text
     html += /*html*/`
       <p aria-label="${getMessage(message)}" 
-         title="${getMessage(message)}">
+         title="${getMessage(message)}"
+         aria-live="polite">
          ${getMessage(message)}
       </p>`;
 

@@ -31,7 +31,7 @@ status-bar > button {
 }
 
 status-bar > button:hover,
-status-bar > button:visited {
+status-bar > button:focus {
   background-color: transparent;
   color: var(--action-color);
 }
