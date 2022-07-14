@@ -38,7 +38,8 @@ Available HTML attributes:
 
 #### appHeader.connectedCallback()
 Upon injection into the DOM:
-- First render.
+- First render
+- Enforce singleton pattern
 
 **Kind**: instance method of [<code>AppHeader</code>](#module_popup/components/IntroHeader.AppHeader)  
 <a name="module_popup/components/IntroHeader.AppHeader+attributeChangedCallback"></a>

@@ -78,7 +78,7 @@ archive-form > form[action="#create-archive"] > fieldset label {
   font-size: 1rem;
   letter-spacing: var(--letter-spacing);;
   display: block;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
   text-align: left;
 }
 

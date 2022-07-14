@@ -63,7 +63,8 @@ On instantiation:
 
 #### archiveForm.connectedCallback()
 Upon injection into the DOM:
-- First render.
+- First render
+- Enforce singleton pattern
 
 **Kind**: instance method of [<code>ArchiveForm</code>](#module_popup/components/ArchiveForm.ArchiveForm)  
 <a name="module_popup/components/ArchiveForm.ArchiveForm+attributeChangedCallback"></a>

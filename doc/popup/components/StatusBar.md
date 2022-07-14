@@ -51,6 +51,7 @@ On instantiation:
 #### statusBar.connectedCallback()
 Upon injection into the DOM:
 - First render.
+- Enforce singleton pattern
 
 **Kind**: instance method of [<code>StatusBar</code>](#module_popup/components/StatusBar.StatusBar)  
 <a name="module_popup/components/StatusBar.StatusBar+attributeChangedCallback"></a>

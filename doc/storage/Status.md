@@ -11,6 +11,7 @@ Data class used to interact with the "status" key in storage (`browser.storage.l
         * _instance_
             * [.KEY](#module_storage/Status.Status+KEY)
             * [.isLoading](#module_storage/Status.Status+isLoading)
+            * [.lastLoadingInit](#module_storage/Status.Status+lastLoadingInit)
             * [.message](#module_storage/Status.Status+message)
             * [.save()](#module_storage/Status.Status+save) ⇒ <code>Promise.&lt;boolean&gt;</code>
             * [.reset()](#module_storage/Status.Status+reset) ⇒ <code>Promise.&lt;boolean&gt;</code>
@@ -28,6 +29,7 @@ This class directly interacts with `browser.storage.local` to push / pull and ma
     * _instance_
         * [.KEY](#module_storage/Status.Status+KEY)
         * [.isLoading](#module_storage/Status.Status+isLoading)
+        * [.lastLoadingInit](#module_storage/Status.Status+lastLoadingInit)
         * [.message](#module_storage/Status.Status+message)
         * [.save()](#module_storage/Status.Status+save) ⇒ <code>Promise.&lt;boolean&gt;</code>
         * [.reset()](#module_storage/Status.Status+reset) ⇒ <code>Promise.&lt;boolean&gt;</code>
@@ -49,6 +51,15 @@ Key given to this object in `browser.storage.local`.
 | --- | --- | --- |
 | newValue | <code>any</code> | Will be cast into a boolean |
 
+<a name="module_storage/Status.Status+lastLoadingInit"></a>
+
+#### status.lastLoadingInit
+**Kind**: instance property of [<code>Status</code>](#module_storage/Status.Status)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| newValue | <code>any</code> | Will try to read date from string if not null. |
+
 <a name="module_storage/Status.Status+message"></a>
 
 #### status.message
@@ -62,6 +73,9 @@ Key given to this object in `browser.storage.local`.
 
 #### status.save() ⇒ <code>Promise.&lt;boolean&gt;</code>
 Saves the current object in store.
+
+Note:
+Automatically sets `lastLoadingInit` is `isLoading` is `true`.
 
 **Kind**: instance method of [<code>Status</code>](#module_storage/Status.Status)  
 <a name="module_storage/Status.Status+reset"></a>

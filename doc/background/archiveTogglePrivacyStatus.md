@@ -14,8 +14,8 @@ Automatically updates timeline for the current tab.
 
 **Kind**: static method of [<code>background/archiveTogglePrivacyStatus</code>](#module_background/archiveTogglePrivacyStatus)  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| guid | <code>string</code> |  | 
-| [isPrivate] | <code>boolean</code> | <code>false</code> | 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| guid | <code>string</code> |  |  |
+| [isPrivate] | <code>boolean</code> | <code>false</code> | State the archive should be in after the update (public or private) |
 
