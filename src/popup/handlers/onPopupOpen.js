@@ -10,6 +10,7 @@
 import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
 import { Status } from "../../storage/Status.js";
 import { Auth } from "../../storage/Auth.js";
+
 import { onStorageUpdate } from "./onStorageUpdate.js";
 
 /**
@@ -77,8 +78,14 @@ export async function onPopupOpen(e) {
     BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.ARCHIVE_PULL_TIMELINE });
   }
 
-  // [6] Schedule cleanup of status message
-  setTimeout(() => {
+  // [6] Schedule cleanup of status message if not loading.
+  setTimeout(async() => {
+    status = await Status.fromStorage();
+
+    if (status.isLoading === true) {
+      return;
+    }
+
     BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.STATUS_MESSAGE_CLEAR });
   }, 3000);
 

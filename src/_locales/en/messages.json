@@ -82,7 +82,7 @@
     "message": "Select a folder to save the archive into."
   },
   "create_archive_form_select_default": {
-    "message": "Default folder."
+    "message": "Use the default folder"
   },
   "create_archive_form_button_caption": {
     "message": "Archive"

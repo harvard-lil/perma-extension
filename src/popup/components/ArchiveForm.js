@@ -6,7 +6,6 @@
  * @description `<archive-form>` custom element. 
  */
 // @ts-check
-
 import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
 
 /**
@@ -262,7 +261,7 @@ export class ArchiveForm extends HTMLElement {
 
     for (let folder of JSON.parse(foldersList)) {
       let selected = foldersPick && parseInt(foldersPick) === folder?.id ? "selected" : "";
-      let name = `${"-".repeat(folder.depth)} ${folder.name}`;
+      let name = `${"┄".repeat(folder.depth)} ${folder.name}`;
 
       html += /*html*/ `
       <option ${selected} value="${folder?.id}" aria-label="${name}">${name}</option>

@@ -105,7 +105,6 @@ export class StatusBar extends HTMLElement {
     //
     // [2] Bind event listeners
     //
-
     // Sign-out button click
     this.querySelector("button")?.addEventListener("click", this.handleSignOutClick);
   }
