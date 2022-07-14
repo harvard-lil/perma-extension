@@ -39,7 +39,7 @@ export async function archivePullTimeline() {
   }
   catch(err) {
     status.message = "error_pulling_timeline";
-    //console.error(err);
+    console.error(err);
     throw err;
   }
   finally {

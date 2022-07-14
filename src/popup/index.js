@@ -12,6 +12,7 @@ import { BROWSER } from "../constants/index.js";
 import "./components/AppHeader.js";
 import "./components/ArchiveForm.js";
 import "./components/ArchiveTimeline.js";
+import "./components/ArchiveTimelineItem.js";
 import "./components/StatusBar.js"; 
 
 import { onPopupOpen } from "./handlers/onPopupOpen.js"

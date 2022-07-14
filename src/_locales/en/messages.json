@@ -82,13 +82,17 @@
     "message": "Select a folder to save the archive into."
   },
   "create_archive_form_select_default": {
-    "message": "Use the default folder"
+    "message": "Default folder"
   },
   "create_archive_form_button_caption": {
     "message": "Archive"
   },
   "create_archive_form_button_label": {
     "message": "Create a public archive for the current page."
+  },
+
+  "archive_timeline_empty": {
+    "message": "You have no Perma links for this page."
   },
 
   "status_bar_loading_alt": {

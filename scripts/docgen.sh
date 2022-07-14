@@ -26,4 +26,5 @@ jsdoc2md ../src/popup/handlers/onStorageUpdate.js > ../doc/popup/handlers/onStor
 jsdoc2md ../src/popup/components/AppHeader.js > ../doc/popup/components/AppHeader.md;
 jsdoc2md ../src/popup/components/ArchiveForm.js > ../doc/popup/components/ArchiveForm.md;
 jsdoc2md ../src/popup/components/ArchiveTimeline.js > ../doc/popup/components/ArchiveTimeline.md;
+jsdoc2md ../src/popup/components/ArchiveTimelineItem.js > ../doc/popup/components/ArchiveTimelineItem.md;
 jsdoc2md ../src/popup/components/StatusBar.js > ../doc/popup/components/StatusBar.md;

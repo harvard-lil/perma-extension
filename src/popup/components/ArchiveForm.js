@@ -140,7 +140,6 @@ export class ArchiveForm extends HTMLElement {
    * Binds event listeners to the elements that were injected.
    */
   renderInnerHTML() {
-    const getMessage = BROWSER.i18n.getMessage;
     const getAttribute = this.getAttribute.bind(this);
 
     //

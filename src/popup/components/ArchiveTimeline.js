@@ -12,17 +12,16 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
 /**
  * Custom Element: `<archive-timeline>`. 
  * Shows the user the list of archives that they created for the current page.
+ * Accepts `<archive-timeline-item>` elements as direct children, filters out other elements.
+ * 
+ * Note:
+ * - Use `addArchives()` to feed this component an array of archive objects.
  * 
  * Available HTML attributes:
  * - `is-authenticated`: If not "true", this component is hidden.
  * - `is-loading`: If "true", all buttons and links in this list will be disabled.
  */
 export class ArchiveTimeline extends HTMLElement {
-
-  constructor() {
-    super();
-  }
-
   /**
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
@@ -30,6 +29,11 @@ export class ArchiveTimeline extends HTMLElement {
     return ["is-authenticated", "is-loading"];
   }
 
+  /**
+   * Upon injection into the DOM:
+   * - First render
+   * - Enforce singleton pattern
+   */
   connectedCallback() {
     this.renderInnerHTML();
 
@@ -57,28 +61,66 @@ export class ArchiveTimeline extends HTMLElement {
     }
   }
 
+  /**
+   * Creates and inject `<archive-timeline-item>` elements using a list of `PermaArchive` objects.
+   * Re-renders.
+   * 
+   * @param {PermaArchive[]} archives 
+   */
+  addArchives(archives) {
+    if (!(archives instanceof Array)) {
+      archives = [];
+    }
+
+    for (let archive of archives) {
+      const item = document.createElement("archive-timeline-item");
+      item.setAttribute("guid", archive?.guid);
+      item.setAttribute("is-private", String(archive?.is_private));
+      item.setAttribute("creation-timestamp", archive?.creation_timestamp);
+      this.appendChild(item);
+    }
+
+    this.renderInnerHTML();
+  }
+
+  /**
+   * Assembles a template and injects it into `innerHTML`.
+   * Binds event listeners to the elements that were injected.
+   */
   renderInnerHTML() {
     const getAttribute = this.getAttribute.bind(this);
     const setAttribute = this.setAttribute.bind(this);
     const getMessage = BROWSER.i18n.getMessage;
 
-    // aria-hidden and empty if user is not authenticated
+    // If not authenticated:
+    // - Element should be `aria-hidden`
+    // - Tree should be empty
     if (getAttribute("is-authenticated") !== "true") {
       setAttribute("aria-hidden", "true");
       this.innerHTML = ``;
       return;
     }
 
-    // If user is authenticated:
-    // - Make element behave like a list
-    // - Check that all children are `<archive-timeline-item>` if any
-    // - Inject "empty" message if no valid children found
+    // If authenticated:
+    // - This element should behave like a list
+    // - This element should only accept `<archive-timeline-item>` as direct children
+    // - This element should display a message if there are no archives to display
     setAttribute("aria-hidden", "false");
     setAttribute("role", "list");
 
-    this.innerHTML = /*html*/``;
+    // Remove children that are not `<archive-timeline-item>`
+    for (let child of this.children) {
+      if(child.tagName !== "archive-timeline-item".toUpperCase()) {
+        child.remove();
+      }
+    }
 
-
+    // Show a message if list there is no archive to display
+    if (this.children.length < 1) {
+      this.innerHTML = /*html*/`
+      <li class="empty">${getMessage("archive_timeline_empty")}</li>
+      `;
+    }
   }
 
 }

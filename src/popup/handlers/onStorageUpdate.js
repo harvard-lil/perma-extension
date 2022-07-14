@@ -29,7 +29,13 @@ export async function onStorageUpdate(changes = {}) {
   const archiveTimeline = document.querySelector("body > archive-timeline");
   const statusBar = document.querySelector("body > status-bar");
 
+  if (!appHeader || !archiveForm || !archiveTimeline || !statusBar) {
+    return;
+  }
+
+  //
   // If `changes` is empty, assume everything needs to be pulled from storage.
+  //
   if (updatedKeys.length === 0 ) {
     updatedKeys.push(
       CurrentTab.KEY,
@@ -40,7 +46,9 @@ export async function onStorageUpdate(changes = {}) {
     );
   }
 
+  //
   // Changes to CurrentTab
+  //
   if (updatedKeys.indexOf(CurrentTab.KEY) > -1) {
     const currentTab = await CurrentTab.fromStorage();
 
@@ -51,7 +59,9 @@ export async function onStorageUpdate(changes = {}) {
     archiveForm?.setAttribute("tab-title", currentTab.title);
   }
 
+  //
   // Changes to Status
+  //
   if (updatedKeys.indexOf(Status.KEY) > -1) {
     const status = await Status.fromStorage();
 
@@ -63,23 +73,30 @@ export async function onStorageUpdate(changes = {}) {
     archiveTimeline?.setAttribute("is-loading", status.isLoading);
   }
 
+  //
   // Changes to Auth
+  //
   if (updatedKeys.indexOf(Auth.KEY) > -1) {
     const auth = await Auth.fromStorage();
-
     archiveForm?.setAttribute("is-authenticated", auth.isChecked);
-
     statusBar?.setAttribute("is-authenticated", auth.isChecked);
-  
     archiveTimeline?.setAttribute("is-authenticated", auth.isChecked);
   }
 
+  //
   // Changes to Archives
+  //
   if (updatedKeys.indexOf(Archives.KEY) > -1) {
-    //const archives = await Archives.fromStorage();
+    const archives = await Archives.fromStorage();
+    const currentTab = await CurrentTab.fromStorage();
+
+    // Add archives for the current url to `<archive-timeline>`
+    archiveTimeline.addArchives(archives.byUrl[currentTab.url])
   }
 
+  //
   // Changes to Folders
+  //
   if (updatedKeys.indexOf(Folders.KEY) > -1) {
     const folders = await Folders.fromStorage();
 
