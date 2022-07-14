@@ -118,7 +118,9 @@ export class ArchiveTimeline extends HTMLElement {
     // Show a message if list there is no archive to display
     if (this.children.length < 1) {
       this.innerHTML = /*html*/`
-      <li class="empty">${getMessage("archive_timeline_empty")}</li>
+      <aside class="empty" role="listitem">
+        <span>${getMessage("archive_timeline_empty")}<span>
+      </aside>
       `;
     }
   }

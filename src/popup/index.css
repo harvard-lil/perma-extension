@@ -29,6 +29,8 @@
   --extension-width: 25rem;
   --extension-height: 35rem;
   --body-border-width: 0.25rem;
+
+  --letter-spacing: -0.075ch;
 }
 
 html {

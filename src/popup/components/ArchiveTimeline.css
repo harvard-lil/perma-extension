@@ -1,10 +1,27 @@
 archive-timeline {
   display: block;
   grid-area: main-bottom;
+  border-top: 1px solid var(--main-color-);
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* This element is not displayed when the user is not authenticated */
 archive-timeline[authenticated="false"] {
   display: none;
   grid-area: unset;
+}
+
+archive-timeline aside.empty {
+  display: flex;
+  height: 100%;
+}
+
+archive-timeline aside.empty span {
+  margin: auto;
+  font-size: 0.95rem;
+  color: var(--opposite-color--);
+  letter-spacing: var(--letter-spacing);;
+  font-weight: normal;
 }

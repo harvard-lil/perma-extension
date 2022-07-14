@@ -19,7 +19,7 @@ app-header > h1 img {
 
 app-header > h1 span {
   font-size: 1.65rem;
-  letter-spacing: -0.125rem;
+  letter-spacing: var(--letter-spacing);;
 }
 
 /* Current tab summary */
@@ -45,7 +45,7 @@ app-header > div span {
 
 app-header > div strong {
   font-size: 1.35rem;
-  letter-spacing: -0.1rem;
+  letter-spacing: var(--letter-spacing);;
   padding-bottom: 0.25rem;
 }
 
