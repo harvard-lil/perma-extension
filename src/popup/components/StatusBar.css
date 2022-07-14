@@ -15,7 +15,7 @@ status-bar > p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  letter-spacing: var(--letter-spacing);;
+  letter-spacing: var(--letter-spacing);
   color: var(--opposite-color-);
 }
 
@@ -29,7 +29,8 @@ status-bar > button {
 
 status-bar > img {
   height: 1.65rem;
-  margin-top: 0.85rem;
+  margin-top: 0.8rem;
+  margin-left: 0.5rem;
   opacity: 0.7;
   animation: status-bar-spinner 2s;
   animation-iteration-count: infinite;

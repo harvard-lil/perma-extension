@@ -63,12 +63,11 @@ export class AppHeader extends HTMLElement {
     const getMessage = BROWSER.i18n.getMessage;
     const getAttribute = this.getAttribute.bind(this);
 
-    // Heading
     this.innerHTML = /*html*/`
     <h1>
-      <a href="${getMessage("app_header_link_url")}" 
+      <a href="${getMessage("perma_base_url")}" 
          target="_blank" 
-         rel="noopener noreferer" 
+         rel="noopener noreferrer" 
          title="${getMessage("app_header_link_label")}" 
          aria-label="${getMessage("app_header_link_label")}">
         <img src="../assets/infinity-orange.svg" alt="Perma.cc"/>

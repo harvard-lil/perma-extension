@@ -9,6 +9,10 @@
     "message": "https://github.com/harvard-lil/perma-extension"
   },
 
+  "perma_base_url": {
+    "message": "https://perma.cc/"
+  },
+
   "status_default": {
     "message": "Ready."
   },
@@ -52,9 +56,6 @@
   "app_header_link_label": {
     "message": "Open Perma.cc in a new tab."
   },
-  "app_header_link_url": {
-    "message": "https://perma.cc"
-  },
 
   "sign_in_form_api_key_input_label" : {
     "message": "🗝️ Enter your API key to get started."
@@ -93,6 +94,22 @@
 
   "archive_timeline_empty": {
     "message": "You have no Perma links for this page."
+  },
+
+  "archive_timeline_item_open_in_tab": {
+    "message": "Open this archive in a new tab."
+  },
+  "archive_timeline_item_make_public": {
+    "message": "This is a private archive. Click to make public."
+  },
+  "archive_timeline_item_make_private": {
+    "message": "This is a public archive. Click to make private."
+  },
+  "archive_timeline_item_public_cannot_change": {
+    "message": "This is a public archive. It was created more than 24 hours ago and cannot be made private anymore."
+  },
+  "archive_timeline_item_private_cannot_change": {
+    "message": "This is a private archive. It was created more than 24 hours ago and cannot be made public anymore."
   },
 
   "status_bar_loading_alt": {

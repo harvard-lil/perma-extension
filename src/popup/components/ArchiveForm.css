@@ -15,8 +15,6 @@ archive-form * {
 /* Properties shared by both sign-in and archive creation form */
 archive-form > form {
   padding: 1rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
   background-color: var(--main-color);
 }
 

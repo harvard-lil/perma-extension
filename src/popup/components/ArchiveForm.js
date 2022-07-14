@@ -145,7 +145,6 @@ export class ArchiveForm extends HTMLElement {
     //
     // [1] Prepare and inject template
     //
-
     // If authenticated: Archive creation form
     if (getAttribute("is-authenticated") === "true") {
       this.innerHTML = this.generateCreateArchiveForm();
@@ -158,7 +157,6 @@ export class ArchiveForm extends HTMLElement {
     //
     // [2] Bind event listeners
     //
-
     // Sign-in form: Submit
     this.querySelector('form[action="#sign-in"]')?.addEventListener(
       "submit",
@@ -180,7 +178,6 @@ export class ArchiveForm extends HTMLElement {
     //
     // [3] Side effects
     //
-
     // Disable all form elements when the app is loading
     if (getAttribute("is-loading") === "true") {
       for (let element of this.querySelectorAll("button, input, select")) {
@@ -212,13 +209,13 @@ export class ArchiveForm extends HTMLElement {
 
       <a href="${getMessage("sign_in_form_sign_in_api_key_help_url")}" 
         target="_blank" 
-        rel="noopener noreferer">
+        rel="noopener noreferrer">
         ${getMessage("sign_in_form_sign_in_api_key_help_caption")}
       </a>
 
       <a href="${getMessage("sign_in_form_sign_in_guest_link_url") + getAttribute("tab-url")}" 
         target="_blank" 
-        rel="noopener noreferer">
+        rel="noopener noreferrer">
         ${getMessage("sign_in_form_sign_in_guest_link_caption")}
       </a>
     </form>

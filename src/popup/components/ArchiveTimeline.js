@@ -19,7 +19,7 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * 
  * Available HTML attributes:
  * - `is-authenticated`: If not "true", this component is hidden.
- * - `is-loading`: If "true", all buttons and links in this list will be disabled.
+ * - `is-loading`: Used by children to determine how they should render.
  */
 export class ArchiveTimeline extends HTMLElement {
   /**
@@ -72,6 +72,8 @@ export class ArchiveTimeline extends HTMLElement {
       archives = [];
     }
 
+    this.innerHTML = "";
+
     for (let archive of archives) {
       const item = document.createElement("archive-timeline-item");
       item.setAttribute("guid", archive?.guid);
@@ -94,7 +96,7 @@ export class ArchiveTimeline extends HTMLElement {
 
     // If not authenticated:
     // - Element should be `aria-hidden`
-    // - Tree should be empty
+    // - InnerHTML should be empty.
     if (getAttribute("is-authenticated") !== "true") {
       setAttribute("aria-hidden", "true");
       this.innerHTML = ``;
@@ -103,8 +105,8 @@ export class ArchiveTimeline extends HTMLElement {
 
     // If authenticated:
     // - This element should behave like a list
-    // - This element should only accept `<archive-timeline-item>` as direct children
-    // - This element should display a message if there are no archives to display
+    // - This element should only accept `<archive-timeline-item>` as direct children (filter everything else out)
+    // - This element should display a message if there are no archives to display (inject it)
     setAttribute("aria-hidden", "false");
     setAttribute("role", "list");
 
@@ -123,6 +125,7 @@ export class ArchiveTimeline extends HTMLElement {
       </aside>
       `;
     }
+
   }
 
 }

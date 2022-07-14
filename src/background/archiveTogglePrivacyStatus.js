@@ -17,7 +17,7 @@ import { archivePullTimeline } from "./archivePullTimeline.js";
  * Automatically updates timeline for the current tab.
  * 
  * @param {string} guid
- * @param {boolean} [isPrivate=false]
+ * @param {boolean} [isPrivate=false] - State the archive should be in after the update (public or private)
  * @returns {Promise<void>}
  * @async
  */

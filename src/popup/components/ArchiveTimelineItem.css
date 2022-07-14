@@ -1,3 +1,49 @@
 archive-timeline-item {
-  display: block;
+  width: 100%;
+  border-top: 1px solid var(--main-color--);
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  transition: background-color 0.25s ease-in-out;
+}
+
+archive-timeline-item:hover,
+archive-timeline-item:focus {
+  background-color: var(--main-color-);
+}
+
+/* "Open archive in a new tab" link */
+archive-timeline-item > a {
+  text-decoration: none;
+}
+
+/* Toggle archive privacy mode button */
+archive-timeline-item > a strong {
+  color: var(--action-color-);
+}
+
+archive-timeline-item > a:hover strong, 
+archive-timeline-item > a:focus strong {
+  color: var(--action-color);
+  text-decoration: underline;
+  text-decoration-color: var(--action-color);
+}
+
+archive-timeline-item > a span {
+  text-decoration: none;
+  color: var(--opposite-color--);
+  font-size: 0.95rem;
+  letter-spacing: var(--letter-spacing);
+}
+
+archive-timeline-item > button {
+  padding: 0.55rem;
+  padding-top: 0.65rem;
+}
+
+archive-timeline-item > button img {
+  width: 1.5rem;
 }

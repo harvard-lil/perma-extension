@@ -1,7 +1,6 @@
 archive-timeline {
   display: block;
   grid-area: main-bottom;
-  border-top: 1px solid var(--main-color-);
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
@@ -16,6 +15,7 @@ archive-timeline[authenticated="false"] {
 archive-timeline aside.empty {
   display: flex;
   height: 100%;
+  border-top: 1px solid var(--main-color-);
 }
 
 archive-timeline aside.empty span {
