@@ -77,16 +77,16 @@
   },
 
   "create_archive_form_select_intro": {
-    "message": "The archive will be created under:"
+    "message": "This archive will be created in:"
   },
   "create_archive_form_select_label": {
     "message": "Select a folder to save the archive into."
   },
   "create_archive_form_select_default": {
-    "message": "Default folder"
+    "message": "Unspecified folder"
   },
   "create_archive_form_button_caption": {
-    "message": "Archive"
+    "message": "Archive this page"
   },
   "create_archive_form_button_label": {
     "message": "Create a public archive for the current page."
@@ -104,12 +104,6 @@
   },
   "archive_timeline_item_make_private": {
     "message": "This is a public archive. Click to make private."
-  },
-  "archive_timeline_item_public_cannot_change": {
-    "message": "This is a public archive. It was created more than 24 hours ago and cannot be made private anymore."
-  },
-  "archive_timeline_item_private_cannot_change": {
-    "message": "This is a private archive. It was created more than 24 hours ago and cannot be made public anymore."
   },
 
   "status_bar_loading_alt": {

@@ -66,6 +66,7 @@ archive-form > form[action="#sign-in"] a {
 /* Create archive form */
 archive-form > form[action="#create-archive"] {
   text-align: right;
+  display: grid;
 }
 
 archive-form > form[action="#create-archive"] > fieldset {
@@ -74,7 +75,7 @@ archive-form > form[action="#create-archive"] > fieldset {
 
 archive-form > form[action="#create-archive"] > fieldset label {
   color: var(--opposite-color-);
-  font-size: 0.95rem;
+  font-size: 1rem;
   letter-spacing: var(--letter-spacing);;
   display: block;
   margin-bottom: 0.25rem;
@@ -94,11 +95,14 @@ archive-form > form[action="#create-archive"] > fieldset select {
   top: 0px;
   width: 100%;
   display: block;
+
+  border: 1px solid var(--action-color);
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 archive-form > form[action="#create-archive"] > button {
   display: inline-block;
-  align-self: right;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
 }

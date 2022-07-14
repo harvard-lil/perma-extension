@@ -44,7 +44,8 @@ app-header > div span {
 }
 
 app-header > div strong {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
+  font-weight: normal;
   letter-spacing: var(--letter-spacing);;
   padding-bottom: 0.25rem;
 }

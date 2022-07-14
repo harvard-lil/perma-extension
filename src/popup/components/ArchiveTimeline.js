@@ -19,7 +19,7 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * 
  * Available HTML attributes:
  * - `is-authenticated`: If not "true", this component is hidden.
- * - `is-loading`: Used by children to determine how they should render.
+ * - `is-loading`: If "true", disables all nested form elements.
  */
 export class ArchiveTimeline extends HTMLElement {
   /**
@@ -87,12 +87,15 @@ export class ArchiveTimeline extends HTMLElement {
 
   /**
    * Assembles a template and injects it into `innerHTML`.
-   * Binds event listeners to the elements that were injected.
    */
   renderInnerHTML() {
     const getAttribute = this.getAttribute.bind(this);
     const setAttribute = this.setAttribute.bind(this);
     const getMessage = BROWSER.i18n.getMessage;
+
+    //
+    // [1] Assemble and inject template 
+    //
 
     // If not authenticated:
     // - Element should be `aria-hidden`
@@ -124,6 +127,19 @@ export class ArchiveTimeline extends HTMLElement {
         <span>${getMessage("archive_timeline_empty")}<span>
       </aside>
       `;
+    }
+
+    //
+    // [2] Side effects
+    //
+    // Disable all form elements when the app is loading
+    for (let element of this.querySelectorAll("button, input, select")) {
+      if (getAttribute("is-loading") === "true") {
+        element.setAttribute("disabled", "disabled");
+      }
+      else {
+        element.removeAttribute("disabled");
+      }
     }
 
   }

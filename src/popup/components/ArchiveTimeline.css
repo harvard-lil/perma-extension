@@ -20,7 +20,7 @@ archive-timeline aside.empty {
 
 archive-timeline aside.empty span {
   margin: auto;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--opposite-color--);
   letter-spacing: var(--letter-spacing);;
   font-weight: normal;

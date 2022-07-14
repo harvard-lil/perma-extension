@@ -47,8 +47,16 @@ export async function onPopupOpen(e) {
   // [2] Call `onStorageUpdate` on popup open as a way to hydrate the app.
   await onStorageUpdate();
 
-  // [3] Stop here if the extension is busy
+  // [3] Handle pending loading status:
+  // - Cleanup of loading status if it's been more than a minute
+  // - Otherwise, stop here
   status = await Status.fromStorage();
+  
+  if (status.isLoading === true && (new Date() - status.lastLoadingInit) / 1000 > 60) {
+    status.isLoading = false;
+    await status.save();
+  }
+
   if (status.isLoading === true) {
     return;
   }
@@ -78,7 +86,7 @@ export async function onPopupOpen(e) {
     BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.ARCHIVE_PULL_TIMELINE });
   }
 
-  // [6] Schedule cleanup of status message if not loading.
+  // [6] Schedule cleanup of status message
   setTimeout(async() => {
     status = await Status.fromStorage();
 

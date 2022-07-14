@@ -20,7 +20,7 @@ export class AppHeader extends HTMLElement {
   /**
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
-   static get observedAttributes() { 
+  static get observedAttributes() { 
     return ["tab-url", "tab-title"];
   }
 
@@ -77,8 +77,8 @@ export class AppHeader extends HTMLElement {
     </h1>
     
     <div>
-      <strong>${getAttribute("tab-title")}</strong>
-      <span>${getAttribute("tab-url")}</span>
+      <strong>${getAttribute("tab-url")}</strong>
+      <span>${getAttribute("tab-title")}</span>
     </div>
     `;
   }

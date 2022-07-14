@@ -26,6 +26,13 @@ import { BROWSER } from "../constants/index.js"
   #isLoading = false;
 
   /**
+   * Date + time at with `isLoading` was set to `true` for the last time.
+   * Allows to recover from crashes. Set automatically on save.
+   * @type {?Date}
+   */
+  #lastLoadingInit = null;
+
+  /**
    * Latest status message (`browser.i18n` key).
    * @type {string}
    */
@@ -59,13 +66,22 @@ import { BROWSER } from "../constants/index.js"
 
   /**
    * Saves the current object in store.
+   * 
+   * Note:
+   * Automatically sets `lastLoadingInit` is `isLoading` is `true`.
+   * 
    * @returns {Promise<boolean>}
    * @async 
    */
   async save() {
+    if (this.isLoading) {
+      this.lastLoadingInit = new Date();
+    }
+
     const toSave = {};
     toSave[Status.KEY] = {
       isLoading: this.#isLoading,
+      lastLoadingInit: String(new Date()),
       message: this.#message
     };
 
@@ -94,10 +110,25 @@ import { BROWSER } from "../constants/index.js"
     return this.#isLoading;
   }
 
+  get lastLoadingInit() {
+    return this.#lastLoadingInit;
+  }
+
+  /**
+   * @param {any} newValue - Will try to read date from string if not null.
+   */
+  set lastLoadingInit(newValue) {
+    if (newValue !== null) {
+      newValue = new Date(newValue);
+    }
+
+    this.#lastLoadingInit = newValue;
+  }
+
   /**
    * @param {any} newValue - Will be cast into a string.
    */
-   set message(newValue) {
+  set message(newValue) {
     this.#message = String(newValue);
   }
 

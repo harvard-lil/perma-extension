@@ -92,10 +92,11 @@ export class ArchiveTimelineItem extends HTMLElement {
     //
     // [1] Prepare and inject template
     //
-    let isLoading = this.parentElement?.getAttribute("is-loading") === "true";
+    let guid = getAttribute("guid");
     let isPrivate = getAttribute("is-private") === "true";
-    let archiveStillFresh = false; // Was the archive created less than 24 hours ago?
-    let togglePrivacyButtonLabel = "";
+    let openArchiveLabel = `${getMessage("archive_timeline_item_open_in_tab")} (${getAttribute("guid")})`;
+    let toggleArchivePrivacyLabel = `${getMessage("archive_timeline_item_make_" + (isPrivate ? "public" : "private"))}`;
+
     /** @type {?Date} */
     let creationTimestamp = null;
     let now = new Date();
@@ -103,51 +104,27 @@ export class ArchiveTimelineItem extends HTMLElement {
     // Determine if archive can still toggled between public and private
     try {
       creationTimestamp = new Date(getAttribute("creation-timestamp"));
-      archiveStillFresh = now - creationTimestamp < 3600 * 60 * 24;
     }
     catch(err) { // Fallback
       creationTimestamp = now;
-      archiveStillFresh = false;
     }
-
-    // Determine what the label of the "Toggle privacy mode" button should be.
-    if (isPrivate) {
-      if (archiveStillFresh) {
-        togglePrivacyButtonLabel = getMessage("archive_timeline_item_make_public");
-      }
-      else {
-        togglePrivacyButtonLabel = getMessage("archive_timeline_item_private_cannot_change");
-      }
-    }
-    else {
-      if (archiveStillFresh) {
-        togglePrivacyButtonLabel = getMessage("archive_timeline_item_make_private");
-      }
-      else {
-        togglePrivacyButtonLabel = getMessage("archive_timeline_item_public_cannot_change");
-      }
-    }
-
-    // Pre-concatenate label for the archive link composite
-    let archiveLinkLabel = `${getMessage("archive_timeline_item_open_in_tab")} `;
-    archiveLinkLabel += `(${getAttribute("guid")})`;
 
     this.innerHTML = /*html*/`
-      <a href="${getMessage("perma_base_url")}${getAttribute("guid")}" 
+      <a href="${getMessage("perma_base_url")}${guid}" 
          target="_blank" 
          rel="noopener noreferrer"
-         title="${archiveLinkLabel}"
-         aria-label="${archiveLinkLabel}">
-         <strong>${getAttribute("guid")}</strong><br>
+         title="${openArchiveLabel}"
+         aria-label="${openArchiveLabel}">
+         <strong>${guid}</strong><br>
          <span>${creationTimestamp?.toLocaleString()}</span>
       </a>
 
       <button 
-        aria-label="${togglePrivacyButtonLabel}"
-        title="${togglePrivacyButtonLabel}"
-        data-guid="${getAttribute("guid")}"
-        data-is-private="${getAttribute("is-private")}"
-        ${archiveStillFresh && !isLoading ? "" : "disabled"}>
+        aria-label="${toggleArchivePrivacyLabel}"
+        title="${toggleArchivePrivacyLabel}"
+        data-guid="${guid}"
+        data-is-private="${isPrivate ? "true" : "false"}"
+      >
           <img src="../assets/lock-${isPrivate ? "closed" : "open"}-white.svg" 
                alt="" 
                aria-hidden="true"/>

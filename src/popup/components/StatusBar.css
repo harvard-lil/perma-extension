@@ -25,6 +25,15 @@ status-bar > button {
   padding-right: 0.5rem;
   height: 2.15rem;
   margin-top: 0.55rem;
+  background-color: transparent;
+  color: var(--action-color-);
+  text-decoration: underline;
+}
+
+status-bar > button:hover,
+status-bar > button:visited {
+  background-color: transparent;
+  color: var(--action-color);
 }
 
 status-bar > img {
