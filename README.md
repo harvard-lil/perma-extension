@@ -30,7 +30,7 @@ A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma l
 flowchart RL
     A[Service Worker]
     B[(browser.storage.local)]
-    C[Popup UI<br>_(Custom Elements)_]
+    C[Popup UI<br>Custom Elements]
     D[Perma.cc API]
     A <--> B 
     B --> |onChanged events| C
