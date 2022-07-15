@@ -24,7 +24,7 @@ export async function authSignIn(apiKey) {
 
   try {
     status.isLoading = true;
-    status.message = "status_progress";
+    status.message = "status_in_progress";
     status.lastLoadingInit = new Date();
     await status.save();
 

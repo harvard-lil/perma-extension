@@ -27,7 +27,7 @@ export async function archiveTogglePrivacyStatus(guid, isPrivate = false) {
 
   try {
     status.isLoading = true;
-    status.message = "status_progress";
+    status.message = "status_in_progress";
     status.lastLoadingInit = new Date();
     await status.save();
 
