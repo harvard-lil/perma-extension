@@ -1,3 +1,4 @@
+# Generates documentation using JSDoc comments
 jsdoc2md ../src/background/index.js > ../doc/background/index.md;
 jsdoc2md ../src/background/archiveCreate.js > ../doc/background/archiveCreate.md;
 jsdoc2md ../src/background/archiveDelete.js > ../doc/background/archiveDelete.md;

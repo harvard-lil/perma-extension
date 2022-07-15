@@ -1,5 +1,6 @@
 {
   "recommendations": [
-    "tobermory.es6-string-html"
+    "tobermory.es6-string-html",
+    "ms-playwright.playwright"
   ]
 }

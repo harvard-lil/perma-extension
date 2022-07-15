@@ -47,7 +47,7 @@ Key given to this object in `browser.storage.local`.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| newValue | <code>any</code> | Will be cast into a string. |
+| newValue | <code>any</code> | Will be cast into a string. `<` and `>` will be encoded. |
 
 <a name="module_storage/CurrentTab.CurrentTab+title"></a>
 
@@ -56,7 +56,7 @@ Key given to this object in `browser.storage.local`.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| newValue | <code>any</code> | Will be cast into a string. |
+| newValue | <code>any</code> | Will be cast into a string. `<` and `>` will be encoded. |
 
 <a name="module_storage/CurrentTab.CurrentTab+save"></a>
 
