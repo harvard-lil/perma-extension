@@ -84,10 +84,11 @@ export class CurrentTab {
   }
 
   /**
-   * @param {any} newValue - Will be cast into a string.
+   * @param {any} newValue - Will be cast into a string. `<` and `>` will be encoded.
    */
   set url(newValue) {
     this.#url = String(newValue);
+    this.#url = this.#url.replace(/</g, "%3C").replace(/>/g, "%3E");
   }
 
   get url() {
@@ -95,10 +96,11 @@ export class CurrentTab {
   }
 
   /**
-   * @param {any} newValue - Will be cast into a string.
+   * @param {any} newValue - Will be cast into a string. `<` and `>` will be encoded.
    */
    set title(newValue) {
     this.#title = String(newValue);
+    this.#title = this.#title.replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
   get title() {
