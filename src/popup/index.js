@@ -7,8 +7,7 @@
  */
 // @ts-check
 /// <reference types="@types/chrome" />
-import { BROWSER, MESSAGE_IDS } from "../constants/index.js";
-import { Auth } from "../storage/Auth.js";
+import { BROWSER } from "../constants/index.js";
 
 import "./components/AppHeader.js";
 import "./components/ArchiveForm.js";

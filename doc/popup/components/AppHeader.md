@@ -24,6 +24,9 @@ Available HTML attributes:
 - `tab-url`: Url of the current tab.
 - `tab-title`: Title of the current tab.
 
+Note: 
+- Singleton pattern is enforced. Only 1 element of this type can be present in a given document.
+
 **Kind**: static class of [<code>popup/components/IntroHeader</code>](#module_popup/components/IntroHeader)  
 
 * [.AppHeader](#module_popup/components/IntroHeader.AppHeader)

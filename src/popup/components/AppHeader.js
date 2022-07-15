@@ -15,6 +15,9 @@ import { BROWSER } from "../../constants/index.js";
  * Available HTML attributes: 
  * - `tab-url`: Url of the current tab.
  * - `tab-title`: Title of the current tab.
+ * 
+ * Note: 
+ * - Singleton pattern is enforced. Only 1 element of this type can be present in a given document.
  */
 export class AppHeader extends HTMLElement {
   /**

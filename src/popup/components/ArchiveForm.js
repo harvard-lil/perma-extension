@@ -19,6 +19,9 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * - `tab-title`: Title of the current tab.
  * - `folders-list`: JSON-serialized storage entry for "folders.available", if available. Should contain an array of objects (id, depth, name).
  * - `folders-pick`: Id of the folder the user has picked as a default, if any. 
+ * 
+ * Note: 
+ * - Singleton pattern is enforced. Only 1 element of this type can be present in a given document.
  */
 export class ArchiveForm extends HTMLElement {
   /**

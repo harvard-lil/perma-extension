@@ -20,6 +20,9 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * Available HTML attributes:
  * - `is-authenticated`: If not "true", this component is hidden.
  * - `is-loading`: If "true", disables all nested form elements.
+ * 
+ * Note: 
+ * - Singleton pattern is enforced. Only 1 element of this type can be present in a given document.
  */
 export class ArchiveTimeline extends HTMLElement {
   /**

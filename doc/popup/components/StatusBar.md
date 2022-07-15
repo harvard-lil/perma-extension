@@ -28,6 +28,9 @@ Available HTML attributes:
 - `is-loading`: If "true", will show a loading spinner.
 - `message`: Should be a key accessible via `browser.i18n`.
 
+Note: 
+- Singleton pattern is enforced. Only 1 element of this type can be present in a given document.
+
 **Kind**: static class of [<code>popup/components/StatusBar</code>](#module_popup/components/StatusBar)  
 
 * [.StatusBar](#module_popup/components/StatusBar.StatusBar)

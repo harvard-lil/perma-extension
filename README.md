@@ -8,7 +8,6 @@ A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma l
 ## Summary
 - [Screenshots](#screenshots)
 - [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
 - [Development Setup](#development-setup)
 - [Environment variables](#environment-variables)
 - [API Documentation](#api-documentation)
@@ -27,13 +26,11 @@ A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma l
 
 ## Architecture
 
-> 🚧 TODO
-
 ```mermaid
 flowchart RL
     A[Service Worker]
-    B[(browser.storage)]
-    C[Popup UI]
+    B[(browser.storage.local)]
+    C[Popup UI<br>_(Custom Elements)_]
     D[Perma.cc API]
     A <--> B 
     B --> |onChanged events| C
@@ -41,13 +38,11 @@ flowchart RL
     D <--> |HTTP| A 
 ```
 
-[☝️ Back to summary](#summary)
-
----
-
-## Tech Stack
-
-> 🚧 TODO
+- This projects uses the [`browser.storage.local`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/local), made available by the Web Extensions API, to persist data and monitor changes. 
+- By design, only [the Service Worker](/src/background/index.js) interacts directly with storage, using [data classes](/src/storage/) to normalize the nature of the data being stored and retrieved. 
+- The [front-end](/src/popup/) sends [runtime messages](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage) to the service worker, which reacts accordingly. _(See: [list of available message ids](/docs/constants/index.md#module_constants.MESSAGE_IDS).)_
+- The front-end is made of [_"bare"_ Custom Elements](https://javascript.info/custom-elements), taking data as HTML attributes, which they observe and react to. 
+- [`handlers/onStorageUpdate`](/src/popup/handlers/onStorageUpdate.js) is executed every time storage is updated. It determines what was updated, and what part of the UI needs to be re-hydrated.
 
 [☝️ Back to summary](#summary)
 
@@ -62,14 +57,10 @@ flowchart RL
 - Run `npm install` to install runtime and dev dependencies.
 - Use `npm run dev` to start _"development"_ mode. This effectively starts `vite build --watch`, creating a new build under `/dist` every time a file changes.
 
-### Adding the work-in-progress extension to Google Chrome
+### Google Chrome: Install the work-in-progress extension
 - Open a new tab to `chrome://extensions`
 - Make sure to activate the _"Developer Mode"_ toggle.
-- Click on _"Load unpacked"_ and select the `dist` folder under `perma-extension`.
-
-### Known quirks 
-
-> 🚧 TODO
+- Click on _"Load unpacked"_ and select the `dist` folder in `perma-extension`.
 
 [☝️ Back to summary](#summary)
 
