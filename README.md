@@ -78,40 +78,40 @@ flowchart RL
 Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comments.
 
 ### Service Worker _(`/background`)_
-- [`index.js` _(Entry point)_](/doc/background/index.md)
-- [`archiveCreate.js`](/doc/background/archiveCreate.md)
-- [`archiveDelete.js`](/doc/background/archiveDelete.md)
-- [`archivePullTimeline.js`](/doc/background/archivePullTimeline.md)
-- [`archiveTogglePrivacyStatus.js`](/doc/background/archiveTogglePrivacyStatus.md)
-- [`authCheck.js`](/doc/background/authCheck.md)
-- [`authSignIn.js`](/doc/background/authSignIn.md)
-- [`authSignOut.js`](/doc/background/authSignOut.md)
-- [`foldersPick.js`](/doc/background/foldersPick.md)
-- [`foldersPullList.js`](/doc/background/foldersPullList.md)
-- [`statusCleanUp.js`](/doc/background/statusCleanUp.md)
-- [`tabSwitch.js`](/doc/background/tabSwitch.md)
+- [index.js _(Entry point)_](/doc/background/index.md)
+- [archiveCreate.js](/doc/background/archiveCreate.md)
+- [archiveDelete.js](/doc/background/archiveDelete.md)
+- [archivePullTimeline.js](/doc/background/archivePullTimeline.md)
+- [archiveTogglePrivacyStatus.js](/doc/background/archiveTogglePrivacyStatus.md)
+- [authCheck.js](/doc/background/authCheck.md)
+- [authSignIn.js](/doc/background/authSignIn.md)
+- [authSignOut.js](/doc/background/authSignOut.md)
+- [foldersPick.js](/doc/background/foldersPick.md)
+- [foldersPullList.js](/doc/background/foldersPullList.md)
+- [statusCleanUp.js](/doc/background/statusCleanUp.md)
+- [tabSwitch.js](/doc/background/tabSwitch.md)
 
 ### App-wide constants _(`/constants`)_
-- [`index.js` _(Entry point)_](/doc/constants/index.md)
+- [index.js _(Entry point)_](/doc/constants/index.md)
 
 ### Popup UI _(`/popup`)_
-- [`index.js` _(Entry point)_](/doc/popup/index.md)
+- [index.js _(Entry point)_](/doc/popup/index.md)
 - **Popup UI > Components _(`/popup/components`)_**
-  - [`AppHeader.js`](/doc/popup/components/AppHeader.md)
-  - [`ArchiveForm.js`](/doc/popup/components/ArchiveForm.md)
-  - [`ArchiveTimeline.js`](/doc/popup/components/ArchiveTimeline.md)
-  - [`StatusBar.js`](/doc/popup/components/StatusBar.md)
+  - [AppHeader.js](/doc/popup/components/AppHeader.md)
+  - [ArchiveForm.js](/doc/popup/components/ArchiveForm.md)
+  - [ArchiveTimeline.js](/doc/popup/components/ArchiveTimeline.md)
+  - [StatusBar.js](/doc/popup/components/StatusBar.md)
 - **Popup UI > Handlers _(`/popup/handlers`)_**
-  - [`onPopupOpen.js`](/doc/popup/handlers/onPopupOpen.md)
-  - [`onStorageUpdate.js`](/doc/popup/handlers/onStorageUpdate.md)
+  - [onPopupOpen.js](/doc/popup/handlers/onPopupOpen.md)
+  - [onStorageUpdate.js](/doc/popup/handlers/onStorageUpdate.md)
 
-### Interface with the Browser Storage API _(`/storage`)
-- [`index.js` _(Entry point)_](/doc/storage/index.md)
-- [`Archives.js`](/doc/storage/Archives.md)
-- [`Auth.js`](/doc/storage/Auth.md)
-- [`CurrentTab.js`](/doc/storage/CurrentTab.md)
-- [`Folders.js`](/doc/storage/Folders.md)
-- [`Status.js`](/doc/storage/Status.md)
+### Interface with the Browser Storage API _(`/storage`)_
+- [index.js _(Entry point)_](/doc/storage/index.md)
+- [Archives.js](/doc/storage/Archives.md)
+- [Auth.js](/doc/storage/Auth.md)
+- [CurrentTab.js](/doc/storage/CurrentTab.md)
+- [Folders.js](/doc/storage/Folders.md)
+- [Status.js](/doc/storage/Status.md)
 
 [☝️ Back to summary](#summary)
 
