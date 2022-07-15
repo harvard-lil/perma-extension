@@ -38,7 +38,7 @@ flowchart RL
     D <--> |HTTP| A 
 ```
 
-- This projects uses the [`browser.storage.local`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/local), made available by the Web Extensions API, to persist data and monitor changes. 
+- This projects uses [`browser.storage.local`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/local) - made available by the Web Extensions API - to persist data and monitor changes. 
 - By design, only [the Service Worker](/src/background/index.js) interacts directly with storage, using [data classes](/src/storage/) to normalize the nature of the data being stored and retrieved. 
 - The [front-end](/src/popup/) sends [runtime messages](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage) to the service worker, which reacts accordingly. _(See: [list of available message ids](/docs/constants/index.md#module_constants.MESSAGE_IDS).)_
 - The front-end is made of [_"bare"_ Custom Elements](https://javascript.info/custom-elements), taking data as HTML attributes, which they observe and react to. 
@@ -78,7 +78,7 @@ flowchart RL
 
 Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comments.
 
-### Service Worker _(`/background`)_
+### background
 - [index.js _(Entry point)_](/doc/background/index.md)
 - [archiveCreate.js](/doc/background/archiveCreate.md)
 - [archiveDelete.js](/doc/background/archiveDelete.md)
@@ -92,22 +92,21 @@ Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comm
 - [statusCleanUp.js](/doc/background/statusCleanUp.md)
 - [tabSwitch.js](/doc/background/tabSwitch.md)
 
-
-### App-wide constants _(`/constants`)_
+### constants
 - [index.js _(Entry point)_](/doc/constants/index.md)
 
-### Popup UI _(`/popup`)_
+### popup
 - [index.js _(Entry point)_](/doc/popup/index.md)
-- **Popup UI > Components _(`/popup/components`)_**
+- **popup/components**
   - [AppHeader.js](/doc/popup/components/AppHeader.md)
   - [ArchiveForm.js](/doc/popup/components/ArchiveForm.md)
   - [ArchiveTimeline.js](/doc/popup/components/ArchiveTimeline.md)
   - [StatusBar.js](/doc/popup/components/StatusBar.md)
-- **Popup UI > Handlers _(`/popup/handlers`)_**
+- **popup/handlers**
   - [onPopupOpen.js](/doc/popup/handlers/onPopupOpen.md)
   - [onStorageUpdate.js](/doc/popup/handlers/onStorageUpdate.md)
 
-### Interface with the Browser Storage API _(`/storage`)_
+### storage
 - [index.js _(Entry point)_](/doc/storage/index.md)
 - [Archives.js](/doc/storage/Archives.md)
 - [Auth.js](/doc/storage/Auth.md)
