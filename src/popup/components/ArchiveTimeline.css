@@ -4,6 +4,15 @@ archive-timeline {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+
+  opacity: 0;
+  animation: archive-timeline-fade-in 0.25s normal forwards ease-in-out;
+  animation-delay: 0.35s;
+}
+
+@keyframes archive-timeline-fade-in {
+  from { opacity: 0 }
+  to { opacity: 1 }
 }
 
 /* This element is not displayed when the user is not authenticated */
@@ -12,6 +21,7 @@ archive-timeline[authenticated="false"] {
   grid-area: unset;
 }
 
+/* Empty message */
 archive-timeline aside.empty {
   display: flex;
   height: 100%;
@@ -22,6 +32,6 @@ archive-timeline aside.empty span {
   margin: auto;
   font-size: 1rem;
   color: var(--opposite-color--);
-  letter-spacing: var(--letter-spacing);;
+  letter-spacing: var(--letter-spacing);
   font-weight: normal;
 }
