@@ -18,7 +18,7 @@ import { Archives } from "./Archives.js";
  * Exports all individual data classes used to interact with `browser.storage.local`.
  * 
  * Usage example:
- * ```
+ * ```javascript
  * import { CurrentTab } from "../storage/index.js";
  * 
  * const tab = await CurrentTab.fromStorage();

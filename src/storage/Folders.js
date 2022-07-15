@@ -50,7 +50,7 @@ export class Folders {
    * Use this static method to load "folders" from storage.
    * 
    * Usage:
-   * ```
+   * ```javascript
    * const status = await Folders.fromStorage();
    * ```
    * 

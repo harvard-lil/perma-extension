@@ -42,7 +42,7 @@ export class Auth {
    * Use this static method to load "auth" from storage.
    * 
    * Usage:
-   * ```
+   * ```javascript
    * const auth = await Auth.fromStorage();
    * ```
    * 

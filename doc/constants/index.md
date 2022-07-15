@@ -8,7 +8,6 @@ App-wide constants.
 
 * [constants](#module_constants)
     * [.MESSAGE_IDS](#module_constants.MESSAGE_IDS)
-    * [.DATABASE_NAME](#module_constants.DATABASE_NAME)
     * [.BROWSER](#module_constants.BROWSER)
 
 <a name="module_constants.MESSAGE_IDS"></a>
@@ -18,7 +17,7 @@ Identifiers for the runtime messages passed between the extension and its servic
 These are meant to be passed as `messageId`.
 
 Usage example:
-```
+```javascript
 import { MESSAGE_IDS, BROWSER } from './constants'
 
 // Sending a message, at popup level.
@@ -48,12 +47,6 @@ Message identifiers detail:
 - `ARCHIVE_PRIVACY_STATUS_TOGGLE`: Request to toggle the privacy status of a given archive. Params: `guid`, `isPrivate`.
 - `ARCHIVE_DELETE`: Request the deletion of an archive. Params: `guid`.
 - `STATUS_CLEAN_UP`: Request a clean up of the status (i.e: recover from hanging loading state).
-
-**Kind**: static constant of [<code>constants</code>](#module_constants)  
-<a name="module_constants.DATABASE_NAME"></a>
-
-### constants.DATABASE\_NAME
-Name used by the extension's main IndexedDB database.
 
 **Kind**: static constant of [<code>constants</code>](#module_constants)  
 <a name="module_constants.BROWSER"></a>

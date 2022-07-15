@@ -36,7 +36,7 @@ export class CurrentTab {
    * Use this static method to load "currentTab" from storage.
    * 
    * Usage:
-   * ```
+   * ```javascript
    * const status = await CurrentTab.fromStorage();
    * ```
    * 

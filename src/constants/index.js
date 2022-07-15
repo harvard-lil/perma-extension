@@ -13,7 +13,7 @@
  * These are meant to be passed as `messageId`.
  * 
  * Usage example:
- * ```
+ * ```javascript
  * import { MESSAGE_IDS, BROWSER } from './constants'
  * 
  * // Sending a message, at popup level.
@@ -60,12 +60,6 @@ export const MESSAGE_IDS = {
   ARCHIVE_DELETE: 11,
   STATUS_CLEAN_UP: 12
 };
-
-/**
- * Name used by the extension's main IndexedDB database.
- * @constant
- */
-export const DATABASE_NAME = 'permaExtDb';
 
 /**
  * Proxy for accessing the browser API, which in the case of Chromium-based browser, is vendor-specific.

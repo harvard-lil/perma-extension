@@ -67,7 +67,7 @@ Creates and returns an instance of `Folders` using data from storage.
 Use this static method to load "folders" from storage.
 
 Usage:
-```
+```javascript
 const status = await Folders.fromStorage();
 ```
 

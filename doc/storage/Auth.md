@@ -88,7 +88,7 @@ Creates and returns an instance of `Auth` using data from storage.
 Use this static method to load "auth" from storage.
 
 Usage:
-```
+```javascript
 const auth = await Auth.fromStorage();
 ```
 

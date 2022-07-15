@@ -43,7 +43,7 @@ import { BROWSER } from "../constants/index.js"
    * Use this static method to load "status" from storage.
    * 
    * Usage:
-   * ```
+   * ```javascript
    * const status = await Status.fromStorage();
    * ```
    * 

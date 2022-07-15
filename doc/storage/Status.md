@@ -88,7 +88,7 @@ Creates and returns an instance of `Status` using data from storage.
 Use this static method to load "status" from storage.
 
 Usage:
-```
+```javascript
 const status = await Status.fromStorage();
 ```
 
