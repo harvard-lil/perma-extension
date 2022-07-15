@@ -77,7 +77,7 @@ flowchart RL
 
 Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comments.
 
-### Service Worker _(`/background`)_
+### Service Worker _(`background`)_
 - [index.js _(Entry point)_](/doc/background/index.md)
 - [archiveCreate.js](/doc/background/archiveCreate.md)
 - [archiveDelete.js](/doc/background/archiveDelete.md)
@@ -91,17 +91,18 @@ Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comm
 - [statusCleanUp.js](/doc/background/statusCleanUp.md)
 - [tabSwitch.js](/doc/background/tabSwitch.md)
 
+
 ### App-wide constants _(`/constants`)_
 - [index.js _(Entry point)_](/doc/constants/index.md)
 
 ### Popup UI _(`/popup`)_
 - [index.js _(Entry point)_](/doc/popup/index.md)
-- **Popup UI > Components _(`/popup/components`)_**
+- `/popup/components`
   - [AppHeader.js](/doc/popup/components/AppHeader.md)
   - [ArchiveForm.js](/doc/popup/components/ArchiveForm.md)
   - [ArchiveTimeline.js](/doc/popup/components/ArchiveTimeline.md)
   - [StatusBar.js](/doc/popup/components/StatusBar.md)
-- **Popup UI > Handlers _(`/popup/handlers`)_**
+- `/popup/handlers`
   - [onPopupOpen.js](/doc/popup/handlers/onPopupOpen.md)
   - [onStorageUpdate.js](/doc/popup/handlers/onStorageUpdate.md)
 
