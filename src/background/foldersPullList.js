@@ -20,15 +20,10 @@ import { Auth, Status, Folders } from "../storage/index.js";
  * @async
  */
 export async function foldersPullList() {
-  const status = await Status.fromStorage();
   const auth = await Auth.fromStorage();
   const folders = await Folders.fromStorage();
 
   try {
-    status.isLoading = true;
-    status.lastLoadingInit = new Date();
-    await status.save();
-
     const api = new PermaAPI(String(auth.apiKey));
 
     const allFolders = [];
@@ -72,12 +67,9 @@ export async function foldersPullList() {
 
   }
   catch(err) {
-    status.message = "error_pulling_folders";
     throw err;
   }
   finally {
-    status.isLoading = false;
-    await status.save();
     await folders.save();
   }
 }

@@ -18,6 +18,7 @@ import { onStorageUpdate } from "./onStorageUpdate.js";
  * - Updates tab-related information
  * - Hydrates the app using data from storage (first hydration)
  * - Checks authentication as needed
+ * - Schedule runtime messages 
  * 
  * Called on `DOMContentLoaded`.
  * @param {Event} e 
@@ -40,7 +41,7 @@ export async function onPopupOpen(e) {
     (response) => resolve(response));
   }); 
 
-  // [2] Call `onStorageUpdate` on popup open as a way to hydrate the app.
+  // [2] Call `onStorageUpdate` to hydrate the app.
   await onStorageUpdate();
 
   // [3] Re-check API Key if necessary 
@@ -58,15 +59,46 @@ export async function onPopupOpen(e) {
     });
   }
 
-  // [4] If authenticated and not busy: 
-  // - Send `FOLDERS_PULL_LIST` to refresh the list of available folders
-  // - Send `ARCHIVE_PULL_TIMELINE` to fetch user-created archives for the current tab.
-  auth = await Auth.fromStorage();  // Needs to be refreshed
-  status = await Status.fromStorage();
+  //
+  // [4] If authenticated, send the following messages on schedule: 
+  // 
 
-  if (auth.isChecked === true && status.isLoading === false) {
-    BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.FOLDERS_PULL_LIST });
-    BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.ARCHIVE_PULL_TIMELINE });
+  // `FOLDERS_PULL_LIST` to refresh the list of available folders.
+  // Once + every 20 seconds.
+  sendMessageIfAuth(MESSAGE_IDS.FOLDERS_PULL_LIST)
+  setInterval(async () => {
+    await sendMessageIfAuth(MESSAGE_IDS.FOLDERS_PULL_LIST);
+  }, 20000);
+
+  // `ARCHIVE_PULL_TIMELINE` to fetch user-created archives for the current tab.
+  // Once + every 5 seconds.
+  sendMessageIfAuth(MESSAGE_IDS.ARCHIVE_PULL_TIMELINE)
+  setInterval(async () => {
+    await sendMessageIfAuth(MESSAGE_IDS.ARCHIVE_PULL_TIMELINE);
+  }, 5000);
+
+  // `STATUS_CLEAN_UP` to clean up potential status hangs.
+  // Once + every 2.5 seconds.
+  sendMessageIfAuth(MESSAGE_IDS.STATUS_CLEAN_UP)
+  setInterval(async () => {
+    await sendMessageIfAuth(MESSAGE_IDS.STATUS_CLEAN_UP);
+  }, 2500);
+
+}
+
+/**
+ * Sends a given runtime message if user is authenticated.
+ * Pulls latest Auth info from storage. 
+ * 
+ * @param {number} messageId 
+ * @returns 
+ */
+async function sendMessageIfAuth(messageId) {
+  const auth = await Auth.fromStorage();
+
+  if (auth.isChecked !== true) {
+    return;
   }
 
+  BROWSER.runtime.sendMessage({ messageId });
 }

@@ -16,6 +16,8 @@ import { archivePullTimeline } from "./archivePullTimeline.js";
  * Tries to delete an archive.
  * Automatically updates timeline for the current tab.
  * 
+ * Triggers a loading status.
+ * 
  * @param {string} guid
  * @returns {Promise<void>}
  * @async

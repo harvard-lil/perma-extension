@@ -8,6 +8,7 @@
 // @ts-check
 /// <reference types="@types/chrome" />
 import { BROWSER, MESSAGE_IDS } from "../constants/index.js";
+import { Auth } from "../storage/Auth.js";
 
 import "./components/AppHeader.js";
 import "./components/ArchiveForm.js";
@@ -23,8 +24,3 @@ document.addEventListener("DOMContentLoaded", onPopupOpen);
 
 // Run `onStorageUpdate` every time (part) of `browser.storage.local` is updated.
 BROWSER.storage.local.onChanged.addListener(onStorageUpdate);
-
-// Send `STATUS_CLEAN_UP` message every 2.5 seconds
-setInterval(() => {
-  BROWSER.runtime.sendMessage({messageId: MESSAGE_IDS.STATUS_CLEAN_UP});
-}, 2500);

@@ -22,8 +22,8 @@ export async function statusCleanUp() {
   let wasUpdated = false;
   const secondsSinceLastLoadingInit = (new Date() - status.lastLoadingInit) / 1000;
 
-  // If `isLoading` has been `true` for more than 30 seconds, force it back to false.
-  if (status.isLoading === true && secondsSinceLastLoadingInit > 30) {
+  // If `isLoading` has been `true` for more than 45 seconds, force it back to false.
+  if (status.isLoading === true && secondsSinceLastLoadingInit > 45) {
     status.isLoading = false;
     wasUpdated = true;
   }

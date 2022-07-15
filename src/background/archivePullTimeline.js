@@ -19,16 +19,11 @@ import { Auth, Status, CurrentTab, Archives } from "../storage/index.js";
  * @async
  */
 export async function archivePullTimeline() {
-  const status = await Status.fromStorage();
   const auth = await Auth.fromStorage();
   const currentTab = await CurrentTab.fromStorage();
   const archives = await Archives.fromStorage();
 
   try {
-    status.isLoading = true;
-    status.lastLoadingInit = new Date();
-    await status.save();
-
     const api = new PermaAPI(String(auth.apiKey));
 
     if (!currentTab.url) {
@@ -39,14 +34,10 @@ export async function archivePullTimeline() {
     archives.byUrl[currentTab.url] = archivesFromAPI.objects;
   }
   catch(err) {
-    status.message = "error_pulling_timeline";
-    console.error(err);
+    //console.error(err);
     throw err;
   }
   finally {
-    status.isLoading = false;
-
     await archives.save();
-    await status.save();
   }
 }

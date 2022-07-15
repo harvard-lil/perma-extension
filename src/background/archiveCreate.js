@@ -16,6 +16,8 @@ import { archivePullTimeline } from "./archivePullTimeline.js";
  * Creates a new archive.
  * Automatically updates timeline for the current tab.
  * 
+ * Triggers a loading status.
+ * 
  * @param {boolean} [isPrivate=false]
  * @returns {Promise<void>}
  * @async
@@ -29,6 +31,7 @@ export async function archiveCreate(isPrivate = false) {
   try {
     status.isLoading = true;
     status.lastLoadingInit = new Date();
+    status.message = "status_in_progress";
     await status.save();
 
     const api = new PermaAPI(String(auth.apiKey));

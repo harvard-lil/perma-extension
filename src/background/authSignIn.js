@@ -14,6 +14,8 @@ import { Auth, Status } from "../storage/index.js";
  * Handler for the `AUTH_SIGN_IN` runtime message:
  * Verifies and stores a Perma API key.
  * 
+ * Triggers a loading status.
+ * 
  * @param {string} apiKey 
  * @returns {Promise<void>}
  * @async

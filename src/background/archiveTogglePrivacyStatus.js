@@ -16,6 +16,8 @@ import { archivePullTimeline } from "./archivePullTimeline.js";
  * Tries to toggle the privacy status of a given archive.
  * Automatically updates timeline for the current tab.
  * 
+ * Triggers a loading status.
+ * 
  * @param {string} guid
  * @param {boolean} [isPrivate=false] - State the archive should be in after the update (public or private)
  * @returns {Promise<void>}

@@ -14,7 +14,6 @@ import { Status, Folders } from "../storage/index.js";
  * Handler for the `FOLDERS_PICK` runtime message: 
  * Sets `appState.currentFolder`.
  * Stores the default folder id for future archives. 
-
  * 
  * @param {?number} [folderId=null]
  * @async
