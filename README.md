@@ -6,13 +6,22 @@ A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma l
 ---
 
 ## Summary
+- [Screenshots](#screenshots)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
 - [Development Setup](#development-setup)
 - [Environment variables](#environment-variables)
 - [API Documentation](#api-documentation)
 - [CLI](#cli)
+- [Testing](#testing)
 - [Building and distributing the extension](#building-and-distributing-the-extension)
+- [Automation](#automation)
+
+---
+
+## Screenshots
+
+> 🚧 TODO
 
 ---
 
@@ -72,12 +81,13 @@ flowchart RL
 
 [☝️ Back to summary](#summary)
 
+---
 
 ## API Documentation
 
 Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comments.
 
-### Service Worker _(`background`)_
+### Service Worker _(`/background`)_
 - [index.js _(Entry point)_](/doc/background/index.md)
 - [archiveCreate.js](/doc/background/archiveCreate.md)
 - [archiveDelete.js](/doc/background/archiveDelete.md)
@@ -97,12 +107,12 @@ Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comm
 
 ### Popup UI _(`/popup`)_
 - [index.js _(Entry point)_](/doc/popup/index.md)
-- `/popup/components`
+- **Popup UI > Components _(`/popup/components`)_**
   - [AppHeader.js](/doc/popup/components/AppHeader.md)
   - [ArchiveForm.js](/doc/popup/components/ArchiveForm.md)
   - [ArchiveTimeline.js](/doc/popup/components/ArchiveTimeline.md)
   - [StatusBar.js](/doc/popup/components/StatusBar.md)
-- `/popup/handlers`
+- **Popup UI > Handlers _(`/popup/handlers`)_**
   - [onPopupOpen.js](/doc/popup/handlers/onPopupOpen.md)
   - [onStorageUpdate.js](/doc/popup/handlers/onStorageUpdate.md)
 
@@ -126,7 +136,23 @@ Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comm
 
 ---
 
+## Testing
+
+> 🚧 TODO
+
+[☝️ Back to summary](#summary)
+
+---
+
 ## Building and distributing the extension
+
+> 🚧 TODO
+
+[☝️ Back to summary](#summary)
+
+---
+
+## Automation
 
 > 🚧 TODO
 
