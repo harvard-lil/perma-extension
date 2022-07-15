@@ -67,21 +67,14 @@ import { BROWSER } from "../constants/index.js"
   /**
    * Saves the current object in store.
    * 
-   * Note:
-   * Automatically sets `lastLoadingInit` is `isLoading` is `true`.
-   * 
    * @returns {Promise<boolean>}
    * @async 
    */
   async save() {
-    if (this.isLoading) {
-      this.lastLoadingInit = new Date();
-    }
-
     const toSave = {};
     toSave[Status.KEY] = {
       isLoading: this.#isLoading,
-      lastLoadingInit: String(new Date()),
+      lastLoadingInit: String(this.#lastLoadingInit),
       message: this.#message
     };
 

@@ -74,9 +74,6 @@ Key given to this object in `browser.storage.local`.
 #### status.save() ⇒ <code>Promise.&lt;boolean&gt;</code>
 Saves the current object in store.
 
-Note:
-Automatically sets `lastLoadingInit` is `isLoading` is `true`.
-
 **Kind**: instance method of [<code>Status</code>](#module_storage/Status.Status)  
 <a name="module_storage/Status.Status+reset"></a>
 

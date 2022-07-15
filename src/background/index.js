@@ -18,8 +18,27 @@ import { authSignIn } from "./authSignIn.js";
 import { authSignOut } from "./authSignOut.js";
 import { foldersPick } from "./foldersPick.js";
 import { foldersPullList } from "./foldersPullList.js";
-import { statusMessageClear } from "./statusMessageClear.js";
+import { statusCleanUp } from "./statusCleanUp.js";
 import { tabSwitch } from "./tabSwitch.js";
+
+/**
+ * Set a 1-minute "alarm" cycle for this service worker.
+ */
+chrome.alarms.create("background-1-minute", { periodInMinutes: 1 });
+
+/**
+ * Listens and handles incoming alarm cycles.
+ * 
+ * Alarms handled:
+ * - `background-1-minute`: Send `STATUS_CLEAN_UP`
+*/
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+  switch (alarm.name) {
+    case "background-1-minute":
+      backgroundMessageHandler({messageId: MESSAGE_IDS.STATUS_CLEAN_UP})
+      break;
+  }
+});
 
 /**
  * Handles incoming messages.
@@ -27,10 +46,10 @@ import { tabSwitch } from "./tabSwitch.js";
  * See `constants.MESSAGE_IDS` for details regarding the messages handled.
  *
  * @param {Object} message
- * @param {chrome.runtime.MessageSender} sender
- * @param {function} sendResponse
+ * @param {chrome.runtime.MessageSender} [sender]
+ * @param {function} [sendResponse]
  */
-function backgroundMessageHandler(message, sender, sendResponse) {
+function backgroundMessageHandler(message, sender = {}, sendResponse = ()=>{}) {
   // Ignore messages that don't have a `messageId` property.
   if (!message.messageId) {
     return sendResponse(false);
@@ -103,8 +122,8 @@ function backgroundMessageHandler(message, sender, sendResponse) {
         .catch(() => sendResponse(false));
       break;
 
-    case MESSAGE_IDS.STATUS_MESSAGE_CLEAR:
-      statusMessageClear()
+    case MESSAGE_IDS.STATUS_CLEAN_UP:
+      statusCleanUp()
         .then(() => sendResponse(true))
         .catch(() => sendResponse(false));
       break;

@@ -8,7 +8,7 @@ jsdoc2md ../src/background/authSignIn.js > ../doc/background/authSignIn.md;
 jsdoc2md ../src/background/authSignOut.js > ../doc/background/authSignOut.md;
 jsdoc2md ../src/background/foldersPick.js > ../doc/background/foldersPick.md;
 jsdoc2md ../src/background/foldersPullList.js > ../doc/background/foldersPullList.md;
-jsdoc2md ../src/background/statusMessageClear.js > ../doc/background/statusMessageClear.md;
+jsdoc2md ../src/background/statusCleanUp.js > ../doc/background/statusCleanUp.md;
 jsdoc2md ../src/background/tabSwitch.js > ../doc/background/tabSwitch.md;
 
 jsdoc2md ../src/constants/index.js > ../doc/constants/index.md;

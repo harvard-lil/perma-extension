@@ -27,6 +27,8 @@ export async function archiveTogglePrivacyStatus(guid, isPrivate = false) {
 
   try {
     status.isLoading = true;
+    status.message = "status_progress";
+    status.lastLoadingInit = new Date();
     await status.save();
 
     const api = new PermaAPI(String(auth.apiKey));
@@ -41,6 +43,7 @@ export async function archiveTogglePrivacyStatus(guid, isPrivate = false) {
     throw err;
   }
   finally {
+    status.message = "status_archive_edited";
     status.isLoading = false;
     await status.save();
   }

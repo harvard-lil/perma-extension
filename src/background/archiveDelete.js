@@ -26,6 +26,7 @@ export async function archiveDelete(guid) {
 
   try {
     status.isLoading = true;
+    status.lastLoadingInit = new Date();
     await status.save();
 
     const api = new PermaAPI(String(auth.apiKey));

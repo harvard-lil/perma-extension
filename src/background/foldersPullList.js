@@ -26,6 +26,7 @@ export async function foldersPullList() {
 
   try {
     status.isLoading = true;
+    status.lastLoadingInit = new Date();
     await status.save();
 
     const api = new PermaAPI(String(auth.apiKey));
@@ -77,7 +78,6 @@ export async function foldersPullList() {
   finally {
     status.isLoading = false;
     await status.save();
-
     await folders.save();
   }
 }

@@ -24,6 +24,8 @@ export async function authSignIn(apiKey) {
 
   try {
     status.isLoading = true;
+    status.message = "status_progress";
+    status.lastLoadingInit = new Date();
     await status.save();
 
     const api = new PermaAPI(String(apiKey)); // Will throw if API key is invalid

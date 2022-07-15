@@ -26,6 +26,7 @@ export async function archivePullTimeline() {
 
   try {
     status.isLoading = true;
+    status.lastLoadingInit = new Date();
     await status.save();
 
     const api = new PermaAPI(String(auth.apiKey));
