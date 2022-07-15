@@ -12,6 +12,8 @@ Handler for the `ARCHIVE_DELETE` runtime message:
 Tries to delete an archive.
 Automatically updates timeline for the current tab.
 
+Triggers a loading status.
+
 **Kind**: static method of [<code>background/archiveDelete</code>](#module_background/archiveDelete)  
 
 | Param | Type |

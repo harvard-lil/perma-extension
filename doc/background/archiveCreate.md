@@ -12,6 +12,8 @@ Handler for the `ARCHIVE_CREATE_PUBLIC` and `ARCHIVE_CREATE_PRIVATE` runtime mes
 Creates a new archive.
 Automatically updates timeline for the current tab.
 
+Triggers a loading status.
+
 **Kind**: static method of [<code>background/archiveCreate</code>](#module_background/archiveCreate)  
 
 | Param | Type | Default |

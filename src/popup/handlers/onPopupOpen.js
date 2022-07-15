@@ -91,7 +91,8 @@ export async function onPopupOpen(e) {
  * Pulls latest Auth info from storage. 
  * 
  * @param {number} messageId 
- * @returns 
+ * @returns {Promise<void>}
+ * @async
  */
 async function sendMessageIfAuth(messageId) {
   const auth = await Auth.fromStorage();

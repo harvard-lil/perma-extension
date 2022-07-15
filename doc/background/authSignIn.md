@@ -11,6 +11,8 @@ Handler for the `AUTH_SIGN_IN` runtime message.
 Handler for the `AUTH_SIGN_IN` runtime message:
 Verifies and stores a Perma API key.
 
+Triggers a loading status.
+
 **Kind**: static method of [<code>background/authSignIn</code>](#module_background/authSignIn)  
 
 | Param | Type |

@@ -12,6 +12,8 @@ Handler for the `ARCHIVE_PRIVACY_STATUS_TOGGLE` runtime message:
 Tries to toggle the privacy status of a given archive.
 Automatically updates timeline for the current tab.
 
+Triggers a loading status.
+
 **Kind**: static method of [<code>background/archiveTogglePrivacyStatus</code>](#module_background/archiveTogglePrivacyStatus)  
 
 | Param | Type | Default | Description |
