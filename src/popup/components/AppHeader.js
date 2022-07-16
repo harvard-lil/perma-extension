@@ -34,15 +34,7 @@ export class AppHeader extends HTMLElement {
    */
   connectedCallback() {
     this.renderInnerHTML();
-
-    let instancesCount = 0;
-    for (let instances of document.querySelectorAll("app-header")) {
-      instancesCount += 1;
-
-      if (instancesCount > 1) {
-        instances.remove();
-      }
-    }
+    document.querySelectorAll("app-header:not(:first-of-type)").forEach(e => e.remove());
   }
 
   /**

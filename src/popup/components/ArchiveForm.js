@@ -61,15 +61,7 @@ export class ArchiveForm extends HTMLElement {
    */
   connectedCallback() {
     this.renderInnerHTML();
-
-    let instancesCount = 0;
-    for (let instances of document.querySelectorAll("archive-form")) {
-      instancesCount += 1;
-
-      if (instancesCount > 1) {
-        instances.remove();
-      }
-    }
+    document.querySelectorAll("archive-form:not(:first-of-type)").forEach(e => e.remove());
   }
 
   /**

@@ -54,13 +54,16 @@ flowchart RL
 
 ### Getting started
 - Make sure you have [the latest version of Node JS](https://nodejs.org/en/) installed on your machine. 
-- Run `npm install` to install runtime and dev dependencies.
+- Run `npm install` to install dev dependencies.
 - Use `npm run dev` to start _"development"_ mode. This effectively starts `vite build --watch`, creating a new build under `/dist` every time a file changes.
 
 ### Google Chrome: Install the work-in-progress extension
 - Open a new tab to `chrome://extensions`
 - Make sure to activate the _"Developer Mode"_ toggle.
 - Click on _"Load unpacked"_ and select the `dist` folder in `perma-extension`.
+
+### Misc
+> 🚧 Recommended extensions for HTML in JavaScript template strings.
 
 [☝️ Back to summary](#summary)
 
