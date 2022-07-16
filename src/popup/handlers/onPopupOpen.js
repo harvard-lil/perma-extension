@@ -21,9 +21,9 @@ import { onStorageUpdate } from "./onStorageUpdate.js";
  * - Schedule runtime messages 
  * 
  * Called on `DOMContentLoaded`.
- * @param {Event} e 
+ * @param {?Event} e 
  */
-export async function onPopupOpen(e) {
+export async function onPopupOpen(e = null) {
   let auth = await Auth.fromStorage();
   let status = await Status.fromStorage();
 
