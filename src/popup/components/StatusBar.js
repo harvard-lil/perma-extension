@@ -45,7 +45,7 @@ export class StatusBar extends HTMLElement {
    */
   connectedCallback() {
     this.renderInnerHTML();
-    document.querySelectorAll("archive-timeline:not(:first-of-type)").forEach(e => e.remove());
+    document.querySelectorAll("status-bar:not(:first-of-type)").forEach(e => e.remove());
   }
 
   /**
