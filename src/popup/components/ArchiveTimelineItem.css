@@ -44,6 +44,14 @@ archive-timeline-item > button {
   padding-top: 0.65rem;
 }
 
+archive-timeline-item > button[data-is-private="true"] {
+  background-color: var(--action-color--);
+}
+
+archive-timeline-item > button[data-is-private="true"]:hover {
+  background-color: var(--action-color---);
+}
+
 archive-timeline-item > button img {
   width: 1.5rem;
 }
