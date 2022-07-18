@@ -95,10 +95,15 @@ archive-form > form[action="#create-archive"] > fieldset select {
   top: 0px;
   width: 100%;
   display: block;
+  cursor: pointer;
 
   border: 1px solid var(--action-color);
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+
+  background: url("/assets/dropdown-arrow-black.svg") no-repeat;
+  background-size: 0.85rem 0.85rem;
+  background-position: calc(100% - 1rem) center;
 }
 
 archive-form > form[action="#create-archive"] > button {
