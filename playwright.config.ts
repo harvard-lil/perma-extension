@@ -1,3 +1,10 @@
+/**
+ * perma-extension
+ * @module playwright.config.ts
+ * @author The Harvard Library Innovation Lab
+ * @license MIT
+ * @description Playwright configuration file.
+ */
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
 
@@ -5,7 +12,7 @@ import { devices } from '@playwright/test';
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config();
+import "dotenv/config";
 
 /**
  * See https://playwright.dev/docs/test-configuration.
