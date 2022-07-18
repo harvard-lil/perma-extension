@@ -35,8 +35,10 @@ export async function archiveTogglePrivacyStatus(guid, isPrivate = false) {
 
     const api = new PermaAPI(String(auth.apiKey));
 
-    await api.editArchive(guid, {isPrivate: Boolean(isPrivate)});
-    
+    isPrivate = Boolean(isPrivate);
+    await api.editArchive(guid, {isPrivate});
+    status.message = isPrivate ? "status_archive_made_private" : "status_archive_made_public";
+
     await archivePullTimeline(); // Will update the timeline once the archive is created
   }
   catch(err) {
@@ -45,7 +47,6 @@ export async function archiveTogglePrivacyStatus(guid, isPrivate = false) {
     throw err;
   }
   finally {
-    status.message = "status_archive_edited";
     status.isLoading = false;
     await status.save();
   }

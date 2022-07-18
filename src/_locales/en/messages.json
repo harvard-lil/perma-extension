@@ -31,8 +31,11 @@
   "status_archive_deleted": {
     "message": "Archive deleted."
   },
-  "status_archive_edited": {
-    "message": "Archive edited."
+  "status_archive_made_public": {
+    "message": "Archive is now public."
+  },
+  "status_archive_made_private": {
+    "message": "Archive is now private."
   },
 
   "error_verifying_api_key": {
