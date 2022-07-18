@@ -5,7 +5,8 @@
  * @license MIT
  * @description Playwright configuration file.
  */
-import type { PlaywrightTestConfig } from '@playwright/test';
+// @ts-check
+/// <reference types="@playwright/test" />
 import { devices } from '@playwright/test';
 
 /**
@@ -17,7 +18,7 @@ import "dotenv/config";
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const config: PlaywrightTestConfig = {
+const config = {
   testDir: './tests',
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
