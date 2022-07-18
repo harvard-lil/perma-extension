@@ -6,7 +6,7 @@ archive-timeline {
   overflow-y: auto;
 
   opacity: 0;
-  animation: archive-timeline-fade-in 0.25s normal forwards ease-in-out;
+  animation: archive-timeline-fade-in 0.35s normal forwards ease-in-out;
   animation-delay: 0.25s;
 }
 

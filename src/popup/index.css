@@ -57,7 +57,7 @@ body {
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   
-  animation: body-fade-in 0.25s normal forwards ease-in-out;
+  animation: body-fade-in 0.35s normal forwards ease-in-out;
 }
 
 @keyframes body-fade-in {
