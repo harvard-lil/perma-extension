@@ -7,9 +7,11 @@
     "dev": "vite build --watch",
     "build": "vite build",
     "preview": "vite preview",
-    "docgen": "cd scripts && ./docgen.sh"
+    "docgen": "cd scripts && ./docgen.sh",
+    "test": "npx playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.23.4",
     "@types/chrome": "^0.0.190",
     "jsdoc-to-markdown": "^7.1.1",
     "prettier": "^2.6.2",
