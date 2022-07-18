@@ -3,7 +3,7 @@
  * @module tests/index
  * @author The Harvard Library Innovation Lab
  * @license MIT
- * @description Entry point for E2E test suite. Defines suite-wide tools and fixtures.
+ * @description Entry point for browser-based test suite. Defines suite-wide tools and fixtures.
  */
 import { test as base, chromium } from "@playwright/test";
 
