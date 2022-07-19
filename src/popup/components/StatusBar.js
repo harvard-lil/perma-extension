@@ -66,7 +66,7 @@ export class StatusBar extends HTMLElement {
    * On "click" on the "Sign out" button:
    * - Send `AUTH_SIGN)_OUT` message to the service worker.
    */
-   async handleSignOutClick(e) {
+  async handleSignOutClick(e) {
     e.preventDefault();
     BROWSER.runtime.sendMessage({messageId: MESSAGE_IDS.AUTH_SIGN_OUT});
   }

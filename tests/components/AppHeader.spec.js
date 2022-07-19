@@ -3,7 +3,7 @@
  * @module tests/components/AppHeader.spec
  * @author The Harvard Library Innovation Lab
  * @license MIT
- * @description Browser-based tests for `<app-header>`. Tests this component in isolation.
+ * @description Browser-based tests for `<app-header>`.
  */
 import { expect } from "@playwright/test";
 import { test } from "../index.js";
@@ -14,9 +14,10 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
   await page.waitForTimeout(500);
 });
 
-test("Enforce the singleton pattern", async ({ page, extensionId }) => {
+test("Enforces the singleton pattern", async ({ page, extensionId }) => {
   // Try to inject a second `<app-header>` in the document. 
   // Only the first one should remain.
+  // (Assumes one is already present in the document).
   const count = await page.evaluate(() => {
     const extra = document.createElement("app-header");
     extra.setAttribute("tab-url", "TEST");
