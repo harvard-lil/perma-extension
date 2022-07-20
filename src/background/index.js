@@ -9,7 +9,6 @@
 // @ts-check
 import { BROWSER, MESSAGE_IDS } from "../constants/index.js";
 
-import { apiColdStartFix } from "./apiColdStartFix.js";
 import { archiveCreate } from "./archiveCreate.js";
 import { archiveDelete } from "./archiveDelete.js";
 import { archivePullTimeline } from "./archivePullTimeline.js";
@@ -125,12 +124,6 @@ function backgroundMessageHandler(message, sender = {}, sendResponse = ()=>{}) {
 
     case MESSAGE_IDS.STATUS_CLEAN_UP:
       statusCleanUp()
-        .then(() => sendResponse(true))
-        .catch(() => sendResponse(false));
-      break;
-
-    case MESSAGE_IDS.API_COLD_START_FIX:
-      apiColdStartFix()
         .then(() => sendResponse(true))
         .catch(() => sendResponse(false));
       break;
