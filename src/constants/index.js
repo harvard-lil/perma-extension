@@ -63,8 +63,9 @@ export const MESSAGE_IDS = {
 
 /**
  * Proxy for accessing the browser API, which in the case of Chromium-based browser, is vendor-specific.
- * Will throw if ran outside of a browser extension context.
+ * Will be `null` if ran outside of a browser context.
  * @constant 
+ * @type {chrome}
  */
 export const BROWSER = (() => {
   if ("chrome" in globalThis) {
@@ -75,6 +76,7 @@ export const BROWSER = (() => {
     return globalThis.browser;
   }
 
-  throw new Error("WebExtensions API unavailable.");
+  return null;
+  //throw new Error("WebExtensions API unavailable.");
 })();
 
