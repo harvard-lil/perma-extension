@@ -237,8 +237,7 @@ export class ArchiveForm extends HTMLElement {
         </select>
       </fieldset>
 
-      <button data-action="create-archive-public"
-              aria-label="${getMessage("create_archive_form_button_label")}"
+      <button aria-label="${getMessage("create_archive_form_button_label")}"
               title="${getMessage("create_archive_form_button_label")}">
         ${getMessage("create_archive_form_button_caption")}
       </button>
@@ -251,25 +250,26 @@ export class ArchiveForm extends HTMLElement {
    * @returns {string} HTML
    */
   generateFoldersPickOptions() {
-    let foldersList = this.getAttribute("folders-list");
-    let foldersPick = this.getAttribute("folders-pick");
+    try {
+      let foldersList = this.getAttribute("folders-list");
+      let foldersPick = this.getAttribute("folders-pick");
 
-    if (!foldersList) {
+      let html = "";
+
+      for (let folder of JSON.parse(foldersList)) {
+        let selected = foldersPick && parseInt(foldersPick) === folder?.id ? "selected" : "";
+        let name = `${"┄".repeat(folder.depth)} ${folder.name}`;
+
+        html += /*html*/ `
+        <option ${selected} value="${folder?.id}" aria-label="${name}">${name}</option>
+        `;
+      }
+
+      return html;
+    }
+    catch(err) {
       return "";
     }
-
-    let html = "";
-
-    for (let folder of JSON.parse(foldersList)) {
-      let selected = foldersPick && parseInt(foldersPick) === folder?.id ? "selected" : "";
-      let name = `${"┄".repeat(folder.depth)} ${folder.name}`;
-
-      html += /*html*/ `
-      <option ${selected} value="${folder?.id}" aria-label="${name}">${name}</option>
-      `;
-    }
-
-    return html;
   }
 } 
 customElements.define('archive-form', ArchiveForm);

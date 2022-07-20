@@ -23,7 +23,7 @@ test("Enforces the singleton pattern", async ({ page, extensionId }) => {
     const extra = document.createElement("status-bar");
     extra.setAttribute("message", "status_default");
     document.querySelector("body").appendChild(extra);
- 
+
     return document.querySelectorAll("status-bar").length;
   });
  
@@ -68,7 +68,7 @@ test('Sign-out button shows when `is-authenticated` is "true" and `is-loading` i
 
 test('Sign-out button sends `AUTH_SIGN_OUT` runtime message.', async ({ page, extensionId }) => {
   // Monkey-patch chrome.runtime.sendMessage to capture the message that would have been sent.
-  const payload = await page.evaluate(async() => {
+  const payload = await page.evaluate(async () => {
     let payload = null;
     chrome.runtime.sendMessage = data => payload = data;
 
@@ -98,7 +98,7 @@ test('`message` is observed, taken into account, and pulls i18n content.', async
   ];
 
   for (const scenario of Object.values(scenarios)) {
-    await page.evaluate(async(scenario) => {
+    await page.evaluate(async (scenario) => {
       document.querySelector("status-bar").setAttribute("message", scenario.key);
     }, scenario);
   
@@ -121,7 +121,7 @@ test('Loading spinner shows (only) when `is-loading` is "true"', async ({ page, 
   ];
 
   for (const scenario of Object.values(scenarios)) {
-    const count = await page.evaluate(async(scenario) => {
+    const count = await page.evaluate(async (scenario) => {
       document.querySelector("status-bar").setAttribute("is-loading", scenario.isLoading);
       await new Promise(resolve => setTimeout(resolve, 100));
       return document.querySelectorAll("status-bar > img").length;
