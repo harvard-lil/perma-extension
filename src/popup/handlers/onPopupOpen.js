@@ -63,6 +63,13 @@ export async function onPopupOpen(e = null) {
   // [4] If authenticated, send the following messages on schedule: 
   // 
 
+  // `API_COLD_START_FIX` to prevent long responses from [POST] `/v1/archives` (temporary)
+  // Once + every 45 seconds
+  sendMessageIfAuth(MESSAGE_IDS.API_COLD_START_FIX)
+  setInterval(async () => {
+    await sendMessageIfAuth(MESSAGE_IDS.API_COLD_START_FIX);
+  }, 45000);
+
   // `FOLDERS_PULL_LIST` to refresh the list of available folders.
   // Once + every 20 seconds.
   sendMessageIfAuth(MESSAGE_IDS.FOLDERS_PULL_LIST)

@@ -43,6 +43,7 @@
  * - `ARCHIVE_PRIVACY_STATUS_TOGGLE`: Request to toggle the privacy status of a given archive. Params: `guid`, `isPrivate`.
  * - `ARCHIVE_DELETE`: Request the deletion of an archive. Params: `guid`.
  * - `STATUS_CLEAN_UP`: Request a clean up of the status (i.e: recover from hanging loading state).
+ * - `API_COLD_START_FIX`: Temporary workaround to keep the archive creation endpoint "warm" (perf. issue). To be run at most every 45 seconds. 
  * 
  * @constant 
  */
@@ -58,7 +59,8 @@ export const MESSAGE_IDS = {
   ARCHIVE_CREATE_PRIVATE: 9,
   ARCHIVE_PRIVACY_STATUS_TOGGLE: 10,
   ARCHIVE_DELETE: 11,
-  STATUS_CLEAN_UP: 12
+  STATUS_CLEAN_UP: 12,
+  API_COLD_START_FIX: 13
 };
 
 /**
