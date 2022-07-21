@@ -23,7 +23,24 @@ export const MOCK_FOLDERS_LIST = [
 export const MOCK_FOLDERS_PICK = 3;
 
 /**
+ * Valid mock for archive timeline.
+ * Only mocks the strict necessary to render `<archive-timeline-item>` elements.
+ * @constant
+ */
+export const MOCK_ARCHIVE_TIMELINE = [
+  {guid: "ABCD-1234", creation_timestamp: new Date().toISOString(), is_private: false},
+  {guid: "1234-ABCD", creation_timestamp: new Date().toISOString(), is_private: true},
+];
+
+/**
  * Valid mock for an API key.
  * @constant
  */
 export const MOCK_API_KEY = "abcedfghijklmnopqrstuvwxyz12345678901234";
+
+
+/**
+ * Mocks an archive guid.
+ * @constant
+ */
+export const MOCK_ARCHIVE_GUID = "AAAA-2222";

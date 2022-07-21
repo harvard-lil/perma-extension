@@ -8,7 +8,6 @@
 import { expect } from "@playwright/test";
 import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
 import { MOCK_API_KEY, MOCK_FOLDERS_LIST, MOCK_FOLDERS_PICK } from "../mocks.js";
-
 import { MESSAGE_IDS } from "../../src/constants/index.js";
 
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.
@@ -18,7 +17,7 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
   await page.waitForTimeout(WAIT_MS_AFTER_BOOT);
 });
  
-test("Enforces the singleton pattern", async ({ page, extensionId }) => {
+test("Enforces the singleton pattern.", async ({ page, extensionId }) => {
   // Try to inject a second `<archive-form>` in the document. 
   const count = await page.evaluate(() => {
     const extra = document.createElement("archive-form");
@@ -30,7 +29,7 @@ test("Enforces the singleton pattern", async ({ page, extensionId }) => {
   expect(count).toBe(1); // Only the first one should remain.
 });
 
-test('Sign-in form shows up (only) when `is-authenticated` is "false"',  async ({ page, extensionId }) => {
+test('Sign-in form shows up (only) when `is-authenticated` is "false".',  async ({ page, extensionId }) => {
   const scenarios = [
     {
       isAuthenticated: "false",

@@ -15,7 +15,7 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * 
  * Available HTML attributes:
  * - `guid`
- * - `creation-timestamp`
+ * - `creation-timestamp`: String representation of Data object.
  * - `is-private`
  * 
  * Note:
@@ -98,16 +98,7 @@ export class ArchiveTimelineItem extends HTMLElement {
     let toggleArchivePrivacyLabel = `${getMessage("archive_timeline_item_make_" + (isPrivate ? "public" : "private"))}`;
 
     /** @type {?Date} */
-    let creationTimestamp = null;
-    let now = new Date();
-
-    // Determine if archive can still toggled between public and private
-    try {
-      creationTimestamp = new Date(getAttribute("creation-timestamp"));
-    }
-    catch(err) { // Fallback
-      creationTimestamp = now;
-    }
+    let creationTimestamp = new Date(getAttribute("creation-timestamp"));
 
     this.innerHTML = /*html*/`
       <a href="${getMessage("perma_base_url")}${guid}" 

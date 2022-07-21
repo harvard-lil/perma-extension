@@ -108,7 +108,7 @@ test('`message` is observed, pulls and renders `browser.i18n` content.', async (
   }
 });
 
-test('Loading spinner shows (only) when `is-loading` is "true"', async ({ page, extensionId }) => {
+test('Loading spinner shows (only) when `is-loading` is "true".', async ({ page, extensionId }) => {
   const scenarios = [
     {
       isLoading: false,
