@@ -36,10 +36,23 @@ test('Does not render if `is-authenticated` is not "true".', async ({ page, exte
   expect(await archiveTimeline.getAttribute("aria-hidden")).toBe("true");
 });
 
-test('Shows an "empty" message if no archives provided.', async ({ page, extensionId }) => {
+test('Shows an "empty" message if no archive provided.', async ({ page, extensionId }) => {
   expect(await page.evaluate(async () => {
     return document.querySelectorAll("archive-timeline .empty").length
   })).toBe(1);
+});
+
+test("Renders archive objects as `<archive-timeline-item>` entries via `addArchives()`.", async ({ page, extensionId }) => {
+  const renderedEntries = await page.evaluate(async (MOCK_ARCHIVE_TIMELINE) => {
+    const archiveTimeline = document.querySelector("archive-timeline");
+    archiveTimeline.addArchives(MOCK_ARCHIVE_TIMELINE);
+    
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    
+    return archiveTimeline.querySelectorAll("archive-timeline-item").length;
+  }, MOCK_ARCHIVE_TIMELINE);
+
+  expect(renderedEntries).toBe(MOCK_ARCHIVE_TIMELINE.length);
 });
 
 /*
