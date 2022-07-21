@@ -33,13 +33,13 @@ test("Enforces the singleton pattern", async ({ page, extensionId }) => {
 test('Sign-out button shows when `is-authenticated` is "true" and `is-loading` is "false".', async ({ page, extensionId }) => {
   const scenarios = [
     {
-      isAuthenticated: "true",
-      isLoading: "false",
+      isAuthenticated: true,
+      isLoading: false,
       buttonCount: 1,
     },
     {
-      isAuthenticated: "true",
-      isLoading: "true",
+      isAuthenticated: true,
+      isLoading: true,
       buttonCount: 0,
     },
   ];
@@ -54,8 +54,8 @@ test('Sign-out button shows when `is-authenticated` is "true" and `is-loading` i
       await new Promise(resolve => requestAnimationFrame(resolve));
     }, scenario);
   
-    expect(await page.getAttribute("status-bar", "is-authenticated")).toBe(scenario.isAuthenticated);
-    expect(await page.getAttribute("status-bar", "is-loading")).toBe(scenario.isLoading);
+    expect(await page.getAttribute("status-bar", "is-authenticated")).toBe(`${scenario.isAuthenticated}`);
+    expect(await page.getAttribute("status-bar", "is-loading")).toBe(`${scenario.isLoading}`);
   
     expect(
       await page.evaluate(() => {
@@ -111,11 +111,11 @@ test('`message` is observed, pulls and renders `browser.i18n` content.', async (
 test('Loading spinner shows (only) when `is-loading` is "true"', async ({ page, extensionId }) => {
   const scenarios = [
     {
-      isLoading: "false",
+      isLoading: false,
       spinnerCount: 0
     },
     {
-      isLoading: "true",
+      isLoading: true,
       spinnerCount: 1
     }
   ];

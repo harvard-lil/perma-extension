@@ -187,8 +187,54 @@ test('Archive creation form sends `FOLDERS_PICK_ONE` runtime message on folder `
   }, options);
 
   expect(payload.messageId).toBe(MESSAGE_IDS.FOLDERS_PICK_ONE);
-  expect(payload.folderId).toBe(String(MOCK_FOLDERS_PICK));
+  expect(payload.folderId).toBe(`${MOCK_FOLDERS_PICK}`);
 });
 
 test('Inputs are disabled when `is-loading` is "true"',  async ({ page, extensionId }) => {
+  const scenarios = [
+    {
+      isAuthenticated: false,
+      isLoading: true,
+      foldersList: "",
+      foldersPick: "",
+    },
+    {
+      isAuthenticated: false,
+      isLoading: true,
+      foldersList: MOCK_FOLDERS_LIST,
+      foldersPick: MOCK_FOLDERS_PICK,
+    }
+  ];
+
+  for (let scenario of scenarios) {
+    const inputsAreDisabled = await page.evaluate(async (scenario) => {
+      const archiveForm = document.querySelector("archive-form");
+
+      archiveForm.setAttribute("is-authenticated", scenario.isAuthenticated);
+      archiveForm.setAttribute("is-loading", scenario.isLoading);
+
+      if (scenario.foldersList) {
+        archiveForm.setAttribute("folders-list", JSON.stringify(scenario.foldersList));
+      }
+
+      if (scenario.foldersPick) {
+        archiveForm.setAttribute("folders-pick", scenario.foldersPick);
+      }
+
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      let inputsAreDisabled = true;
+
+      for (let input of archiveForm.querySelectorAll("input, select, button")) {
+        if (!input.getAttribute("disabled")) {
+          inputsAreDisabled = false;
+          break;
+        }
+      }
+
+      return inputsAreDisabled;
+    });
+
+    expect(inputsAreDisabled).toBe(true);
+  }
 });
