@@ -26,7 +26,7 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
     archiveTimeline.setAttribute("is-authenticated", "true");
     archiveTimeline.addArchives(MOCK_ARCHIVE_TIMELINE)
 
-    await new Promise(resolve => setTimeout(resolve, 250));
+    await new Promise(resolve => requestAnimationFrame(resolve));
   }, MOCK_ARCHIVE_TIMELINE);
 });
 
@@ -140,23 +140,4 @@ test("Click on privacy toggle button sends `ARCHIVE_PRIVACY_STATUS_TOGGLE` runti
     expect(payload.messageId).toBe(MESSAGE_IDS.ARCHIVE_PRIVACY_STATUS_TOGGLE);
     expect(payload.isPrivate).toBe(scenario.expectedIsPrivateInPayload);
   }
-});
-
-test('Buttons are disabled when parent `is-loading` is "true"',  async ({ page, extensionId }) => {
-  const buttonsAreDisabled = await page.evaluate(async () => {
-    document.querySelector("archive-timeline").setAttribute("is-loading", "true");
-
-    for (let item of document.querySelectorAll("archive-timeline-item")) {
-      buttonsAreDisabled = true;
-
-      if (!item.querySelector("button:disabled")) {
-        buttonsAreDisabled = false;
-        break;
-      }
-    }
-
-    return buttonsAreDisabled;
-  });
-
-  expect(buttonsAreDisabled).toBe(true);
 });

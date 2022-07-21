@@ -7,7 +7,7 @@
  */
 import { expect } from "@playwright/test";
 import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
-import { MOCK_API_KEY, MOCK_FOLDERS_LIST, MOCK_FOLDERS_PICK } from "../mocks.js";
+import { MOCK_API_KEY, MOCK_FOLDERS_LIST, MOCK_FOLDERS_PICK, MOCK_TAB_URL } from "../mocks.js";
 import { MESSAGE_IDS } from "../../src/constants/index.js";
 
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.
@@ -78,7 +78,7 @@ test('Sign-in form sends `AUTH_SIGN_IN` runtime message on submit.',  async ({ p
 });
 
 test("Sign-in form has a working link to Perma.cc's bookmarklet feature.",  async ({ page, extensionId }) => {
-  const tabUrl = "https://lil.harvard.edu";
+  const tabUrl = MOCK_TAB_URL;
 
   await page.evaluate(async (tabUrl) => {
     document.querySelector("archive-form").setAttribute("is-authenticated", "false");

@@ -40,7 +40,19 @@ export const MOCK_API_KEY = "abcedfghijklmnopqrstuvwxyz12345678901234";
 
 
 /**
- * Mocks an archive guid.
+ * Mocks a valid archive guid.
  * @constant
  */
 export const MOCK_ARCHIVE_GUID = "AAAA-2222";
+
+/**
+ * Mocks a valid tab title.
+ * @constant
+ */
+export const MOCK_TAB_TITLE = "LOREM IPSUM";
+
+/**
+ * Mocks a valid tab url.
+ * @constant
+ */
+export const MOCK_TAB_URL = "https://lil.harvard.edu";

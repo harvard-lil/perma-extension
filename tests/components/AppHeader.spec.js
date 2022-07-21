@@ -7,6 +7,7 @@
  */
 import { expect } from "@playwright/test";
 import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
+import { MOCK_TAB_TITLE, MOCK_TAB_URL } from "../mocks.js";
 
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.
 // This page contains an instance of `<app-header>`.
@@ -31,8 +32,8 @@ test("Enforces the singleton pattern.", async ({ page, extensionId }) => {
 
 test("`tab-title` and `tab-url` are observed and taken into account.", async ({ page, extensionId }) => {
   const updates = {
-    "tabTitle": "LOREM IPSUM",
-    "tabUrl": "https://lil.harvard.edu"
+    "tabTitle": MOCK_TAB_TITLE,
+    "tabUrl": MOCK_TAB_URL
   };
 
   await page.evaluate((updates) => {

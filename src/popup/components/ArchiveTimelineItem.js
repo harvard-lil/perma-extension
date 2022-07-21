@@ -18,8 +18,6 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * - `creation-timestamp`: String representation of Data object.
  * - `is-private`
  * 
- * Note:
- * - Probes parent's `is-loading` attribute to determine if buttons should be disabled.
  */
 export class ArchiveTimelineItem extends HTMLElement {
   /**

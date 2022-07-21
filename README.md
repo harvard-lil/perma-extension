@@ -3,6 +3,8 @@
 # perma-extension
 A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma links directly from the browser.
 
+[![Test suite](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml/badge.svg)](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml)
+
 ---
 
 ## Summary
