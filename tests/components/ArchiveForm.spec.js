@@ -7,7 +7,7 @@
  */
 import { expect } from "@playwright/test";
 import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
-import { MOCK_API_KEY, MOCK_FOLDERS_LIST } from "../mocks.js";
+import { MOCK_API_KEY, MOCK_FOLDERS_LIST, MOCK_FOLDERS_PICK } from "../mocks.js";
 
 import { MESSAGE_IDS } from "../../src/constants/index.js";
 
@@ -135,9 +135,59 @@ test('Archive creation renders `folders-list`.',  async ({ page, extensionId }) 
 });
 
 test('Archive creation takes into account `folder-pick`.',  async ({ page, extensionId }) => {
+  const options = {
+    foldersList: MOCK_FOLDERS_LIST, 
+    foldersPick: MOCK_FOLDERS_PICK
+  };
+
+  const optionsIsSelected = await page.evaluate(async (options) => {
+    const archiveForm = document.querySelector("archive-form");
+
+    archiveForm.setAttribute("is-authenticated", "true");
+    archiveForm.setAttribute("folders-list", JSON.stringify(options.foldersList));
+    archiveForm.setAttribute("folders-pick", options.foldersPick);
+
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    if (archiveForm.querySelector(`option[value="${options.foldersPick}"][selected]`)) {
+      return true;
+    }
+    else {
+      return false;
+    }
+
+  }, options);
+
+  expect(optionsIsSelected).toBe(true);
 });
 
 test('Archive creation form sends `FOLDERS_PICK_ONE` runtime message on folder `<select>` change.',  async ({ page, extensionId }) => {
+  const options = {
+    foldersList: MOCK_FOLDERS_LIST, 
+    foldersPick: MOCK_FOLDERS_PICK
+  };
+
+  // Monkey-patch `chrome.runtime.sendMessage` to intercept message.
+  const payload = await page.evaluate(async (options) => {
+    let payload = null;
+    chrome.runtime.sendMessage = data => payload = data;
+    
+    const archiveForm = document.querySelector("archive-form");
+
+    archiveForm.setAttribute("is-authenticated", "true");
+    archiveForm.setAttribute("folders-list", JSON.stringify(options.foldersList));
+
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    archiveForm.querySelector("select").value = options.foldersPick;
+    archiveForm.querySelector("select").dispatchEvent(new Event("change"));
+
+    return payload;
+
+  }, options);
+
+  expect(payload.messageId).toBe(MESSAGE_IDS.FOLDERS_PICK_ONE);
+  expect(payload.folderId).toBe(String(MOCK_FOLDERS_PICK));
 });
 
 test('Inputs are disabled when `is-loading` is "true"',  async ({ page, extensionId }) => {

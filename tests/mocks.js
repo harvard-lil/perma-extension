@@ -17,6 +17,12 @@ export const MOCK_FOLDERS_LIST = [
 ];
 
 /**
+ * Valid mock for folder pick.
+ * @constant
+ */
+export const MOCK_FOLDERS_PICK = 3;
+
+/**
  * Valid mock for an API key.
  * @constant
  */
