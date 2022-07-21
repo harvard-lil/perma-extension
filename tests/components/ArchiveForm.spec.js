@@ -232,7 +232,7 @@ test('Inputs are disabled when `is-loading` is "true"',  async ({ page, extensio
       }
 
       return inputsAreDisabled;
-    });
+    }, scenario);
 
     expect(inputsAreDisabled).toBe(true);
   }

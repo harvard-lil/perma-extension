@@ -26,7 +26,7 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
     archiveTimeline.setAttribute("is-authenticated", "true");
     archiveTimeline.addArchives(MOCK_ARCHIVE_TIMELINE)
 
-    await new Promise(resolve => requestAnimationFrame(resolve));
+    await new Promise(resolve => setTimeout(resolve, 250));
   }, MOCK_ARCHIVE_TIMELINE);
 });
 
@@ -41,6 +41,7 @@ test("`guid` is observed and taken into account.", async ({ page, extensionId })
     await page.evaluate(async (guid) => {
       const firstItem = document.querySelector("archive-timeline-item");
       firstItem.setAttribute("guid", guid);
+
       await new Promise(resolve => requestAnimationFrame(resolve));
     }, guid);
   

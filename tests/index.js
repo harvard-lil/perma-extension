@@ -10,7 +10,7 @@ import { test as base, chromium } from "@playwright/test";
 /**
  * Time (in MS) to wait before running a test.
  */
-export const WAIT_MS_AFTER_BOOT = 400;
+export const WAIT_MS_AFTER_BOOT = 500;
 
 /**
  * Path to _built_ extension.
