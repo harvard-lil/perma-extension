@@ -73,9 +73,89 @@ test("`creation-timestamp` is observed and taken into account.", async ({ page, 
   }
 });
 
-
 test("`is-private` is observed and taken into account.", async ({ page, extensionId }) => {
+  const isPrivateArgs = [
+    true,
+    false,
+    null,
+    "FOO"
+  ];
+
+  for (let isPrivate of isPrivateArgs) {
+    await page.evaluate(async (isPrivate) => {
+      const firstItem = document.querySelector("archive-timeline-item");
+      firstItem.setAttribute("is-private", isPrivate);
+      await new Promise(resolve => requestAnimationFrame(resolve));
+    }, isPrivate);
+
+    const button = await page.locator("archive-timeline-item:first-of-type button");
+
+    if (isPrivate === true) {
+      expect(await button.getAttribute("data-is-private")).toBe("true");
+    }
+    else {
+      expect(await button.getAttribute("data-is-private")).toBe("false");
+    }
+
+  }
 });
 
 test("Click on privacy toggle button sends `ARCHIVE_PRIVACY_STATUS_TOGGLE` runtime message.", async ({ page, extensionId }) => {
+  const scenarios = [
+    {
+      isPrivate: false,
+      expectedIsPrivateInPayload: true,
+    },
+    {
+      isPrivate: true,
+      expectedIsPrivateInPayload: false,
+    },
+    {
+      isPrivate: "FOO",
+      expectedIsPrivateInPayload: true,
+    },
+    {
+      isPrivate: null,
+      expectedIsPrivateInPayload: true,
+    }
+  ];
+
+  for (let scenario of scenarios) {
+    // Monkey-patch `chrome.runtime.sendMessage` to intercept message.
+    const payload = await page.evaluate(async (scenario) => {
+      let payload = null;
+      chrome.runtime.sendMessage = data => payload = data;
+
+      const firstItem = document.querySelector("archive-timeline-item:first-of-type");
+      firstItem.setAttribute("is-private", scenario.isPrivate);
+
+      await new Promise(resolve => requestAnimationFrame(resolve));
+
+      firstItem.querySelector("button").click();
+
+      return payload;
+    }, scenario);
+
+    expect(payload.messageId).toBe(MESSAGE_IDS.ARCHIVE_PRIVACY_STATUS_TOGGLE);
+    expect(payload.isPrivate).toBe(scenario.expectedIsPrivateInPayload);
+  }
+});
+
+test('Buttons are disabled when parent `is-loading` is "true"',  async ({ page, extensionId }) => {
+  const buttonsAreDisabled = await page.evaluate(async () => {
+    document.querySelector("archive-timeline").setAttribute("is-loading", "true");
+
+    for (let item of document.querySelectorAll("archive-timeline-item")) {
+      buttonsAreDisabled = true;
+
+      if (!item.querySelector("button:disabled")) {
+        buttonsAreDisabled = false;
+        break;
+      }
+    }
+
+    return buttonsAreDisabled;
+  });
+
+  expect(buttonsAreDisabled).toBe(true);
 });
