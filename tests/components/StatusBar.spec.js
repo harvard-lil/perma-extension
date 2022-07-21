@@ -51,7 +51,7 @@ test('Sign-out button shows when `is-authenticated` is "true" and `is-loading` i
       statusBar.setAttribute("is-authenticated", scenario.isAuthenticated);
       statusBar.setAttribute("is-loading", scenario.isLoading);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => requestAnimationFrame(resolve));
     }, scenario);
   
     expect(await page.getAttribute("status-bar", "is-authenticated")).toBe(scenario.isAuthenticated);
@@ -66,8 +66,8 @@ test('Sign-out button shows when `is-authenticated` is "true" and `is-loading` i
 
 });
 
-test('Sign-out button sends `AUTH_SIGN_OUT` runtime message.', async ({ page, extensionId }) => {
-  // Monkey-patch chrome.runtime.sendMessage to capture the message that would have been sent.
+test("Sign-out button sends `AUTH_SIGN_OUT` runtime message on click.", async ({ page, extensionId }) => {
+  // Monkey-patch `chrome.runtime.sendMessage` to intercept message.
   const payload = await page.evaluate(async () => {
     let payload = null;
     chrome.runtime.sendMessage = data => payload = data;
@@ -77,7 +77,7 @@ test('Sign-out button sends `AUTH_SIGN_OUT` runtime message.', async ({ page, ex
 
     document.querySelector("status-bar > button").click();
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => requestAnimationFrame(resolve));
 
     return payload;
   });
@@ -85,7 +85,7 @@ test('Sign-out button sends `AUTH_SIGN_OUT` runtime message.', async ({ page, ex
   expect(payload.messageId).toBe(MESSAGE_IDS.AUTH_SIGN_OUT);
 });
 
-test('`message` is observed, taken into account, and pulls i18n content.', async ({ page, extensionId }) => {
+test('`message` is observed, pulls and renders `browser.i18n` content.', async ({ page, extensionId }) => {
   const scenarios = [
     {
       key: "app_title", // Valid key, exists in "_locales/en/messages.json"
@@ -123,7 +123,9 @@ test('Loading spinner shows (only) when `is-loading` is "true"', async ({ page, 
   for (const scenario of Object.values(scenarios)) {
     const count = await page.evaluate(async (scenario) => {
       document.querySelector("status-bar").setAttribute("is-loading", scenario.isLoading);
-      await new Promise(resolve => setTimeout(resolve, 100));
+
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      
       return document.querySelectorAll("status-bar > img").length;
     }, scenario);
   
