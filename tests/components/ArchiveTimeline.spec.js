@@ -55,23 +55,25 @@ test("Renders archive objects as `<archive-timeline-item>` entries via `addArchi
   expect(renderedEntries).toBe(MOCK_ARCHIVE_TIMELINE.length);
 });
 
-/*
-test('Buttons are disabled when `is-loading` is "true"',  async ({ page, extensionId }) => {
-  const buttonsAreDisabled = await page.evaluate(async () => {
-    document.querySelector("archive-timeline").setAttribute("is-loading", "true");
+test('All input elements of this subtree are disabled when `is-loading` is "true"', async ({ page, extensionId }) => {
+  const inputsAreDisabled = await page.evaluate(async (MOCK_ARCHIVE_TIMELINE) => {
+    const archiveTimeline = document.querySelector("archive-timeline");
+    archiveTimeline.addArchives(MOCK_ARCHIVE_TIMELINE);
+    archiveTimeline.setAttribute("is-loading", "true");
 
-    for (let item of document.querySelectorAll("archive-timeline-item")) {
-      buttonsAreDisabled = true;
+    await new Promise(resolve => requestAnimationFrame(resolve));
 
-      if (!item.querySelector("button:disabled")) {
-        buttonsAreDisabled = false;
+    for (let item of archiveTimeline.querySelectorAll("input, button, select")) {
+      inputsAreDisabled = true;
+
+      if (!item.getAttribute("disabled")) {
+        inputsAreDisabled = false;
         break;
       }
     }
 
-    return buttonsAreDisabled;
-  });
+    return inputsAreDisabled;
+  }, MOCK_ARCHIVE_TIMELINE);
 
-  expect(buttonsAreDisabled).toBe(true);
+  expect(inputsAreDisabled).toBe(true);
 });
-*/

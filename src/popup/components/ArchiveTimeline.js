@@ -7,7 +7,7 @@
  */
 // @ts-check
 
-import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
+import { BROWSER } from "../../constants/index.js";
 
 /**
  * Custom Element: `<archive-timeline>`. 
