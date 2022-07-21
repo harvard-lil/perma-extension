@@ -7,6 +7,7 @@
  */
 import { expect } from "@playwright/test";
 import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
+import { MOCK_API_KEY, MOCK_FOLDERS_LIST } from "../mocks.js";
 
 import { MESSAGE_IDS } from "../../src/constants/index.js";
 
@@ -57,9 +58,7 @@ test('Sign-in form shows up (only) when `is-authenticated` is "false"',  async (
 
 test('Sign-in form sends `AUTH_SIGN_IN` runtime message on submit.',  async ({ page, extensionId }) => {
   // Monkey-patch `chrome.runtime.sendMessage` to intercept message.
-  const dummyApiKey = "abcedfghijklmnopqrstuvwxyz12345678901234";
-
-  const payload = await page.evaluate(async (dummyApiKey) => {
+  const payload = await page.evaluate(async (MOCK_API_KEY) => {
     let payload = null;
     chrome.runtime.sendMessage = data => payload = data;
 
@@ -67,27 +66,72 @@ test('Sign-in form sends `AUTH_SIGN_IN` runtime message on submit.',  async ({ p
     await new Promise(resolve => requestAnimationFrame(resolve));
 
     const signInForm = document.querySelector("archive-form form[action='#sign-in']");
-
-    signInForm.querySelector("input[name='api-key']").value = dummyApiKey;
+    signInForm.querySelector("input[name='api-key']").value = MOCK_API_KEY;
     signInForm.querySelector("button").click();
-
     await new Promise(resolve => requestAnimationFrame(resolve));
 
     return payload;
-  }, dummyApiKey);
+  }, MOCK_API_KEY);
 
   // Note: if authentication were successful, we would get more than 1 message being sent.
   expect(payload.messageId).toBe(MESSAGE_IDS.AUTH_SIGN_IN);
-  expect(payload.apiKey).toBe(dummyApiKey);
+  expect(payload.apiKey).toBe(MOCK_API_KEY);
 });
 
 test("Sign-in form has a working link to Perma.cc's bookmarklet feature.",  async ({ page, extensionId }) => {
+  const tabUrl = "https://lil.harvard.edu";
+
+  await page.evaluate(async (tabUrl) => {
+    document.querySelector("archive-form").setAttribute("is-authenticated", "false");
+    document.querySelector("archive-form").setAttribute("tab-url", tabUrl);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+  }, tabUrl);
+
+  // Link is present and contains url
+  const href = await page.getAttribute("form[action='#sign-in'] a:last-of-type", "href");
+  expect(href).toContain(tabUrl);
 });
 
 test('Archive creation form sends `ARCHIVE_CREATE_PUBLIC` runtime message on submit.',  async ({ page, extensionId }) => {
+  // Monkey-patch `chrome.runtime.sendMessage` to intercept message.
+  const payload = await page.evaluate(async (dummyApiKey) => {
+    let payload = null;
+    chrome.runtime.sendMessage = data => payload = data;
+
+    document.querySelector("archive-form").setAttribute("is-authenticated", "true");
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    const signInForm = document.querySelector("archive-form form[action='#create-archive']");
+    signInForm.querySelector("button").click();
+
+    return payload;
+  });
+
+  expect(payload.messageId).toBe(MESSAGE_IDS.ARCHIVE_CREATE_PUBLIC);
 });
 
 test('Archive creation renders `folders-list`.',  async ({ page, extensionId }) => {
+  const optionsHaveRendered = await page.evaluate(async (MOCK_FOLDERS_LIST) => {
+    const archiveForm = document.querySelector("archive-form");
+
+    archiveForm.setAttribute("is-authenticated", "true");
+    archiveForm.setAttribute("folders-list", JSON.stringify(MOCK_FOLDERS_LIST));
+
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    let optionsHaveRendered = true;
+
+    for (let option of Object.values(MOCK_FOLDERS_LIST)) {
+      if (!archiveForm.querySelector(`option[value="${option.id}"]`)) {
+        optionsHaveRendered = false;
+        break;
+      }
+    }
+
+    return optionsHaveRendered;
+  }, MOCK_FOLDERS_LIST);
+
+  expect(optionsHaveRendered).toBe(true);
 });
 
 test('Archive creation takes into account `folder-pick`.',  async ({ page, extensionId }) => {
