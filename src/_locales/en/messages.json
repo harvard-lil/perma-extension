@@ -77,7 +77,7 @@
     "message": "https://perma.cc/service/bookmarklet-create/?v=1&url="
   },
   "sign_in_form_sign_in_api_key_help_caption": {
-    "message": "Help me find my API key"
+    "message": "Take me to my API key"
   },
   "sign_in_form_sign_in_api_key_help_url": {
     "message": "https://perma.cc/settings/tools#:~:text=Create%20Perma%20Link.%22-,API,-API%20Key"
