@@ -8,7 +8,7 @@
 // @ts-check
 
 import { PermaAPI } from "@harvard-lil/perma-js-sdk";
-import { Auth, Status, Folders } from "../storage/index.js";
+import { Auth, Folders } from "../storage/index.js";
 
 /**
  * Handler for the `FOLDERS_PULL_LIST` runtime message:

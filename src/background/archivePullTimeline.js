@@ -31,7 +31,17 @@ export async function archivePullTimeline() {
     }
 
     const archivesFromAPI = await api.pullArchives(100, 0, currentTab.url);
-    archives.byUrl[currentTab.url] = archivesFromAPI.objects;
+
+    // Debug: Filter-out entries that don't exactly match the current url.
+    const filteredArchives = [];
+
+    for (let archive of archivesFromAPI.objects) {
+      if (new URL(archive.url).href === currentTab.url) {
+        filteredArchives.push(archive);
+      }
+    }
+
+    archives.byUrl[currentTab.url] = filteredArchives;
   }
   catch(err) {
     //console.error(err);

@@ -55,4 +55,4 @@ export const MOCK_TAB_TITLE = "LOREM IPSUM";
  * Mocks a valid tab url.
  * @constant
  */
-export const MOCK_TAB_URL = "https://lil.harvard.edu";
+export const MOCK_TAB_URL = "https://lil.law.harvard.edu/";

@@ -22,7 +22,7 @@ import { Archives } from "./Archives.js";
  * import { CurrentTab } from "../storage/index.js";
  * 
  * const tab = await CurrentTab.fromStorage();
- * tab.url = "https://lil.harvard.edu";
+ * tab.url = "https://lil.law.harvard.edu;
  * tab.title = "Harvard Library Innovation Lab";
  * await tab.save();
  * ```
