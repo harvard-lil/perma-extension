@@ -20,12 +20,13 @@ export const EXTENSION_PATH = "./dist/";
 
 /**
  * Extends Playwright's "test" function so it:
- * - Loads Chromium with the extension pre-loaded.
+ * - Loads Chromium with the extension pre-loaded and clipboard permissions pre-enabled.
  * - Finds the extension id and feeds it to every test.
  */
 export const test = base.extend({
   context: async ({ }, use) => {
     const pathToExtension = EXTENSION_PATH;
+
     const context = await chromium.launchPersistentContext("", {
       headless: false,
       args: [
@@ -33,6 +34,9 @@ export const test = base.extend({
         `--load-extension=${pathToExtension}`,
       ],
     });
+
+    context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    
     await use(context);
     await context.close();
   },

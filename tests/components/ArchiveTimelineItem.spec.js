@@ -7,7 +7,6 @@
  */
 import { expect } from "@playwright/test";
 import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
-import { MESSAGE_IDS } from "../../src/constants/index.js";
 import { MOCK_ARCHIVE_TIMELINE, MOCK_ARCHIVE_GUID } from "../mocks.js";
 
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.
@@ -101,4 +100,22 @@ test("`capture-status` is observed and taken into account.", async ({ page, exte
 });
 
 test('Click on "Copy" button uses `guid` and `archived-url` to create a reference and add it to clipboard.', async ({ page, extensionId }) => {
+  await page.keyboard.down('Tab');
+
+  const clipboardContent = await page.evaluate(async () => {
+    await navigator.clipboard.writeText("");
+
+    const firstItem = document.querySelector("archive-timeline-item");
+    firstItem.querySelector("button").click();
+
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    return await navigator.clipboard.readText();
+  });
+
+  const guid = await page.getAttribute("archive-timeline-item:first-of-type", "guid");
+  const archivedUrl = await page.getAttribute("archive-timeline-item:first-of-type", "archived-url");
+
+  expect(clipboardContent.startsWith(archivedUrl)).toBe(true);
+  expect(clipboardContent.endsWith(guid)).toBe(true);
 });
