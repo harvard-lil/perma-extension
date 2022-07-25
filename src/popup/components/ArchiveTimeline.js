@@ -73,8 +73,18 @@ export class ArchiveTimeline extends HTMLElement {
       const item = document.createElement("archive-timeline-item");
       item.setAttribute("guid", archive?.guid);
       item.setAttribute("archived-url", archive?.url);
-      item.setAttribute("capture-status", String(archive?.captures[0]?.status));
+      item.setAttribute("capture-status", "success"); // Default
       item.setAttribute("creation-timestamp", archive?.creation_timestamp);
+
+      // Try to assess actual capture status.
+      if ("captures" in archive && archive.captures.length > 0) {
+        for (let capture of archive.captures) {
+          if (capture.role === "primary") {
+            item.setAttribute("capture-status", capture.status);
+          }
+        }
+      }
+
       this.appendChild(item);
     }
 
