@@ -14,7 +14,7 @@
   },
 
   "status_default": {
-    "message": "Ready."
+    "message": ""
   },
   "status_signed_in": {
     "message": "Signed in."
@@ -23,10 +23,10 @@
     "message": "Signed out."
   },
   "status_in_progress": {
-    "message": "In progress ..."
+    "message": "Processing ..."
   },
   "status_archive_created": {
-    "message": "Archive created."
+    "message": "Capture in progress ..."
   },
   "status_archive_deleted": {
     "message": "Archive deleted."
