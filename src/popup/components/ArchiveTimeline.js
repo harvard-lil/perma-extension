@@ -5,8 +5,8 @@
  * @license MIT
  * @description `<archive-timeline>` custom element. 
  */
+/// <reference path="@harvard-lil/perma-js-sdk"" />
 // @ts-check
-
 import { BROWSER } from "../../constants/index.js";
 
 /**
@@ -72,7 +72,8 @@ export class ArchiveTimeline extends HTMLElement {
     for (let archive of archives) {
       const item = document.createElement("archive-timeline-item");
       item.setAttribute("guid", archive?.guid);
-      item.setAttribute("is-private", String(archive?.is_private));
+      item.setAttribute("archived-url", archive?.url);
+      item.setAttribute("capture-status", String(archive?.captures[0]?.status));
       item.setAttribute("creation-timestamp", archive?.creation_timestamp);
       this.appendChild(item);
     }

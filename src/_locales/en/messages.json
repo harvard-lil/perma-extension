@@ -106,11 +106,17 @@
   "archive_timeline_item_open_in_tab": {
     "message": "Open this archive in a new tab."
   },
-  "archive_timeline_item_make_public": {
-    "message": "This is a private archive. Click to make public."
+  "archive_timeline_item_copy_in_clipboard": {
+    "message": "Copy this link in the clipboard."
   },
-  "archive_timeline_item_make_private": {
-    "message": "This is a public archive. Click to make private."
+  "archive_timeline_item_capture_pending": {
+    "message": "Capture in progress ..."
+  },
+  "archive_timeline_item_capture_failed": {
+    "message": "Capture failed."
+  },
+  "archive_timeline_item_clipboard_archived_at": {
+    "message": ", archived at"
   },
 
   "status_bar_loading_alt": {

@@ -7,7 +7,7 @@
  */
 // @ts-check
 
-import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
+import { BROWSER } from "../../constants/index.js";
 
 /**
  * Custom Element: `<archive-timeline-item>`. 
@@ -15,25 +15,32 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * 
  * Available HTML attributes:
  * - `guid`
+ * - `archived-url`: Url that was actually captured (from `PermaArchive.url`).
  * - `creation-timestamp`: String representation of Data object.
- * - `is-private`
- * 
+ * - `capture-status`: From `PermaCapture.status`. Can be "pending", "failed" or "success".
  */
 export class ArchiveTimelineItem extends HTMLElement {
+
+  /**
+   * Possible values for `capture-status`.
+   * @static
+   */
+  static CAPTURE_STATUSES = ["success", "pending", "failed"];
+
   /**
    * On instantiation: 
    * - Bind local methods to `this` so they can easily be passed around
    */
   constructor() {
     super();
-    this.handlePrivacyToggleClick = this.handlePrivacyToggleClick.bind(this);
+    this.handleCopyButtonClick = this.handleCopyButtonClick.bind(this);
   }
 
   /**
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
   static get observedAttributes() { 
-    return ["guid", "creation-timestamp", "is-private"];
+    return ["guid", "creation-timestamp", "capture-status"];
   }
 
   /**
@@ -59,24 +66,25 @@ export class ArchiveTimelineItem extends HTMLElement {
   }
 
   /**
-   * On click on the "toggle privacy" button of a given item:
-   * - Send `ARCHIVE_PRIVACY_STATUS_TOGGLE` message to the service worker.
+   * Adds a reference to the Perma link that was clicked to the clipboard, in a "cite-ready" format.
    * 
-   * @param {HTMLElement} button - Reference to the button that was clicked 
+   * Example: "https://lil.law.harvard.edu, archived at https://perma.cc/{guid}".
+   * 
+   * @param {Event} e
    */
-  handlePrivacyToggleClick(button) {
-    if (!("guid" in button.dataset) || !("isPrivate" in button.dataset)) {
-      return;
-    }
+  async handleCopyButtonClick(e) {
+    e.preventDefault();
+    const getMessage = BROWSER.i18n.getMessage;
 
-    const guid = button.dataset.guid;
-    const isPrivate = button.dataset.isPrivate === "true" ? false : true;
+    const guid = this.getAttribute("guid");
+    const archivedUrl = this.getAttribute("archived-url");
 
-    BROWSER.runtime.sendMessage({
-      messageId: MESSAGE_IDS.ARCHIVE_PRIVACY_STATUS_TOGGLE,
-      guid: guid,
-      isPrivate: isPrivate
-    });
+    let toClipboard = `${archivedUrl}`;
+    toClipboard += getMessage("archive_timeline_item_clipboard_archived_at");
+    toClipboard += " ";
+    toClipboard += `${getMessage("perma_base_url")}${guid}`;
+
+    await navigator.clipboard.writeText(toClipboard);
   }
 
   /**
@@ -91,32 +99,36 @@ export class ArchiveTimelineItem extends HTMLElement {
     // [1] Prepare and inject template
     //
     let guid = getAttribute("guid");
-    let isPrivate = getAttribute("is-private") === "true";
-    let openArchiveLabel = `${getMessage("archive_timeline_item_open_in_tab")} (${getAttribute("guid")})`;
-    let toggleArchivePrivacyLabel = `${getMessage("archive_timeline_item_make_" + (isPrivate ? "public" : "private"))}`;
-
-    /** @type {?Date} */
+    let captureStatus = getAttribute("capture-status");
     let creationTimestamp = new Date(getAttribute("creation-timestamp"));
+
+    // Default `captureStatus` to "success" if `capture-status` not provided.
+    if (!ArchiveTimelineItem.CAPTURE_STATUSES.includes(captureStatus)) {
+      captureStatus = ArchiveTimelineItem.CAPTURE_STATUSES[0];
+    }
+
+    let archiveLinkLabel = `${getMessage("archive_timeline_item_open_in_tab")} (${getAttribute("guid")})`;
+    let archiveCopyLabel = `${getMessage("archive_timeline_item_copy_in_clipboard")} (${getAttribute("guid")})`;
+
+    // If capture was a success: Make link caption display date. Otherwise, display status.
+    let linkCaption = creationTimestamp?.toLocaleString();
+
+    if (["pending", "failed"].includes(captureStatus)) {
+      linkCaption = getMessage(`archive_timeline_item_capture_${captureStatus}`);
+    }
 
     this.innerHTML = /*html*/`
       <a href="${getMessage("perma_base_url")}${guid}" 
          target="_blank" 
          rel="noopener noreferrer"
-         title="${openArchiveLabel}"
-         aria-label="${openArchiveLabel}">
+         title="${archiveLinkLabel}"
+         aria-label="${archiveLinkLabel}">
          <strong>${guid}</strong><br>
-         <span>${creationTimestamp?.toLocaleString()}</span>
+         <span>${linkCaption}</span>
       </a>
 
-      <button 
-        aria-label="${toggleArchivePrivacyLabel}"
-        title="${toggleArchivePrivacyLabel}"
-        data-guid="${guid}"
-        data-is-private="${isPrivate ? "true" : "false"}"
-      >
-          <img src="../assets/lock-${isPrivate ? "closed" : "open"}-white.svg" 
-               alt="" 
-               aria-hidden="true"/>
+      <button aria-label="${archiveCopyLabel}" title="${archiveCopyLabel}">
+        <img src="../assets/copy-white.svg" alt="" aria-hidden="true"/>
       </button>
     `;
 
@@ -124,7 +136,7 @@ export class ArchiveTimelineItem extends HTMLElement {
     // [2] Bind event listeners
     //
     for (let button of this.querySelectorAll("button")) {
-      button.addEventListener("click", (e) => this.handlePrivacyToggleClick(button)); // TODO: Event delegation?
+      button.addEventListener("click", (e) => this.handleCopyButtonClick(e)); // TODO: Event delegation?
     }
   }
 

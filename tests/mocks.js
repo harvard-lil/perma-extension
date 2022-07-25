@@ -28,8 +28,18 @@ export const MOCK_FOLDERS_PICK = 3;
  * @constant
  */
 export const MOCK_ARCHIVE_TIMELINE = [
-  {guid: "ABCD-1234", creation_timestamp: new Date().toISOString(), is_private: false},
-  {guid: "1234-ABCD", creation_timestamp: new Date().toISOString(), is_private: true},
+  {
+    guid: "ABCD-1234",
+    url: "https://lil.law.harvard.edu",
+    captures: [{ status: "pending" }],
+    creation_timestamp: new Date().toISOString()
+  },
+  {
+    guid: "DCBA-4321",
+    url: "https://lil.law.harvard.edu",
+    captures: [{ status: "success" }],
+    creation_timestamp: new Date().toISOString()
+  },
 ];
 
 /**

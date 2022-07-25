@@ -10,7 +10,6 @@ import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
 import { MESSAGE_IDS } from "../../src/constants/index.js";
 import { MOCK_ARCHIVE_TIMELINE, MOCK_ARCHIVE_GUID } from "../mocks.js";
 
-
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.
 // This page contains an instance of `<archive-timeline>`
 // - Set `is-authenticated` to "true" on `<archive-form>` and `<archive-timeline>` so we can use `<archive-timeline>`.
@@ -74,70 +73,32 @@ test("`creation-timestamp` is observed and taken into account.", async ({ page, 
   }
 });
 
-test("`is-private` is observed and taken into account.", async ({ page, extensionId }) => {
-  const isPrivateArgs = [
-    true,
-    false,
-    null,
-    "FOO"
-  ];
+test("`capture-status` is observed and taken into account.", async ({ page, extensionId }) => {
+  const statuses = ["success", "failed", "pending", true, "BAR", null];
 
-  for (let isPrivate of isPrivateArgs) {
-    await page.evaluate(async (isPrivate) => {
+  for (let status of statuses) {
+    await page.evaluate(async (status) => {
       const firstItem = document.querySelector("archive-timeline-item");
-      firstItem.setAttribute("is-private", isPrivate);
+      firstItem.setAttribute("capture-status", status);
       await new Promise(resolve => requestAnimationFrame(resolve));
-    }, isPrivate);
+    }, status);
 
-    const button = await page.locator("archive-timeline-item:first-of-type button");
+    // Based on `capture-status`, a > span should contain:
+    // - If status is "failed" or "pending": a message
+    // - If status is anything else: a date
+    const spanContent = await page.locator("archive-timeline-item:first-of-type a > span").innerText();
 
-    if (isPrivate === true) {
-      expect(await button.getAttribute("data-is-private")).toBe("true");
+    expect(new Date(spanContent)).toBeInstanceOf(Date);
+
+    if (["pending", "failed"].includes(status)) {
+      expect(new Date(spanContent).toString()).toBe("Invalid Date");
     }
     else {
-      expect(await button.getAttribute("data-is-private")).toBe("false");
+      expect(new Date(spanContent).toString()).not.toBe("Invalid Date");
     }
 
   }
 });
 
-test("Click on privacy toggle button sends `ARCHIVE_PRIVACY_STATUS_TOGGLE` runtime message.", async ({ page, extensionId }) => {
-  const scenarios = [
-    {
-      isPrivate: false,
-      expectedIsPrivateInPayload: true,
-    },
-    {
-      isPrivate: true,
-      expectedIsPrivateInPayload: false,
-    },
-    {
-      isPrivate: "FOO",
-      expectedIsPrivateInPayload: true,
-    },
-    {
-      isPrivate: null,
-      expectedIsPrivateInPayload: true,
-    }
-  ];
-
-  for (let scenario of scenarios) {
-    // Monkey-patch `chrome.runtime.sendMessage` to intercept message.
-    const payload = await page.evaluate(async (scenario) => {
-      let payload = null;
-      chrome.runtime.sendMessage = data => payload = data;
-
-      const firstItem = document.querySelector("archive-timeline-item:first-of-type");
-      firstItem.setAttribute("is-private", scenario.isPrivate);
-
-      await new Promise(resolve => requestAnimationFrame(resolve));
-
-      firstItem.querySelector("button").click();
-
-      return payload;
-    }, scenario);
-
-    expect(payload.messageId).toBe(MESSAGE_IDS.ARCHIVE_PRIVACY_STATUS_TOGGLE);
-    expect(payload.isPrivate).toBe(scenario.expectedIsPrivateInPayload);
-  }
+test('Click on "Copy" button uses `guid` and `archived-url` to create a reference and add it to clipboard.', async ({ page, extensionId }) => {
 });
