@@ -10,9 +10,10 @@
     * [.ArchiveTimelineItem](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem)
         * [new exports.ArchiveTimelineItem()](#new_module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem_new)
         * _instance_
+            * [.CAPTURE_STATUSES](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+CAPTURE_STATUSES)
             * [.connectedCallback()](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+connectedCallback)
             * [.attributeChangedCallback(name, oldValue, newValue)](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+attributeChangedCallback)
-            * [.handlePrivacyToggleClick(button)](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+handlePrivacyToggleClick)
+            * [.handleCopyButtonClick(e)](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+handleCopyButtonClick)
             * [.renderInnerHTML()](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+renderInnerHTML)
         * _static_
             * [.observedAttributes](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem.observedAttributes)
@@ -25,20 +26,19 @@ Represents a single archive in the `<archive-timeline>` element.
 
 Available HTML attributes:
 - `guid`
-- `creation-timestamp`
-- `is-private`
-
-Note:
-- Probes parent's `is-loading` attribute to determine if buttons should be disabled.
+- `archived-url`: Url that was actually captured (from `PermaArchive.url`).
+- `creation-timestamp`: String representation of Data object.
+- `capture-status`: From `PermaCapture.status`. Can be "pending", "failed" or "success".
 
 **Kind**: static class of [<code>popup/components/ArchiveTimelineItem</code>](#module_popup/components/ArchiveTimelineItem)  
 
 * [.ArchiveTimelineItem](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem)
     * [new exports.ArchiveTimelineItem()](#new_module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem_new)
     * _instance_
+        * [.CAPTURE_STATUSES](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+CAPTURE_STATUSES)
         * [.connectedCallback()](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+connectedCallback)
         * [.attributeChangedCallback(name, oldValue, newValue)](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+attributeChangedCallback)
-        * [.handlePrivacyToggleClick(button)](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+handlePrivacyToggleClick)
+        * [.handleCopyButtonClick(e)](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+handleCopyButtonClick)
         * [.renderInnerHTML()](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+renderInnerHTML)
     * _static_
         * [.observedAttributes](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem.observedAttributes)
@@ -49,6 +49,12 @@ Note:
 On instantiation: 
 - Bind local methods to `this` so they can easily be passed around
 
+<a name="module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+CAPTURE_STATUSES"></a>
+
+#### archiveTimelineItem.CAPTURE\_STATUSES
+Possible values for `capture-status`.
+
+**Kind**: instance property of [<code>ArchiveTimelineItem</code>](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem)  
 <a name="module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+connectedCallback"></a>
 
 #### archiveTimelineItem.connectedCallback()
@@ -70,17 +76,18 @@ On HTML attribute update:
 | oldValue | <code>\*</code> | 
 | newValue | <code>\*</code> | 
 
-<a name="module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+handlePrivacyToggleClick"></a>
+<a name="module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+handleCopyButtonClick"></a>
 
-#### archiveTimelineItem.handlePrivacyToggleClick(button)
-On click on the "toggle privacy" button of a given item:
-- Send `ARCHIVE_PRIVACY_STATUS_TOGGLE` message to the service worker.
+#### archiveTimelineItem.handleCopyButtonClick(e)
+Adds a reference to the Perma link that was clicked to the clipboard, in a "cite-ready" format.
+
+Example: "https://lil.law.harvard.edu, archived at https://perma.cc/{guid}".
 
 **Kind**: instance method of [<code>ArchiveTimelineItem</code>](#module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| button | <code>HTMLElement</code> | Reference to the button that was clicked |
+| Param | Type |
+| --- | --- |
+| e | <code>Event</code> | 
 
 <a name="module_popup/components/ArchiveTimelineItem.ArchiveTimelineItem+renderInnerHTML"></a>
 

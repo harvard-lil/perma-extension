@@ -8,7 +8,8 @@ App-wide constants.
 
 * [constants](#module_constants)
     * [.MESSAGE_IDS](#module_constants.MESSAGE_IDS)
-    * [.BROWSER](#module_constants.BROWSER)
+    * [.BROWSER](#module_constants.BROWSER) : <code>chrome</code>
+    * [.PERMA_API_BASE_URL](#module_constants.PERMA_API_BASE_URL)
 
 <a name="module_constants.MESSAGE_IDS"></a>
 
@@ -46,13 +47,19 @@ Message identifiers detail:
 - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url.
 - `ARCHIVE_PRIVACY_STATUS_TOGGLE`: Request to toggle the privacy status of a given archive. Params: `guid`, `isPrivate`.
 - `ARCHIVE_DELETE`: Request the deletion of an archive. Params: `guid`.
-- `STATUS_CLEAN_UP`: Request a clean up of the status (i.e: recover from hanging loading state).
+- `STATUS_CLEAN_UP`: Request a clean up of "status" (i.e: recover from hanging loading state).
 
 **Kind**: static constant of [<code>constants</code>](#module_constants)  
 <a name="module_constants.BROWSER"></a>
 
-### constants.BROWSER
+### constants.BROWSER : <code>chrome</code>
 Proxy for accessing the browser API, which in the case of Chromium-based browser, is vendor-specific.
-Will throw if ran outside of a browser extension context.
+Will be `null` if ran outside of a browser context.
+
+**Kind**: static constant of [<code>constants</code>](#module_constants)  
+<a name="module_constants.PERMA_API_BASE_URL"></a>
+
+### constants.PERMA\_API\_BASE\_URL
+Perma.cc API's base url
 
 **Kind**: static constant of [<code>constants</code>](#module_constants)  

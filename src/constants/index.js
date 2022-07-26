@@ -42,7 +42,7 @@
  * - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url.
  * - `ARCHIVE_PRIVACY_STATUS_TOGGLE`: Request to toggle the privacy status of a given archive. Params: `guid`, `isPrivate`.
  * - `ARCHIVE_DELETE`: Request the deletion of an archive. Params: `guid`.
- * - `STATUS_CLEAN_UP`: Request a clean up of the status (i.e: recover from hanging loading state).
+ * - `STATUS_CLEAN_UP`: Request a clean up of "status" (i.e: recover from hanging loading state).
  * 
  * @constant 
  */
