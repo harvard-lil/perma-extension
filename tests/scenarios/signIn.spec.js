@@ -1,6 +1,6 @@
 /**
  * perma-extension
- * @module tests/components/AppHeader.spec
+ * @module tests/scenarios/SignIn.spec
  * @author The Harvard Library Innovation Lab
  * @license MIT
  * @description E2E Testing scenario: Signing in. Assumes "env.TESTS_API_KEY" is available and valid.
@@ -10,7 +10,7 @@ import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
 import { MOCK_API_KEY } from "../mocks.js";
 
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.
-// Clears `chrome.storage.local` between each tests.
+// Clears `chrome.storage.local` before each test.
 test.beforeEach(async ({ page, extensionId }, testInfo) => {
   await page.goto(`chrome-extension://${extensionId}/popup/index.html`);
   await page.evaluate(async () => await chrome.storage.local.clear());
@@ -18,7 +18,7 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
   await page.waitForTimeout(WAIT_MS_AFTER_BOOT);
 });
 
-test("Signing in with both a valid and invalid API key", async ({ page, extensionId }) => {
+test("App switches between Sign-In and Archive Creation when valid credentials are provided.", async ({ page, extensionId }) => {
   // Notes:
   // - `expectedFormAction`: Expected value for the `action` attribute of archive-form > form after signing-in.
   const scenarios = [
