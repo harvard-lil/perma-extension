@@ -55,8 +55,8 @@ flowchart RL
 > 🚧 TODO
 
 ### Getting started
-- Make sure you have [the latest version of Node JS](https://nodejs.org/en/) installed on your machine. 
-- Run `npm install` to install dev dependencies.
+- Make sure you have [the latest version of Node JS](https://nodejs.org/en/) installed on your machine _(18+ recommended)_.
+- Run `npm install` to install dependencies.
 - Use `npm run dev` to start _"development"_ mode. This effectively starts `vite build --watch`, creating a new build under `/dist` every time a file changes.
 
 ### Google Chrome: Install the work-in-progress extension
@@ -73,7 +73,14 @@ flowchart RL
 
 ## Environment Variables
 
-> 🚧 TBD 
+### Scope: E2E testing
+The following environment variables are only used in the context of [the test suites](#testing).
+They may be provided using an `.env` file, which the Playwright test runner will take into account. 
+
+| Name | Context | Required | Description |
+| --- | --- | --- | --- |
+| `TESTS_API_KEY` | Test suite | Yes | API key to be used for E2E tests. |
+| `CI` | Test suite | No | Will alter test reporting if set _(see `playwright.config.js`)_. Used to run tests in a GitHub Action. | 
 
 [☝️ Back to summary](#summary)
 
@@ -125,7 +132,34 @@ Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comm
 
 ## CLI
 
-> 🚧 TODO
+### dev
+```
+npm run dev
+```
+
+Starts _"development"_ mode.  Effectively runs `vite build --watch`, creating a new build under `/dist` every time a file changes. 
+
+### build 
+```
+npm run build
+```
+
+Generates a new extension build under `/dist`.
+
+### docgen
+```bash
+npm run docgen
+```
+
+Generates documentation using [`JSDoc` comments](https://jsdoc.app/). Outputs as Markdown to `doc`.
+To update which files should be taken into account, check `/scripts/docgen.sh`.
+
+### test
+```bash
+npm run test
+```
+
+Runs the [end-to-end tests suite](#testing) using [playwright](https://playwright.dev/).
 
 [☝️ Back to summary](#summary)
 
