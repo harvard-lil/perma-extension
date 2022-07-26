@@ -77,6 +77,11 @@ export const BROWSER = (() => {
   }
 
   return null;
-  //throw new Error("WebExtensions API unavailable.");
 })();
 
+/**
+ * Perma.cc API's base url
+ * 
+ * @constant
+ */
+export const PERMA_API_BASE_URL = "https://api.perma.cc";

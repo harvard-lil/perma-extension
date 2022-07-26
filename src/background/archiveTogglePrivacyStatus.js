@@ -10,6 +10,7 @@
 import { PermaAPI } from "@harvard-lil/perma-js-sdk";
 import { Auth, Status } from "../storage/index.js";
 import { archivePullTimeline } from "./archivePullTimeline.js";
+import { PERMA_API_BASE_URL } from "../constants/index.js";
 
 /**
  * Handler for the `ARCHIVE_PRIVACY_STATUS_TOGGLE` runtime message: 
@@ -33,7 +34,7 @@ export async function archiveTogglePrivacyStatus(guid, isPrivate = false) {
     status.lastLoadingInit = new Date();
     await status.save();
 
-    const api = new PermaAPI(String(auth.apiKey));
+    const api = new PermaAPI(String(auth.apiKey), PERMA_API_BASE_URL);
 
     isPrivate = Boolean(isPrivate);
     await api.editArchive(guid, {isPrivate});

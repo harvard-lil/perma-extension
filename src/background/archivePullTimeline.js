@@ -8,7 +8,8 @@
 // @ts-check
 
 import { PermaAPI } from "@harvard-lil/perma-js-sdk";
-import { Auth, Status, CurrentTab, Archives } from "../storage/index.js";
+import { Auth, CurrentTab, Archives } from "../storage/index.js";
+import { PERMA_API_BASE_URL } from "../constants/index.js";
 
 /**
  * Handler for the `ARCHIVE_PULL_TIMELINE` runtime message:
@@ -24,7 +25,7 @@ export async function archivePullTimeline() {
   const archives = await Archives.fromStorage();
 
   try {
-    const api = new PermaAPI(String(auth.apiKey));
+    const api = new PermaAPI(String(auth.apiKey), PERMA_API_BASE_URL);
 
     if (!currentTab.url) {
       throw new Error("`currentTab.url` is not set.");

@@ -10,6 +10,7 @@
 import { PermaAPI } from "@harvard-lil/perma-js-sdk";
 import { Auth, Status, CurrentTab, Folders } from "../storage/index.js";
 import { archivePullTimeline } from "./archivePullTimeline.js";
+import { PERMA_API_BASE_URL } from "../constants/index.js";
 
 /**
  * Handler for the `ARCHIVE_CREATE_PUBLIC` and `ARCHIVE_CREATE_PRIVATE` runtime messages: 
@@ -34,7 +35,7 @@ export async function archiveCreate(isPrivate = false) {
     status.message = "status_in_progress";
     await status.save();
 
-    const api = new PermaAPI(String(auth.apiKey));
+    const api = new PermaAPI(String(auth.apiKey), PERMA_API_BASE_URL);
 
     if (!currentTab.url) {
       throw new Error("`currentTab.url` is not set.");

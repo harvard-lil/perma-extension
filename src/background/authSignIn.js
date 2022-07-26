@@ -9,6 +9,7 @@
 
 import { PermaAPI } from "@harvard-lil/perma-js-sdk";
 import { Auth, Status } from "../storage/index.js";
+import { PERMA_API_BASE_URL } from "../constants/index.js";
 
 /**
  * Handler for the `AUTH_SIGN_IN` runtime message:
@@ -30,7 +31,7 @@ export async function authSignIn(apiKey) {
     status.lastLoadingInit = new Date();
     await status.save();
 
-    const api = new PermaAPI(String(apiKey)); // Will throw if API key is invalid
+    const api = new PermaAPI(String(apiKey), PERMA_API_BASE_URL); // Will throw if API key is invalid
     await api.pullUser(); // Will throw if API key is invalid
 
     auth.apiKey = apiKey;

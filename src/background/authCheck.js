@@ -10,6 +10,7 @@
 import { PermaAPI } from "@harvard-lil/perma-js-sdk";
 import { Auth } from "../storage/index.js";
 import { authSignOut } from "./authSignOut.js";
+import { PERMA_API_BASE_URL } from "../constants/index.js";
 
 /**
  * Handler for the `AUTH_CHECK` runtime message:
@@ -27,7 +28,7 @@ export async function authCheck() {
       throw new Error("No API key provided.");
     }
 
-    const api = new PermaAPI(String(auth.apiKey)); // Will throw if API key is invalid
+    const api = new PermaAPI(String(auth.apiKey), PERMA_API_BASE_URL); // Will throw if API key is invalid
     await api.pullUser(); // Will throw if API key is invalid
   }
   // If the verification fails, clear any user-related data.

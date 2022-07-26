@@ -9,6 +9,7 @@
 
 import { PermaAPI } from "@harvard-lil/perma-js-sdk";
 import { Auth, Folders } from "../storage/index.js";
+import { PERMA_API_BASE_URL } from "../constants/index.js";
 
 /**
  * Handler for the `FOLDERS_PULL_LIST` runtime message:
@@ -24,7 +25,7 @@ export async function foldersPullList() {
   const folders = await Folders.fromStorage();
 
   try {
-    const api = new PermaAPI(String(auth.apiKey));
+    const api = new PermaAPI(String(auth.apiKey), PERMA_API_BASE_URL);
 
     const allFolders = [];
     const topFolder = await api.pullTopLevelFolders();
