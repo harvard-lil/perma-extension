@@ -35,11 +35,13 @@ archive-form > form[action="#sign-in"] input {
   width: 100%;
   background-color: transparent;
   border: 0px;
-  border-bottom: 2px solid var(--main-color--);
+  border: 2px solid var(--main-color--);
+  border-radius: 0.25rem;
   font-size: 1rem;
   font-weight: bold;
   padding: 0.75rem;
   margin-bottom: 1rem;
+  color: var(--opposite-color);
 }
 
 archive-form > form[action="#sign-in"] input::placeholder {
@@ -101,9 +103,16 @@ archive-form > form[action="#create-archive"] > fieldset select {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
 
-  background: url("/assets/dropdown-arrow-black.svg") no-repeat;
+  background-image: url("/assets/dropdown-arrow-black.svg");
+  background-repeat: no-repeat;
   background-size: 0.85rem 0.85rem;
   background-position: calc(100% - 1rem) center;
+}
+
+@media (prefers-color-scheme: dark) {
+  archive-form > form[action="#create-archive"] > fieldset select {
+    background-image: url("/assets/dropdown-arrow-white.svg");
+  }
 }
 
 archive-form > form[action="#create-archive"] > button {

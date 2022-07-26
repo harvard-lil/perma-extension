@@ -30,10 +30,24 @@ status-bar > button {
   text-decoration: underline;
 }
 
+@media (prefers-color-scheme: dark) {
+  status-bar > button {
+    color: var(--opposite-color--);
+  }
+}
+
 status-bar > button:hover,
 status-bar > button:focus {
   background-color: transparent;
   color: var(--action-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  status-bar > button:hover,
+  status-bar > button:focus {
+    background-color: transparent;
+    color: var(--opposite-color);
+  }
 }
 
 status-bar > img {
@@ -52,5 +66,11 @@ status-bar > img {
 @media (prefers-reduced-motion: reduce) {
   status-bar > img {
     animation: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  status-bar > img {
+    filter: invert(1);
   }
 }

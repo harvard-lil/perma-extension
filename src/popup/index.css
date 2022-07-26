@@ -24,15 +24,28 @@
 
   --special-color: rgb(221, 103, 26);
 
-  --highlight-color: rgb(247, 255, 111);
-  --highlight-color-: rgb(250, 254, 174);
-  --highlight-color--: rgb(252, 254, 209);
-
   --extension-width: 25rem;
   --extension-height: 35rem;
   --body-border-width: 0.25rem;
 
   --letter-spacing: -0.075ch;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {  
+    --main-color: rgb(34, 34, 34);
+    --main-color-: rgb(53, 52, 52);
+    --main-color--: rgb(80, 80, 80);
+
+    --opposite-color: white;
+    --opposite-color-: rgb(246, 248, 241);
+    --opposite-color--: rgb(226, 228, 223);
+
+    --action-color: rgb(37, 112, 233);
+    --action-color-: rgb(20, 76, 189);
+    --action-color--: rgb(0, 59, 154);
+    --action-color---: rgb(0, 50, 129);
+  }
 }
 
 html {
@@ -88,6 +101,13 @@ button {
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  button {
+    color: var(--opposite-color);
+  }
+}
+
+
 button:hover, button:focus {
   background-color: var(--action-color-);
 }
@@ -109,7 +129,19 @@ a {
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  a {
+    color: var(--opposite-color--);
+  }
+}
+
 a:hover {
   color: var(--action-color-);
   text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  a:hover {
+    color: var(--opposite-color-);
+  }
 }

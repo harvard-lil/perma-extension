@@ -20,9 +20,16 @@ archive-timeline-item > a {
   text-decoration: none;
 }
 
+
 /* Toggle archive privacy mode button */
 archive-timeline-item > a strong {
   color: var(--action-color-);
+}
+
+@media (prefers-color-scheme: dark) {
+  archive-timeline-item > a strong {
+    color: var(--opposite-color--);
+  }
 }
 
 archive-timeline-item > a:hover strong, 
@@ -30,6 +37,15 @@ archive-timeline-item > a:focus strong {
   color: var(--action-color);
   text-decoration: underline;
   text-decoration-color: var(--action-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  archive-timeline-item > a:hover strong, 
+  archive-timeline-item > a:focus strong {
+    color: var(--opposite-color-);
+    text-decoration: underline;
+    text-decoration-color: var(--opposite-color-);
+  }
 }
 
 archive-timeline-item > a span {
