@@ -21,14 +21,11 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
   // Sign in
   await page.evaluate( async(apiKey) => {
     const signInForm = document.querySelector('archive-form [action="#sign-in"]');
-
     signInForm.querySelector("input[name='api-key']").value = apiKey;
     signInForm.querySelector("button").click();
-
-    await new Promise(resolve => setTimeout(resolve, 1500));
   }, process.env["TESTS_API_KEY"]);
 
-  await page.waitForTimeout(WAIT_MS_AFTER_BOOT);
+  await page.waitForTimeout(WAIT_MS_AFTER_BOOT * 10);
 });
 
 test("App switches back to the Sign-In form and clears user data from storage upon sign-out.", async ({ page, extensionId }) => {

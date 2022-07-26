@@ -23,11 +23,9 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
     const signInForm = document.querySelector('archive-form [action="#sign-in"]');
     signInForm.querySelector("input[name='api-key']").value = apiKey;
     signInForm.querySelector("button").click();
-
-    await new Promise(resolve => setTimeout(resolve, 1500));
   }, process.env["TESTS_API_KEY"]);
 
-  await page.waitForTimeout(WAIT_MS_AFTER_BOOT);
+  await page.waitForTimeout(WAIT_MS_AFTER_BOOT * 10);
 });
 
 test("App retains folder that user picked as a default", async ({ page, extensionId }) => {

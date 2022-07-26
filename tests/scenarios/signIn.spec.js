@@ -35,12 +35,11 @@ test("App switches between Sign-In and Archive Creation when valid credentials a
   for (let scenario of scenarios) {
     await page.evaluate( async(apiKey) => {
       const signInForm = document.querySelector('archive-form [action="#sign-in"]');
-
       signInForm.querySelector("input[name='api-key']").value = apiKey;
       signInForm.querySelector("button").click();
-
-      await new Promise(resolve => setTimeout(resolve, 1500));
     }, scenario.apiKey);
+
+    await page.waitForTimeout(WAIT_MS_AFTER_BOOT * 10);
   
     const formAction = await page.getAttribute("archive-form > form", "action")
     expect(formAction).toBe(scenario.expectedFormAction);
