@@ -16,28 +16,40 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
  */
 const popupCSSBundle = () => {
   let config;
+  let sourceCSSFiles = [];
 
   return {
     name: "popup-css-bundle",
 
     configResolved(resolvedConfig) {
-      config = resolvedConfig
+      config = resolvedConfig;
     },
 
-    async closeBundle() {
-      let inputPath = `./src/popup`;
-      let outputPath = `./${config.build.outDir}/popup`;
+    // On build start: find all CSS files and add them to the watch list
+    async buildStart() {
+      let popupDir = "./src/popup/";
+      sourceCSSFiles.push(`${popupDir}/index.css`);
 
-      let output = readFileSync(`${inputPath}/index.css`);
-
-      for (let filename of readdirSync(`${inputPath}/components/`)) {
-        if (!filename.endsWith(".css")) {
-          continue;
+      for (let filename of readdirSync(`${popupDir}/components/`)) {
+        if (filename.endsWith(".css")) {
+          sourceCSSFiles.push(`${popupDir}/components/${filename}`);
         }
-        output += `\n` + readFileSync(`${inputPath}/components/${filename}`);
+      }
+
+      for (let filename of sourceCSSFiles) {
+        this.addWatchFile(filename);
+      }
+    },
+
+    // On bundle close: Merge all files from `sourceCSSFiles`
+    async closeBundle() {
+      let output = "";
+
+      for (let filename of sourceCSSFiles) {
+        output += readFileSync(filename) + `\n`;
       }
     
-      writeFileSync(`${outputPath}/index.css`, output)
+      writeFileSync(`./${config.build.outDir}/popup/index.css`, output)
       return true;
     }
   }
