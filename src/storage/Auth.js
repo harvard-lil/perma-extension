@@ -7,7 +7,6 @@
  */
 /// <reference types="@types/chrome" />
 // @ts-check
-
 import { BROWSER } from "../constants/index.js"
 
 /**
