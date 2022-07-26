@@ -7,8 +7,6 @@
  */
 import { expect } from "@playwright/test";
 import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
-import { MOCK_TAB_URL, MOCK_TAB_TITLE } from "../mocks.js";
-import { MESSAGE_IDS } from "../../src/constants/index.js";
 
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.
 // Clears `chrome.storage.local` before each test.

@@ -13,7 +13,7 @@ import { devices } from '@playwright/test';
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-import "dotenv/config";
+process.env.CI ? null : await import("dotenv/config");
 
 /**
  * See https://playwright.dev/docs/test-configuration.
