@@ -23,7 +23,6 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
   // Sign in
   await page.evaluate( async(apiKey) => {
     const signInForm = document.querySelector('archive-form [action="#sign-in"]');
-
     signInForm.querySelector("input[name='api-key']").value = apiKey;
     signInForm.querySelector("button").click();
 
@@ -31,7 +30,7 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
   }, process.env["TESTS_API_KEY"]);
 
   await page.waitForTimeout(WAIT_MS_AFTER_BOOT);
- });
+});
 
 test("App can request the creation of an archive and list the newly created entry.", async ({ page, extensionId }) => {
   const scenarios = [
