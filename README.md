@@ -1,18 +1,15 @@
-> 🚧 Work in progress.
-
 # perma-extension
 A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma links directly from the browser.
 
-**Current version:** 2.0.0 Alpha
-
-**Browsers currently supported:** Google Chrome (100+)
+- **Current version:** 2.0.0 Alpha 🚧
+- **Browsers currently supported:** Google Chrome (100+)
 
 [![Test suite](https://github.com/harvard-lil/perma-extension/actions/workflows/tests.yml/badge.svg)](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml)
 
 ---
 
 ## Summary
-- [Screenshots](#screenshots)
+- [Features](#features)
 - [Architecture](#architecture)
 - [Development Setup](#development-setup)
 - [Environment variables](#environment-variables)
@@ -23,9 +20,35 @@ A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma l
 
 ---
 
-## Screenshots
+## Features
 
-> 🚧 TODO
+<details>
+  <summary><strong>Create a Perma Link for the current tab</strong> 📽️</summary>
+
+  https://user-images.githubusercontent.com/625889/181287408-2e4102d9-65dd-4191-9780-a92bf539dbc7.mov
+
+</details>
+
+<details>
+  <summary><strong>See all the Perma links I created for the current tab</strong> 📽️</summary>
+
+</details>
+
+
+<details>
+  <summary><strong>Copy a Perma link in a cite-ready format</strong> 📽️</summary>
+
+  https://user-images.githubusercontent.com/625889/181284647-502fdca2-340c-4659-a55b-d5c9bcc4c938.mov
+
+</details>
+
+<details>
+  <summary><strong>Automatic switch between light and dark theme based on system preferences</strong> 📽️</summary>
+
+  https://user-images.githubusercontent.com/625889/181284788-92f5ec42-2030-4cb4-bfbc-06c1ae153036.mov
+  
+</details>
+
 
 ---
 
@@ -184,9 +207,9 @@ Runs the end-to-end tests suite using [playwright](https://playwright.dev/).
 - Commit changes to `develop` and create a pull request from `develop` to `main`
   - Merge to `main` when tests pass
 - On the `main` branch:
-  - At GitHub Level: [Create a new release](https://github.com/harvard-lil/perma-extension/releases/new). 
-    - Using the `main` branch
-    - Using semver for as a title and tag _(i.e: `2.0.1`)_
+    - At GitHub Level: [Create a new release](https://github.com/harvard-lil/perma-extension/releases/new). 
+      - Using the `main` branch
+      - Using [semver](https://semver.org/) as a title and tag _(i.e: `2.0.1`)_
   - Locally: 
     - Run `npm run build-and-zip` to generate `perma-extension.zip`.
 - On the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions)
