@@ -3,7 +3,11 @@
 # perma-extension
 A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma links directly from the browser.
 
-[![Test suite](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml/badge.svg)](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml)
+**Current version:** 2.0.0 Alpha
+
+**Browsers currently supported:** Google Chrome (100+)
+
+[![Test suite](https://github.com/harvard-lil/perma-extension/actions/workflows/tests.yml/badge.svg)](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml)
 
 ---
 
@@ -52,8 +56,6 @@ flowchart RL
 
 ## Development Setup
 
-> 🚧 TODO
-
 ### Getting started
 - Make sure you have [the latest version of Node JS](https://nodejs.org/en/) installed on your machine _(18+ recommended)_.
 - Run `npm install` to install dependencies.
@@ -65,7 +67,7 @@ flowchart RL
 - Click on _"Load unpacked"_ and select the `dist` folder in `perma-extension`.
 
 ### Misc
-> 🚧 Recommended extensions for HTML in JavaScript template strings.
+- This project uses `/*html*/` to indicate that a JavaScript template string contains HTML. For VSCode users, we recommend [the `es6-string-html` extension to enable syntax highlighting in that context](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html).
 
 [☝️ Back to summary](#summary)
 
