@@ -1,7 +1,7 @@
 # perma-extension
 A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma links directly from the browser.
 
-- **Current version:** 2.0.0 Alpha 🚧
+- **Current version:** 2.0.0 Alpha 🚧 _(Internal)_
 - **Browsers currently supported:** Google Chrome (100+)
 
 [![Test suite](https://github.com/harvard-lil/perma-extension/actions/workflows/tests.yml/badge.svg)](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml)
@@ -9,7 +9,7 @@ A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma l
 ---
 
 ## Summary
-- [Features](#features)
+- [Core Features](#core-features)
 - [Architecture](#architecture)
 - [Development Setup](#development-setup)
 - [Environment variables](#environment-variables)
@@ -20,7 +20,7 @@ A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma l
 
 ---
 
-## Features
+## Core Features
 
 <details>
   <summary><strong>Create a Perma Link for the current tab</strong> 📽️</summary>
@@ -32,13 +32,15 @@ A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma l
 <details>
   <summary><strong>See all the Perma links I created for the current tab</strong> 📽️</summary>
 
+  https://user-images.githubusercontent.com/625889/181289558-f3fa1ebf-9443-4120-bab6-2f01659b43c1.mov
+
 </details>
 
 
 <details>
   <summary><strong>Copy a Perma link in a cite-ready format</strong> 📽️</summary>
 
-  https://user-images.githubusercontent.com/625889/181284647-502fdca2-340c-4659-a55b-d5c9bcc4c938.mov
+  https://user-images.githubusercontent.com/625889/181289165-328060f5-e19f-4809-8ab6-a3b42aad826e.mov
 
 </details>
 
