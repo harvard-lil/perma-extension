@@ -3,7 +3,7 @@
     "message": "Perma.cc"
   },
   "app_description": {
-    "message": "Create and manage Perma.cc links directly from the browser."
+    "message": "Create and manage Perma.cc links directly from your browser."
   },
   "app_github_url": {
     "message": "https://github.com/harvard-lil/perma-extension"
@@ -45,7 +45,7 @@
     "message": "⚠️ Couldn't list folders."
   },
   "error_pulling_timeline": {
-    "message": "⚠️ Couldn't pull related archives."
+    "message": "⚠️ Couldn't pull archives."
   },
   "error_creating_archive": {
     "message": "⚠️ Couldn't create archive."
