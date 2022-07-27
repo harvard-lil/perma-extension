@@ -12,3 +12,4 @@ tmp.js
 /playwright-report/
 /playwright/.cache/
 .env
+perma-extension.zip

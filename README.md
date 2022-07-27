@@ -18,7 +18,6 @@ A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma l
 - [Environment variables](#environment-variables)
 - [API Documentation](#api-documentation)
 - [CLI](#cli)
-- [Testing](#testing)
 - [Building and distributing the extension](#building-and-distributing-the-extension)
 - [Automation](#automation)
 
@@ -148,6 +147,13 @@ npm run build
 
 Generates a new extension build under `/dist`.
 
+### build-and-zip
+```
+npm run build-and-zip
+```
+
+Generates a new extension build under `/dist` and generates a zip from it _(`perma-extension.zip`)_.
+
 ### docgen
 ```bash
 npm run docgen
@@ -161,15 +167,7 @@ To update which files should be taken into account, check `/scripts/docgen.sh`.
 npm run test
 ```
 
-Runs the [end-to-end tests suite](#testing) using [playwright](https://playwright.dev/).
-
-[☝️ Back to summary](#summary)
-
----
-
-## Testing
-
-> 🚧 TODO
+Runs the end-to-end tests suite using [playwright](https://playwright.dev/).
 
 [☝️ Back to summary](#summary)
 
@@ -177,7 +175,22 @@ Runs the [end-to-end tests suite](#testing) using [playwright](https://playwrigh
 
 ## Building and distributing the extension
 
-> 🚧 TODO
+**Step-by-step**:
+- On `develop`:
+  - Update documentation (`npm run docgen`)
+  - Update APP version number in:
+    - [`manifest.json`](https://github.com/harvard-lil/perma-extension/blob/develop/src/manifest.json#L5)
+    - This README 
+- Commit changes to `develop` and create a pull request from `develop` to `main`
+  - Merge to `main` when tests pass
+- On the `main` branch:
+  - At GitHub Level: [Create a new release](https://github.com/harvard-lil/perma-extension/releases/new). 
+    - Using the `main` branch
+    - Using semver for as a title and tag _(i.e: `2.0.1`)_
+  - Locally: 
+    - Run `npm run build-and-zip` to generate `perma-extension.zip`.
+- On the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions)
+  - Upload `perma-extension.zip`
 
 [☝️ Back to summary](#summary)
 
@@ -185,8 +198,8 @@ Runs the [end-to-end tests suite](#testing) using [playwright](https://playwrigh
 
 ## Automation
 
-> 🚧 TODO
+The [E2E test suite is run via GitHub Action on](/.github/workflows/tests.yml):
+- Pull request to `develop`, `main`
+- Push to `main`
 
 [☝️ Back to summary](#summary)
-
----
