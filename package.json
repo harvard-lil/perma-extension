@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build",
-    "build-and-zip": "vite build && zip -r perma-extension.zip dist/",
+    "build-and-zip": "vite build && cd dist/ && zip -r perma-extension.zip * && mv perma-extension.zip ../perma-extension.zip;",
     "docgen": "cd scripts && ./docgen.sh",
     "test": "npx playwright test"
   },
