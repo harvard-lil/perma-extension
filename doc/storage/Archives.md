@@ -51,7 +51,7 @@ Key given to this object in `browser.storage.local`.
 
 #### archives.save() ⇒ <code>Promise.&lt;boolean&gt;</code>
 Saves the current object in store.
-Checks and validates `this.#byUrl` before saving to make sure it is an object of PermaArchive, indexed by url.
+Checks, anonymises and validates `this.#byUrl` before saving (PermaArchive objects indexed by url).
 
 **Kind**: instance method of [<code>Archives</code>](#module_storage/Archives.Archives)  
 <a name="module_storage/Archives.Archives+reset"></a>

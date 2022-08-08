@@ -21,6 +21,16 @@ archive-timeline[authenticated="false"] {
   grid-area: unset;
 }
 
+/* Label showing before list of <archive-timeline-item> */
+archive-timeline h3 {
+  padding: 1rem;
+  padding-top: 0px;
+  font-weight: normal;
+  font-size: 1rem;
+  color: var(--opposite-color-);
+  letter-spacing: var(--letter-spacing);;
+}
+
 /* Empty message */
 archive-timeline aside.empty {
   display: flex;

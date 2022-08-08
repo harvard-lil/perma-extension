@@ -139,6 +139,7 @@ Generates the sign-in form.
 
 #### archiveForm.generateCreateArchiveForm() ⇒ <code>string</code>
 Generates the archive creation form.
+Will be disabled when visiting "perma.cc/{guid}".
 
 **Kind**: instance method of [<code>ArchiveForm</code>](#module_popup/components/ArchiveForm.ArchiveForm)  
 **Returns**: <code>string</code> - HTML  

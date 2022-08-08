@@ -102,6 +102,9 @@
   "archive_timeline_empty": {
     "message": "You have no Perma Links for this page."
   },
+  "archive_timeline_intro": {
+    "message": "Past captures of this page:"
+  },
 
   "archive_timeline_item_open_in_tab": {
     "message": "Open this Perma Link in a new tab."

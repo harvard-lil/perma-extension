@@ -12,10 +12,10 @@ import { BROWSER } from "../../constants/index.js";
 /**
  * Custom Element: `<archive-timeline>`. 
  * Shows the user the list of archives that they created for the current page.
- * Accepts `<archive-timeline-item>` elements as direct children, filters out other elements.
+ * Accepts `<archive-timeline-item>` elements as direct children (+ `<h3>` intro), filters out other elements.
  * 
  * Note:
- * - Use `addArchives()` to feed this component an array of archive objects.
+ * - Use `addArchives()` to feed this component an array of archive objects (See: PermaArchive objects from `perma-js-sdk`).
  * 
  * Available HTML attributes:
  * - `is-authenticated`: If not "true", this component is hidden.
@@ -63,12 +63,16 @@ export class ArchiveTimeline extends HTMLElement {
    * @param {PermaArchive[]} archives 
    */
   addArchives(archives) {
+    const getMessage = BROWSER.i18n.getMessage;
+    
     if (!(archives instanceof Array)) {
       archives = [];
     }
 
-    this.innerHTML = "";
+    // Intro label
+    this.innerHTML = /*html*/`<h3>${getMessage("archive_timeline_intro")}</h3>`;
 
+    // Individual `<archive-timeline-item>` entries
     for (let archive of archives) {
       const item = document.createElement("archive-timeline-item");
       item.setAttribute("guid", archive?.guid);
@@ -114,20 +118,20 @@ export class ArchiveTimeline extends HTMLElement {
 
     // If authenticated:
     // - This element should behave like a list
-    // - This element should only accept `<archive-timeline-item>` as direct children (filter everything else out)
+    // - This element should only accept `<archive-timeline-item>` and `<h3>` as direct children (filter everything else out)
     // - This element should display a message if there are no archives to display (inject it)
     setAttribute("aria-hidden", "false");
     setAttribute("role", "list");
 
-    // Remove children that are not `<archive-timeline-item>`
+    // Remove children that are not `<archive-timeline-item>` or `<h3>`
     for (let child of this.children) {
-      if(child.tagName !== "archive-timeline-item".toUpperCase()) {
+      if(child.tagName !== "archive-timeline-item".toUpperCase() && child.tagName !== "H3") {
         child.remove();
       }
     }
 
-    // Show a message if list there is no archive to display
-    if (this.children.length < 1) {
+    // Show a message if there is no archive to display
+    if (this.querySelectorAll("archive-timeline-item").length < 1) {
       this.innerHTML = /*html*/`
       <aside class="empty" role="listitem">
         <span>${getMessage("archive_timeline_empty")}<span>
@@ -147,6 +151,7 @@ export class ArchiveTimeline extends HTMLElement {
         element.removeAttribute("disabled");
       }
     }
+    
 
   }
 
