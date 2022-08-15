@@ -16,7 +16,6 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * - `is-authenticated`: If "true", will show the archive creation form. Will show the sign-in form otherwise.
  * - `is-loading`: If "true", will "block" any form element.
  * - `tab-url`: Url of the current tab.
- * - `tab-title`: Title of the current tab.
  * - `folders-list`: JSON-serialized storage entry for "folders.available", if available. Should contain an array of objects (id, depth, name).
  * - `folders-pick`: Id of the folder the user has picked as a default, if any. 
  * 
@@ -48,7 +47,6 @@ export class ArchiveForm extends HTMLElement {
       "is-authenticated",
       "is-loading",
       "tab-url",
-      "tab-title",
       "folders-list",
       "folders-pick",
     ];
@@ -219,10 +217,20 @@ export class ArchiveForm extends HTMLElement {
 
   /**
    * Generates the archive creation form.
+   * Will be disabled when visiting "perma.cc/{guid}".
+   * 
    * @returns {string} HTML
    */
   generateCreateArchiveForm() {
     const getMessage = BROWSER.i18n.getMessage;
+    const getAttribute = this.getAttribute.bind(this);
+
+    const tabUrl = String(getAttribute("tab-url"));
+    let forceDisabled = false;
+    
+    if (tabUrl.match(/^https:\/\/perma\.cc\/[A-Z0-9]{4}\-[A-Z0-9]{4}\/?$/)) {
+      forceDisabled = true;
+    }
 
     return /*html*/ `
     <form action="#create-archive">
@@ -231,14 +239,16 @@ export class ArchiveForm extends HTMLElement {
         <label for="folders-pick">${getMessage("create_archive_form_select_intro")}</label>
         <select name="folders-pick"
                 id="folders-pick" 
-                aria-label="${getMessage("create_archive_form_select_label")}">
+                aria-label="${getMessage("create_archive_form_select_label")}"
+                ${forceDisabled ? "disabled" : ""}>
           <option value="">${getMessage("create_archive_form_select_default")}</option>
           ${this.generateFoldersPickOptions()}
         </select>
       </fieldset>
 
       <button aria-label="${getMessage("create_archive_form_button_label")}"
-              title="${getMessage("create_archive_form_button_label")}">
+              title="${getMessage("create_archive_form_button_label")}"
+              ${forceDisabled ? "disabled" : ""}>
         ${getMessage("create_archive_form_button_caption")}
       </button>
     </form>

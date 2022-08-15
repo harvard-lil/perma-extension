@@ -32,7 +32,6 @@ Available HTML attributes:
 - `is-authenticated`: If "true", will show the archive creation form. Will show the sign-in form otherwise.
 - `is-loading`: If "true", will "block" any form element.
 - `tab-url`: Url of the current tab.
-- `tab-title`: Title of the current tab.
 - `folders-list`: JSON-serialized storage entry for "folders.available", if available. Should contain an array of objects (id, depth, name).
 - `folders-pick`: Id of the folder the user has picked as a default, if any. 
 
@@ -139,6 +138,7 @@ Generates the sign-in form.
 
 #### archiveForm.generateCreateArchiveForm() ⇒ <code>string</code>
 Generates the archive creation form.
+Will be disabled when visiting "perma.cc/{guid}".
 
 **Kind**: instance method of [<code>ArchiveForm</code>](#module_popup/components/ArchiveForm.ArchiveForm)  
 **Returns**: <code>string</code> - HTML  

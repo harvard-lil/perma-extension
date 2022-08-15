@@ -57,6 +57,8 @@ export class AppHeader extends HTMLElement {
   renderInnerHTML() {
     const getMessage = BROWSER.i18n.getMessage;
     const getAttribute = this.getAttribute.bind(this);
+    const tabUrl = getAttribute("tab-url");
+    const tabTitle = getAttribute("tab-title");
 
     this.innerHTML = /*html*/`
     <h1>
@@ -72,10 +74,11 @@ export class AppHeader extends HTMLElement {
     </h1>
     
     <div>
-      <strong>${getAttribute("tab-url")}</strong>
-      <span>${getAttribute("tab-title")}</span>
+      <strong>${tabUrl ? tabUrl : "&nbsp;"}</strong>
+      <span>${tabTitle ? tabTitle : "&nbsp;"}</span>
     </div>
     `;
+    // Note: that `&nbsp;` was added to cover a rare edge case in which `tabUrl` and `tabTitle` are null, and we want the space to be filled in.
   }
 
 }

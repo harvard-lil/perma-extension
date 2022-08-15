@@ -54,12 +54,13 @@ export class Archives {
 
   /**
    * Saves the current object in store.
-   * Checks and validates `this.#byUrl` before saving to make sure it is an object of PermaArchive, indexed by url.
+   * Checks, anonymises and validates `this.#byUrl` before saving (PermaArchive objects indexed by url).
    * @returns {Promise<boolean>}
    * @async 
    */
   async save() {
-    // Checks and validates `this.#byUrl`
+    // Checks and validates `this.#byUrl`. 
+    // Filters-out personal information from "archive.created_by".
     for (let [url, archives] of Object.entries(this.#byUrl)) {
       try {
         new URL(url); // Will throw if invalid
@@ -69,6 +70,13 @@ export class Archives {
           archive.guid; // Will throw if not present
           // @ts-ignore
           archive.url; // Will throw if not present
+
+          if ("created_by" in archive) {
+            archive.created_by.first_name = "";
+            archive.created_by.full_name = "";
+            archive.created_by.short_name = "";
+            archive.created_by.last_name = "";
+          }
         }
       }
       catch(err) {

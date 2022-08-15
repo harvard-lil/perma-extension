@@ -21,10 +21,10 @@
 ### popup/components/ArchiveTimeline.ArchiveTimeline
 Custom Element: `<archive-timeline>`. 
 Shows the user the list of archives that they created for the current page.
-Accepts `<archive-timeline-item>` elements as direct children, filters out other elements.
+Accepts `<archive-timeline-item>` elements as direct children (+ `<h3>` intro), filters out other elements.
 
 Note:
-- Use `addArchives()` to feed this component an array of archive objects.
+- Use `addArchives()` to feed this component an array of archive objects (See: PermaArchive objects from `perma-js-sdk`).
 
 Available HTML attributes:
 - `is-authenticated`: If not "true", this component is hidden.

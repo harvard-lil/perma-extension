@@ -75,6 +75,7 @@ export default defineConfig({
     sourcemap: true,
     devSourcemap: true,
     minify: false,
+    target: "chrome100",
 
     rollupOptions: {
       input: {

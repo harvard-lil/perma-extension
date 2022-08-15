@@ -1,15 +1,18 @@
 # perma-extension
 A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma links directly from the browser.
 
-- **Current version:** 2.0.0 Alpha 🚧 _(Internal)_
+- **Current version:** 2.0.0 Beta 🚧
 - **Browsers currently supported:** Google Chrome (100+)
 
 [![Test suite](https://github.com/harvard-lil/perma-extension/actions/workflows/tests.yml/badge.svg)](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml)
 
+📹 [How does it work ?](https://www.youtube.com/watch?v=zVz1SAtdw8A)
+
+💾 [Download it on the Chrome Web Store](https://chrome.google.com/webstore/detail/permacc/bigjakhahgnccheaompmgebkncglllel)
+
 ---
 
 ## Summary
-- [Core Features](#core-features)
 - [Architecture](#architecture)
 - [Development Setup](#development-setup)
 - [Environment variables](#environment-variables)
@@ -17,40 +20,6 @@ A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma l
 - [CLI](#cli)
 - [Building and distributing the extension](#building-and-distributing-the-extension)
 - [Automation](#automation)
-
----
-
-## Core Features
-
-<details>
-  <summary><strong>Create a Perma Link for the current tab</strong> 📽️</summary>
-
-  https://user-images.githubusercontent.com/625889/181287408-2e4102d9-65dd-4191-9780-a92bf539dbc7.mov
-
-</details>
-
-<details>
-  <summary><strong>See all the Perma links I created for the current tab</strong> 📽️</summary>
-
-  https://user-images.githubusercontent.com/625889/181289558-f3fa1ebf-9443-4120-bab6-2f01659b43c1.mov
-
-</details>
-
-
-<details>
-  <summary><strong>Copy a Perma link in a cite-ready format</strong> 📽️</summary>
-
-  https://user-images.githubusercontent.com/625889/181289165-328060f5-e19f-4809-8ab6-a3b42aad826e.mov
-
-</details>
-
-<details>
-  <summary><strong>Automatic switch between light and dark theme based on system preferences</strong> 📽️</summary>
-
-  https://user-images.githubusercontent.com/625889/181284788-92f5ec42-2030-4cb4-bfbc-06c1ae153036.mov
-  
-</details>
-
 
 ---
 

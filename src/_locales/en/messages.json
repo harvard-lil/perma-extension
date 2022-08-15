@@ -3,7 +3,7 @@
     "message": "Perma.cc"
   },
   "app_description": {
-    "message": "Create and manage Perma.cc links directly from the browser."
+    "message": "Create and manage Perma.cc links directly from your browser."
   },
   "app_github_url": {
     "message": "https://github.com/harvard-lil/perma-extension"
@@ -29,13 +29,13 @@
     "message": "Capture requested."
   },
   "status_archive_deleted": {
-    "message": "Archive deleted."
+    "message": "Perma Link deleted."
   },
   "status_archive_made_public": {
-    "message": "Archive is now public."
+    "message": "Perma Link is now public."
   },
   "status_archive_made_private": {
-    "message": "Archive is now private."
+    "message": "Perma Link is now private."
   },
 
   "error_verifying_api_key": {
@@ -45,16 +45,16 @@
     "message": "⚠️ Couldn't list folders."
   },
   "error_pulling_timeline": {
-    "message": "⚠️ Couldn't pull related archives."
+    "message": "⚠️ Error listing previous Perma Links."
   },
   "error_creating_archive": {
-    "message": "⚠️ Couldn't create archive."
+    "message": "⚠️ Couldn't create Perma Link."
   },
   "error_picking_folder": {
     "message": "⚠️ Couldn't set default folder."
   },
   "error_toggling_archive_privacy_status": {
-    "message": "⚠️ Couldn't edit archive."
+    "message": "⚠️ Couldn't edit Perma Link."
   },
 
   "app_header_title": {
@@ -71,7 +71,7 @@
     "message": "Sign in"
   },
   "sign_in_form_sign_in_guest_link_caption": {
-    "message": "Archive this page on Perma.cc directly"
+    "message": "Create archive via Perma.cc dashboard"
   },
   "sign_in_form_sign_in_guest_link_url": {
     "message": "https://perma.cc/service/bookmarklet-create/?v=1&url="
@@ -84,10 +84,10 @@
   },
 
   "create_archive_form_select_intro": {
-    "message": "This archive will be created in:"
+    "message": "This Perma Link will be affiliated with:"
   },
   "create_archive_form_select_label": {
-    "message": "Select a folder to save the archive into."
+    "message": "Select the folder for this Perma Link."
   },
   "create_archive_form_select_default": {
     "message": "Unspecified folder"
@@ -96,15 +96,18 @@
     "message": "Archive this page"
   },
   "create_archive_form_button_label": {
-    "message": "Create a public archive for the current page."
+    "message": "Create a public Perma Link for the current page."
   },
 
   "archive_timeline_empty": {
-    "message": "You have no Perma links for this page."
+    "message": "You have no Perma Links for this page."
+  },
+  "archive_timeline_intro": {
+    "message": "Past captures of this page:"
   },
 
   "archive_timeline_item_open_in_tab": {
-    "message": "Open this archive in a new tab."
+    "message": "Open this Perma Link in a new tab."
   },
   "archive_timeline_item_copy_in_clipboard": {
     "message": "Copy this link in the clipboard."
