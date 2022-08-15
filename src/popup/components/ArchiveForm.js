@@ -16,7 +16,6 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * - `is-authenticated`: If "true", will show the archive creation form. Will show the sign-in form otherwise.
  * - `is-loading`: If "true", will "block" any form element.
  * - `tab-url`: Url of the current tab.
- * - `tab-title`: Title of the current tab.
  * - `folders-list`: JSON-serialized storage entry for "folders.available", if available. Should contain an array of objects (id, depth, name).
  * - `folders-pick`: Id of the folder the user has picked as a default, if any. 
  * 
@@ -48,7 +47,6 @@ export class ArchiveForm extends HTMLElement {
       "is-authenticated",
       "is-loading",
       "tab-url",
-      "tab-title",
       "folders-list",
       "folders-pick",
     ];
