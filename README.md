@@ -1,7 +1,7 @@
 # perma-extension
 A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma links directly from the browser.
 
-- **Current version:** 2.0.0 Beta 🚧
+- **Current version:** 2.0.1
 - **Browsers currently supported:** Google Chrome (100+)
 
 [![Test suite](https://github.com/harvard-lil/perma-extension/actions/workflows/tests.yml/badge.svg)](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml)
