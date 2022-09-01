@@ -56,7 +56,7 @@ html {
 
 body {
   width: var(--extension-width);
-  height: var(--extension-height);
+  height: calc(var(--extension-height) - var(--body-border-width));
   border: var(--body-border-width) solid var(--main-color--);
   background-color: var(--main-color);
   color: var(--opposite-color);
