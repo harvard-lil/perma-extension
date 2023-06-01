@@ -5,7 +5,7 @@
  * @license MIT
  * @description `<archive-timeline>` custom element. 
  */
-/// <reference path="@harvard-lil/perma-js-sdk"" />
+/// <reference path="../../../node_modules/@harvard-lil/perma-js-sdk/types.js" />
 // @ts-check
 import { BROWSER } from "../../constants/index.js";
 
