@@ -83,7 +83,7 @@ export async function foldersPullList() {
  * @param {number} [depth=1] - Used to represent the nesting level of the folders.
  */
 async function recursivePull(folderId, folders, api, depth=1) {
-  const children = await api.pullFolderChildren(folderId);
+  const children = await api.pullFolderChildren(folderId, 300);
 
   for (let child of children.objects) {
     if (child.read_only === true) {
