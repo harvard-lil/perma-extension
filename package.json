@@ -16,10 +16,10 @@
     "dotenv": "^16.0.1",
     "jsdoc-to-markdown": "^7.1.1",
     "prettier": "^2.6.2",
-    "vite": "^2.9.9",
-    "vite-plugin-static-copy": "^0.5.1"
+    "vite": "^6.1.0",
+    "vite-plugin-static-copy": "^2.2.0"
   },
   "dependencies": {
-    "@harvard-lil/perma-js-sdk": "^0.0.3"
+    "@harvard-lil/perma-js-sdk": "^0.0.5"
   }
 }

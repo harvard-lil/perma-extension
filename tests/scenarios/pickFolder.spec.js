@@ -29,6 +29,12 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
 });
 
 test("App retains folder that user picked as a default", async ({ page, extensionId }) => {
+  // Ensure there is a subfolder within the test user's account; if not, we must create it manually
+  const foldersCount = await page.evaluate(async () => {
+    return document.querySelectorAll("select[name='folders-pick']").length;
+  })
+  expect(foldersCount, "user account contains subfolder required for test").toBeGreaterThan(0);
+
   const beforePick = await page.evaluate(async () => {
     return document.querySelector("select[name='folders-pick']").value;
   });
