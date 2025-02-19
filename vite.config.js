@@ -11,6 +11,39 @@ import { defineConfig } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
 /**
+ * Read target browser from file, if necessary.
+ * https://github.com/motdotla/dotenv
+ */
+process.env.TARGET ? null : await import("dotenv/config");
+
+/**
+ * Transforms `manifest.json` for target browser compatibility.
+ * Swaps in Firefox-only properties for Chrome-only properties, if necessary.
+ */
+const transformManifest = (contents, filename) => {
+  if (process.env.TARGET !== "firefox") {
+    return contents;
+  } else {
+    console.log("Transforming manifest.json for Firefox compatibility...")
+  }
+  const manifest = JSON.parse(contents.toString());
+
+  // Set minimum version
+  delete manifest.minimum_chrome_version;
+  manifest.browser_specific_settings = {
+    gecko: {
+      strict_min_version: "100"
+    }
+  };
+
+  // Set background scripts
+  delete manifest.background.service_worker;
+  manifest.background.scripts = ["background/index.js"];
+
+  return JSON.stringify(manifest, null, 2);
+}
+
+/**
  * Creates the CSS bundle for the `popup`.
  * Merges `index.css` with all the components-specific CSS files.
  */
@@ -48,7 +81,7 @@ const popupCSSBundle = () => {
       for (let filename of sourceCSSFiles) {
         output += readFileSync(filename) + `\n`;
       }
-    
+
       writeFileSync(`./${config.build.outDir}/popup/index.css`, output)
       return true;
     }
@@ -61,7 +94,7 @@ export default defineConfig({
   plugins: [
     viteStaticCopy({
       targets: [
-        {src: "src/manifest.json", dest: ""},
+        {src: "src/manifest.json", dest: "", transform: transformManifest},
         {src: "src/assets", dest: ""},
         {src: "src/_locales", dest: ""},
         {src: "src/popup/index.html", dest: "popup"},
@@ -75,7 +108,7 @@ export default defineConfig({
     sourcemap: true,
     devSourcemap: true,
     minify: false,
-    target: "chrome100",
+    target: ["chrome100", "firefox100"],
 
     rollupOptions: {
       input: {

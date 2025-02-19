@@ -1,18 +1,22 @@
 # perma-extension
+
 A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma links directly from the browser.
 
-- **Current version:** 2.0.2
-- **Browsers currently supported:** Google Chrome (100+)
+- **Current version:** 2.0.3
+- **Browsers currently supported:** Google Chrome (100+), Mozilla Firefox (100+)
 
 [![Test suite](https://github.com/harvard-lil/perma-extension/actions/workflows/tests.yml/badge.svg)](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml)
 
-📹 [How does it work ?](https://www.youtube.com/watch?v=zVz1SAtdw8A)
+📹 [How does it work?](https://www.youtube.com/watch?v=zVz1SAtdw8A)
 
-💾 [Download it on the Chrome Web Store](https://chrome.google.com/webstore/detail/permacc/bigjakhahgnccheaompmgebkncglllel)
+💾 Download the extension:
+- [Chrome Web Store](https://chrome.google.com/webstore/detail/permacc/bigjakhahgnccheaompmgebkncglllel)
+- [Add-ons for Firefox](https://addons.mozilla.org/en-US/firefox/addon/perma-cc)
 
 ---
 
 ## Summary
+
 - [Architecture](#architecture)
 - [Development Setup](#development-setup)
 - [Environment variables](#environment-variables)
@@ -31,16 +35,16 @@ flowchart RL
     B[(browser.storage.local)]
     C[Popup UI<br>Custom Elements]
     D[Perma.cc API]
-    A <--> B 
+    A <--> B
     B --> |onChanged events| C
     C -.-> |Runtime Messages| A
-    D <--> |HTTP| A 
+    D <--> |HTTP| A
 ```
 
-- This projects uses [`browser.storage.local`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/local) - made available by the Web Extensions API - to persist data and monitor changes. 
-- By design, only [the Service Worker](/src/background/index.js) interacts directly with storage, using [data classes](/src/storage/) to normalize the nature of the data being stored and retrieved. 
+- This projects uses [`browser.storage.local`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/local) - made available by the Web Extensions API - to persist data and monitor changes.
+- By design, only [the Service Worker](/src/background/index.js) interacts directly with storage, using [data classes](/src/storage/) to normalize the nature of the data being stored and retrieved.
 - The [front-end](/src/popup/) sends [runtime messages](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage) to the service worker, which reacts accordingly. _(See: [list of available message ids](/docs/constants/index.md#module_constants.MESSAGE_IDS).)_
-- The front-end is made of [_"bare"_ Custom Elements](https://javascript.info/custom-elements), taking data as HTML attributes, which they observe and react to. 
+- The front-end is made of [_"bare"_ Custom Elements](https://javascript.info/custom-elements), taking data as HTML attributes, which they observe and react to.
 - [`handlers/onStorageUpdate`](/src/popup/handlers/onStorageUpdate.js) is executed every time storage is updated. It determines what was updated, and what part of the UI needs to be re-hydrated.
 
 [☝️ Back to summary](#summary)
@@ -50,16 +54,27 @@ flowchart RL
 ## Development Setup
 
 ### Getting started
-- Make sure you have [the latest version of Node JS](https://nodejs.org/en/) installed on your machine _(18+ recommended)_.
+
+- Make sure you have [the latest version of Node.js](https://nodejs.org/en/) installed on your machine _(18+ recommended)_.
 - Run `npm install` to install dependencies.
 - Use `npm run dev` to start _"development"_ mode. This effectively starts `vite build --watch`, creating a new build under `/dist` every time a file changes.
 
-### Google Chrome: Install the work-in-progress extension
-- Open a new tab to `chrome://extensions`
+### Install the work-in-progress extension
+
+#### Google Chrome
+
+- Open a new tab to `chrome://extensions`.
 - Make sure to activate the _"Developer Mode"_ toggle.
 - Click on _"Load unpacked"_ and select the `dist` folder in `perma-extension`.
 
+#### Mozilla Firefox
+
+- Open a new tab to `about:debugging`.
+- Click on _"This Firefox"_ in the navigation bar.
+- Click on _"Load Temporary Add-on..."_ and select the `manifest.json` file in `perma-extension/dist`.
+
 ### Misc
+
 - This project uses `/*html*/` to indicate that a JavaScript template string contains HTML. For VSCode users, we recommend [the `es6-string-html` extension to enable syntax highlighting in that context](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html).
 
 [☝️ Back to summary](#summary)
@@ -69,13 +84,21 @@ flowchart RL
 ## Environment Variables
 
 ### Scope: E2E testing
-The following environment variables are only used in the context of [the test suites](#testing).
-They may be provided using an `.env` file, which the Playwright test runner will take into account. 
+
+The following environment variables are only used in the context of [the test suites](#testing). They may be provided using an `.env` file, which the Playwright test runner will take into account.
 
 | Name | Context | Required | Description |
 | --- | --- | --- | --- |
 | `TESTS_API_KEY` | Test suite | Yes | API key to be used for E2E tests. |
-| `CI` | Test suite | No | Will alter test reporting if set _(see `playwright.config.js`)_. Used to run tests in a GitHub Action. | 
+| `CI` | Test suite | No | Will alter test reporting if set _(see `playwright.config.js`)_. Used to run tests in a GitHub Action. |
+
+### Scope: Building the extension
+
+The following environment variable is only used in the context of [building the extension](#building-and-distributing-the-extension). It may also be provided using an `.env` file, which the Vite build process will take into account.
+
+| Name | Context | Required | Description |
+| --- | --- | --- | --- |
+| `TARGET` | Build process | No | Target browser to use. Set to `"firefox"` if building for Mozilla Firefox; otherwise the build process will target Google Chrome. |
 
 [☝️ Back to summary](#summary)
 
@@ -86,6 +109,7 @@ They may be provided using an `.env` file, which the Playwright test runner will
 Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comments.
 
 ### background
+
 - [index.js _(Entry point)_](/doc/background/index.md)
 - [archiveCreate.js](/doc/background/archiveCreate.md)
 - [archiveDelete.js](/doc/background/archiveDelete.md)
@@ -100,9 +124,11 @@ Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comm
 - [tabSwitch.js](/doc/background/tabSwitch.md)
 
 ### constants
+
 - [index.js _(Entry point)_](/doc/constants/index.md)
 
 ### popup
+
 - [index.js _(Entry point)_](/doc/popup/index.md)
 - **popup/components**
   - [AppHeader.js](/doc/popup/components/AppHeader.md)
@@ -114,6 +140,7 @@ Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comm
   - [onStorageUpdate.js](/doc/popup/handlers/onStorageUpdate.md)
 
 ### storage
+
 - [index.js _(Entry point)_](/doc/storage/index.md)
 - [Archives.js](/doc/storage/Archives.md)
 - [Auth.js](/doc/storage/Auth.md)
@@ -128,13 +155,15 @@ Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comm
 ## CLI
 
 ### dev
+
 ```
 npm run dev
 ```
 
-Starts _"development"_ mode.  Effectively runs `vite build --watch`, creating a new build under `/dist` every time a file changes. 
+Starts _"development"_ mode.  Effectively runs `vite build --watch`, creating a new build under `/dist` every time a file changes.
 
-### build 
+### build
+
 ```
 npm run build
 ```
@@ -142,6 +171,7 @@ npm run build
 Generates a new extension build under `/dist`.
 
 ### build-and-zip
+
 ```
 npm run build-and-zip
 ```
@@ -149,14 +179,15 @@ npm run build-and-zip
 Generates a new extension build under `/dist` and generates a zip from it _(`perma-extension.zip`)_.
 
 ### docgen
+
 ```bash
 npm run docgen
 ```
 
-Generates documentation using [`JSDoc` comments](https://jsdoc.app/). Outputs as Markdown to `doc`.
-To update which files should be taken into account, check `/scripts/docgen.sh`.
+Generates documentation using [`JSDoc` comments](https://jsdoc.app/). Outputs as Markdown to `doc`. To update which files should be taken into account, check `/scripts/docgen.sh`.
 
 ### test
+
 ```bash
 npm run test
 ```
@@ -169,21 +200,23 @@ Runs the end-to-end tests suite using [playwright](https://playwright.dev/).
 
 ## Building and distributing the extension
 
+Note: to build for Mozilla Firefox, you must set the environment variable `TARGET="firefox"` when executing the following steps.
+
 **Step-by-step**:
 - On `develop`:
   - Update documentation (`npm run docgen`)
-  - Update APP version number in:
+  - Update version number in:
     - [`manifest.json`](https://github.com/harvard-lil/perma-extension/blob/develop/src/manifest.json#L5)
-    - This README 
+    - This README
 - Commit changes to `develop` and create a pull request from `develop` to `main`
   - Merge to `main` when tests pass
 - On the `main` branch:
-    - At GitHub Level: [Create a new release](https://github.com/harvard-lil/perma-extension/releases/new). 
+    - At GitHub Level: [Create a new release](https://github.com/harvard-lil/perma-extension/releases/new).
       - Using the `main` branch
       - Using [semver](https://semver.org/) as a title and tag _(i.e: `2.0.1`)_
-  - Locally: 
+  - Locally:
     - Run `npm run build-and-zip` to generate `perma-extension.zip`.
-- On the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions)
+- On the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions) or [Add-ons for Firefox](https://addons.mozilla.org/en-US/firefox/)
   - Upload `perma-extension.zip`
 
 [☝️ Back to summary](#summary)
