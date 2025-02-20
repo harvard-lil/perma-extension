@@ -32,7 +32,8 @@ const transformManifest = (contents, filename) => {
   delete manifest.minimum_chrome_version;
   manifest.browser_specific_settings = {
     gecko: {
-      strict_min_version: "100"
+      id: "firefox@perma.cc",
+      strict_min_version: "112.0"
     }
   };
 
@@ -108,7 +109,7 @@ export default defineConfig({
     sourcemap: true,
     devSourcemap: true,
     minify: false,
-    target: ["chrome100", "firefox100"],
+    target: ["chrome100", "firefox112"],
 
     rollupOptions: {
       input: {
