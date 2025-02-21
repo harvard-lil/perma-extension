@@ -18,12 +18,10 @@
     "storage"
   ],
   "host_permissions": [
-    "https://api.perma.cc/*",
-    "https://api.perma.test/*",
-    "https://api.perma.test:8000/*"
+    "https://api.perma.cc/*"
   ],
   "content_security_policy": {
-    "extension_pages": "default-src 'self'; frame-ancestors 'none'; connect-src 'self' https://api.perma.cc https://api.perma.test https://api.perma-stage.org;"
+    "extension_pages": "default-src 'self'; frame-ancestors 'none'; connect-src 'self' https://api.perma.cc;"
   },
   "background": {
     "service_worker": "background/index.js",
