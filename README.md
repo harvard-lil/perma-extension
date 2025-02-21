@@ -3,7 +3,7 @@
 A browser extension for [Perma.cc](https://perma.cc/). Create and manage Perma links directly from the browser.
 
 - **Current version:** 2.0.4
-- **Browsers currently supported:** Google Chrome (100+), Mozilla Firefox (100+)
+- **Browsers currently supported:** Google Chrome (100+), Mozilla Firefox (112+)
 
 [![Test suite](https://github.com/harvard-lil/perma-extension/actions/workflows/tests.yml/badge.svg)](https://github.com/harvard-lil/perma-extension/actions/workflows/playwright.yml)
 
@@ -58,6 +58,7 @@ flowchart RL
 - Make sure you have [the latest version of Node.js](https://nodejs.org/en/) installed on your machine _(18+ recommended)_.
 - Run `npm install` to install dependencies.
 - Use `npm run dev` to start _"development"_ mode. This effectively starts `vite build --watch`, creating a new build under `/dist` every time a file changes.
+  + Note: when developing for Mozilla Firefox, you must set the environment variable `TARGET=firefox` prior to executing `npm run dev`.
 
 ### Install the work-in-progress extension
 
@@ -200,7 +201,7 @@ Runs the end-to-end tests suite using [playwright](https://playwright.dev/).
 
 ## Building and distributing the extension
 
-Note: to build for Mozilla Firefox, you must set the environment variable `TARGET="firefox"` when executing the following steps.
+Note: to build for Mozilla Firefox, you must set the environment variable `TARGET=firefox` when executing the following steps.
 
 **Step-by-step**:
 - On `develop`:
