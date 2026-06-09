@@ -14,7 +14,8 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * Informs users on the extension's current state (is loading, error messages ...).
  * 
  * Available HTML attributes:
- * - `is-authenticated`: If "true", will show the "Sign out" button if not loading.
+ * - `auth-state`: One of "valid" | "invalid" | "signedout". The "Sign out" button shows whenever a
+ *   key is on file ("valid" or "invalid") and not loading, so an invalid key can still be cleared.
  * - `is-loading`: If "true", will show a loading spinner.
  * - `message`: Should be a key accessible via `browser.i18n`.
  * 
@@ -35,7 +36,7 @@ export class StatusBar extends HTMLElement {
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
   static get observedAttributes() { 
-    return ["is-authenticated", "is-loading", "message"];
+    return ["auth-state", "is-loading", "message"];
   }
 
   /**
@@ -93,8 +94,8 @@ export class StatusBar extends HTMLElement {
          ${getMessage(message)}
       </p>`;
 
-    // Sign-out button (only if authenticated and not loading) 
-    if (getAttribute("is-authenticated") === 'true' && getAttribute("is-loading") !== 'true') {
+    // Sign-out button (whenever a key is on file — valid or invalid — and not loading)
+    if (getAttribute("auth-state") !== 'signedout' && getAttribute("auth-state") !== null && getAttribute("is-loading") !== 'true') {
       html += /*html*/`<button>${getMessage("status_bar_sign_out_button_caption")}</button>`;
     }
 

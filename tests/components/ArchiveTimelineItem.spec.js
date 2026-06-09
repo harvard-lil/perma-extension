@@ -11,17 +11,17 @@ import { MOCK_ARCHIVE_TIMELINE, MOCK_ARCHIVE_GUID } from "../mocks.js";
 
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.
 // This page contains an instance of `<archive-timeline>`
-// - Set `is-authenticated` to "true" on `<archive-form>` and `<archive-timeline>` so we can use `<archive-timeline>`.
+// - Set `auth-state` to "valid" on `<archive-form>` and `<archive-timeline>` so we can use `<archive-timeline>`.
 // - Mock a timeline in `<archive-timeline>`
 test.beforeEach(async ({ page, extensionId }, testInfo) => {
   await page.goto(`chrome-extension://${extensionId}/popup/index.html`);
   await page.waitForTimeout(WAIT_MS_AFTER_BOOT);
 
   await page.evaluate(async (MOCK_ARCHIVE_TIMELINE) => {
-    document.querySelector("archive-form").setAttribute("is-authenticated", "true");
+    document.querySelector("archive-form").setAttribute("auth-state", "valid");
     
     const archiveTimeline = document.querySelector("archive-timeline");
-    archiveTimeline.setAttribute("is-authenticated", "true");
+    archiveTimeline.setAttribute("auth-state", "valid");
     archiveTimeline.addArchives(MOCK_ARCHIVE_TIMELINE)
 
     await new Promise(resolve => requestAnimationFrame(resolve));

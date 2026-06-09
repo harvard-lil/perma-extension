@@ -13,7 +13,10 @@ import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
  * Allows users to sign-in and create archives.
  *
  * Available HTML attributes:
- * - `is-authenticated`: If "true", will show the archive creation form. Will show the sign-in form otherwise.
+ * - `auth-state`: One of "valid" | "invalid" | "signedout". Drives which form is shown:
+ *   "valid" -> archive creation form, "invalid" -> "invalid key" panel (retry / update key),
+ *   "signedout" (or unset) -> sign-in form.
+ * - `key-hint`: Last few characters of the stored API key, shown in the "invalid key" panel.
  * - `is-loading`: If "true", will "block" any form element.
  * - `tab-url`: Url of the current tab.
  * - `folders-cascade`: JSON-serialized folder cascade `{ levels, path, pick }` (see `storage.Folders`). Rendered as one `<select>` per opened level.
@@ -30,11 +33,21 @@ export class ArchiveForm extends HTMLElement {
     super();
 
     this.generateSignInForm = this.generateSignInForm.bind(this);
+    this.generateInvalidKeyPanel = this.generateInvalidKeyPanel.bind(this);
     this.generateCreateArchiveForm = this.generateCreateArchiveForm.bind(this);
 
     this.handleSignInFormSubmit = this.handleSignInFormSubmit.bind(this);
+    this.handleRetryClick = this.handleRetryClick.bind(this);
+    this.handleUpdateKeyClick = this.handleUpdateKeyClick.bind(this);
     this.handleFolderSelectChange = this.handleFolderSelectChange.bind(this);
     this.handleCreateArchiveClick = this.handleCreateArchiveClick.bind(this);
+
+    /**
+     * When `true`, show the sign-in form even though `auth-state` is "invalid" — set by the
+     * "Update key" button so the user can paste a replacement key. Reset on leaving the invalid state.
+     * @type {boolean}
+     */
+    this.showSignIn = false;
   }
 
   /**
@@ -42,7 +55,8 @@ export class ArchiveForm extends HTMLElement {
    */
   static get observedAttributes() {
     return [
-      "is-authenticated",
+      "auth-state",
+      "key-hint",
       "is-loading",
       "tab-url",
       "folders-cascade",
@@ -94,9 +108,58 @@ export class ArchiveForm extends HTMLElement {
     });
 
     if (signedIn === true) {
-      BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.FOLDERS_PULL_LIST });
-      BROWSER.runtime.sendMessage({ messageId: MESSAGE_IDS.ARCHIVE_PULL_TIMELINE });
+      await this.sendRuntimeMessage(MESSAGE_IDS.FOLDERS_PULL_LIST);
+      await this.sendRuntimeMessage(MESSAGE_IDS.ARCHIVE_PULL_TIMELINE);
     }
+  }
+
+  /**
+   * On "click" of the "Retry" button in the invalid-key panel:
+   * - Send `AUTH_CHECK` to re-validate the stored key. If it now succeeds (transient 401 cleared,
+   *   or key re-enabled), the service worker restores the session and the UI re-renders.
+   * - On success, also re-pull folders and timeline — they were never loaded while the key was
+   *   invalid, so the recovered archive form would otherwise come up empty (mirrors sign-in).
+   *
+   * @param {Event} e
+   */
+  async handleRetryClick(e) {
+    e.preventDefault();
+
+    const recovered = await new Promise((resolve) => {
+      BROWSER.runtime.sendMessage(
+        { messageId: MESSAGE_IDS.AUTH_CHECK },
+        (response) => resolve(response)
+      );
+    });
+
+    if (recovered === true) {
+      await this.sendRuntimeMessage(MESSAGE_IDS.FOLDERS_PULL_LIST);
+      await this.sendRuntimeMessage(MESSAGE_IDS.ARCHIVE_PULL_TIMELINE);
+    }
+  }
+
+  /**
+   * Sends a runtime message and resolves when the service worker responds.
+   *
+   * @param {number} messageId
+   * @returns {Promise<*>}
+   */
+  async sendRuntimeMessage(messageId) {
+    return await new Promise((resolve) => {
+      BROWSER.runtime.sendMessage({ messageId }, (response) => resolve(response));
+    });
+  }
+
+  /**
+   * On "click" of the "Update key" button in the invalid-key panel:
+   * - Reveal the sign-in form so the user can paste a replacement key (without losing their data).
+   *
+   * @param {Event} e
+   */
+  handleUpdateKeyClick(e) {
+    e.preventDefault();
+    this.showSignIn = true;
+    this.renderInnerHTML();
   }
 
   /**
@@ -133,15 +196,26 @@ export class ArchiveForm extends HTMLElement {
    */
   renderInnerHTML() {
     const getAttribute = this.getAttribute.bind(this);
+    const authState = getAttribute("auth-state");
+
+    // Leaving the invalid state clears the "update key" override, so the panel (not the sign-in
+    // form) is what shows if the key becomes invalid again later.
+    if (authState !== "invalid") {
+      this.showSignIn = false;
+    }
 
     //
     // [1] Prepare and inject template
     //
-    // If authenticated: Archive creation form
-    if (getAttribute("is-authenticated") === "true") {
+    // Valid key: Archive creation form
+    if (authState === "valid") {
       this.innerHTML = this.generateCreateArchiveForm();
     }
-    // If not authenticated: Sign-in form
+    // Invalid key (and not updating it): "invalid key" panel.
+    else if (authState === "invalid" && !this.showSignIn) {
+      this.innerHTML = this.generateInvalidKeyPanel();
+    }
+    // Signed out, or updating an invalid key: Sign-in form.
     else {
       this.innerHTML = this.generateSignInForm();
     }
@@ -153,6 +227,16 @@ export class ArchiveForm extends HTMLElement {
     this.querySelector('form[action="#sign-in"]')?.addEventListener(
       "submit",
       this.handleSignInFormSubmit
+    );
+
+    // Invalid-key panel: Retry / Update key
+    this.querySelector('button[data-action="retry"]')?.addEventListener(
+      "click",
+      this.handleRetryClick
+    );
+    this.querySelector('button[data-action="update-key"]')?.addEventListener(
+      "click",
+      this.handleUpdateKeyClick
     );
 
     // Create archive form: Pick a folder at any cascade level
@@ -187,11 +271,12 @@ export class ArchiveForm extends HTMLElement {
 
     return /*html*/`
     <form action="#sign-in">
+      <!-- No client-side length constraints: a wrong-format key should reach authSignIn and
+           surface the same "couldn't verify your key" error as a well-formed-but-rejected one,
+           rather than being silently blocked by HTML5 validation with no feedback. -->
       <input type="password"
              name="api-key"
              id="api-key"
-             minlength="40"
-             maxlength="40"
              required
              aria-label="${getMessage("sign_in_form_api_key_input_label")}"
              placeholder="${getMessage("sign_in_form_api_key_input_label")}"/>
@@ -210,6 +295,27 @@ export class ArchiveForm extends HTMLElement {
         ${getMessage("sign_in_form_sign_in_guest_link_caption")}
       </a>
     </form>
+    `;
+  }
+
+  /**
+   * Generates the "invalid key" panel, shown when the stored API key was rejected (401/403).
+   * Keeps the user's data and offers to re-check the key ("Retry") or replace it ("Update key").
+   * @returns {string} HTML
+   */
+  generateInvalidKeyPanel() {
+    const getMessage = BROWSER.i18n.getMessage;
+    const keyHint = this.getAttribute("key-hint");
+
+    return /*html*/`
+    <div class="invalid-key">
+      <p>${keyHint
+        ? getMessage("invalid_key_panel_intro_with_hint", [keyHint])
+        : getMessage("invalid_key_panel_intro")}</p>
+
+      <button data-action="retry">${getMessage("invalid_key_panel_retry_button_label")}</button>
+      <button data-action="update-key">${getMessage("invalid_key_panel_update_button_label")}</button>
+    </div>
     `;
   }
 

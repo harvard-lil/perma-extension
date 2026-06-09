@@ -30,15 +30,25 @@ test("Enforces the singleton pattern", async ({ page, extensionId }) => {
   expect(count).toBe(1); // Only the first one should remain.
 });
 
-test('Sign-out button shows when `is-authenticated` is "true" and `is-loading` is "false".', async ({ page, extensionId }) => {
+test('Sign-out button shows when a key is on file (`auth-state` "valid"/"invalid") and `is-loading` is "false".', async ({ page, extensionId }) => {
   const scenarios = [
     {
-      isAuthenticated: true,
+      authState: "valid",
       isLoading: false,
       buttonCount: 1,
     },
     {
-      isAuthenticated: true,
+      authState: "invalid",
+      isLoading: false,
+      buttonCount: 1,
+    },
+    {
+      authState: "signedout",
+      isLoading: false,
+      buttonCount: 0,
+    },
+    {
+      authState: "valid",
       isLoading: true,
       buttonCount: 0,
     },
@@ -48,13 +58,13 @@ test('Sign-out button shows when `is-authenticated` is "true" and `is-loading` i
     await page.evaluate(async(scenario) => {
       const statusBar = document.querySelector("status-bar");
 
-      statusBar.setAttribute("is-authenticated", scenario.isAuthenticated);
+      statusBar.setAttribute("auth-state", scenario.authState);
       statusBar.setAttribute("is-loading", scenario.isLoading);
 
       await new Promise(resolve => requestAnimationFrame(resolve));
     }, scenario);
-  
-    expect(await page.getAttribute("status-bar", "is-authenticated")).toBe(`${scenario.isAuthenticated}`);
+
+    expect(await page.getAttribute("status-bar", "auth-state")).toBe(`${scenario.authState}`);
     expect(await page.getAttribute("status-bar", "is-loading")).toBe(`${scenario.isLoading}`);
   
     expect(
@@ -72,7 +82,7 @@ test("Sign-out button sends `AUTH_SIGN_OUT` runtime message on click.", async ({
     let payload = null;
     chrome.runtime.sendMessage = data => payload = data;
 
-    document.querySelector("status-bar").setAttribute("is-authenticated", "true");
+    document.querySelector("status-bar").setAttribute("auth-state", "valid");
     document.querySelector("status-bar").setAttribute("is-loading", "false");
 
     document.querySelector("status-bar > button").click();

@@ -18,7 +18,8 @@ import { BROWSER } from "../../constants/index.js";
  * - Use `addArchives()` to feed this component an array of archive objects (See: PermaArchive objects from `perma-js-sdk`).
  * 
  * Available HTML attributes:
- * - `is-authenticated`: If not "true", this component is hidden.
+ * - `auth-state`: One of "valid" | "invalid" | "signedout". Hidden only when "signedout"; the
+ *   already-fetched timeline stays visible while a key is invalid so the user keeps their context.
  * - `is-loading`: If "true", disables all nested form elements.
  * 
  * Note: 
@@ -29,7 +30,7 @@ export class ArchiveTimeline extends HTMLElement {
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
   static get observedAttributes() {
-    return ["is-authenticated", "is-loading"];
+    return ["auth-state", "is-loading"];
   }
 
   /**
@@ -107,16 +108,17 @@ export class ArchiveTimeline extends HTMLElement {
     // [1] Assemble and inject template 
     //
 
-    // If not authenticated:
+    // If there is no key on file yet (signed out, or auth state not hydrated):
     // - Element should be `aria-hidden`
     // - InnerHTML should be empty.
-    if (getAttribute("is-authenticated") !== "true") {
+    const authState = getAttribute("auth-state");
+    if (authState !== "valid" && authState !== "invalid") {
       setAttribute("aria-hidden", "true");
       this.innerHTML = ``;
       return;
     }
 
-    // If authenticated:
+    // If there is a key on file (valid or invalid):
     // - This element should behave like a list
     // - This element should only accept `<archive-timeline-item>` and `<h3>` as direct children (filter everything else out)
     // - This element should display a message if there are no archives to display (inject it)

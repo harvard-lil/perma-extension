@@ -49,6 +49,7 @@ export async function authSignIn(apiKey) {
   }
   finally {
     auth.lastCheck = new Date();
+    auth.isInvalid = false; // A fresh sign-in attempt always supersedes a prior "invalid key" state.
 
     await Status.update((status) => { status.isLoading = false; });
     await auth.save();

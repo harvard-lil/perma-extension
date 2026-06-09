@@ -12,22 +12,22 @@ import { MOCK_ARCHIVE_TIMELINE, MOCK_ARCHIVE_GUID } from "../mocks.js";
 
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.
 // This page contains an instance of `<archive-timeline>`.
-// We pass `is-authenticated="true"` to `<archive-timeline>` by default (most common test setup).
+// We pass `auth-state="valid"` to `<archive-timeline>` by default (most common test setup).
 test.beforeEach(async ({ page, extensionId }, testInfo) => {
   await page.goto(`chrome-extension://${extensionId}/popup/index.html`);
   await page.waitForTimeout(WAIT_MS_AFTER_BOOT);
 
   await page.evaluate(async () => {
-    document.querySelector("archive-form").setAttribute("is-authenticated", "true");
-    document.querySelector("archive-timeline").setAttribute("is-authenticated", "true");
-    document.querySelector("status-bar").setAttribute("is-authenticated", "true");
+    document.querySelector("archive-form").setAttribute("auth-state", "valid");
+    document.querySelector("archive-timeline").setAttribute("auth-state", "valid");
+    document.querySelector("status-bar").setAttribute("auth-state", "valid");
     await new Promise(resolve => requestAnimationFrame(resolve));
   });
 });
 
-test('Does not render if `is-authenticated` is not "true".', async ({ page, extensionId }) => {
+test('Does not render if `auth-state` is "signedout".', async ({ page, extensionId }) => {
   await page.evaluate(async () => {
-    document.querySelector("archive-timeline").setAttribute("is-authenticated", "false");
+    document.querySelector("archive-timeline").setAttribute("auth-state", "signedout");
     await new Promise(resolve => requestAnimationFrame(resolve));
   });
 

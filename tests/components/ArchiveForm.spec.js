@@ -29,21 +29,21 @@ test("Enforces the singleton pattern.", async ({ page, extensionId }) => {
   expect(count).toBe(1); // Only the first one should remain.
 });
 
-test('Sign-in form shows up (only) when `is-authenticated` is "false".',  async ({ page, extensionId }) => {
+test('Sign-in form shows up (only) when `auth-state` is "signedout".',  async ({ page, extensionId }) => {
   const scenarios = [
     {
-      isAuthenticated: "false",
+      authState: "signedout",
       signInFormCount: 1,
     },
     {
-      isAuthenticated: "true",
+      authState: "valid",
       signInFormCount: 0,
     },
   ];
 
   for (let scenario of Object.values(scenarios)) {
     const count = await page.evaluate(async (scenario) => {
-      document.querySelector("archive-form").setAttribute("is-authenticated", scenario.isAuthenticated);
+      document.querySelector("archive-form").setAttribute("auth-state", scenario.authState);
 
       await new Promise(resolve => requestAnimationFrame(resolve));
 
@@ -55,13 +55,65 @@ test('Sign-in form shows up (only) when `is-authenticated` is "false".',  async 
 
 });
 
+test('Invalid-key panel shows (only) when `auth-state` is "invalid", with retry + update-key buttons and the key hint.', async ({ page, extensionId }) => {
+  const result = await page.evaluate(async () => {
+    const archiveForm = document.querySelector("archive-form");
+    archiveForm.setAttribute("key-hint", "aB3z");
+    archiveForm.setAttribute("auth-state", "invalid");
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    return {
+      panelCount: archiveForm.querySelectorAll(".invalid-key").length,
+      signInFormCount: archiveForm.querySelectorAll("form[action='#sign-in']").length,
+      retryCount: archiveForm.querySelectorAll('.invalid-key button[data-action="retry"]').length,
+      updateCount: archiveForm.querySelectorAll('.invalid-key button[data-action="update-key"]').length,
+      text: archiveForm.querySelector(".invalid-key p")?.innerText ?? "",
+    };
+  });
+
+  expect(result.panelCount).toBe(1);
+  expect(result.signInFormCount).toBe(0);
+  expect(result.retryCount).toBe(1);
+  expect(result.updateCount).toBe(1);
+  expect(result.text).toContain("aB3z"); // Key hint surfaced so the user knows which key failed.
+});
+
+test('Invalid-key panel "Retry" sends `AUTH_CHECK`; "Update key" reveals the sign-in form.', async ({ page, extensionId }) => {
+  const result = await page.evaluate(async (AUTH_CHECK) => {
+    let payload = null;
+    chrome.runtime.sendMessage = data => payload = data;
+
+    const archiveForm = document.querySelector("archive-form");
+    archiveForm.setAttribute("auth-state", "invalid");
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    // Retry re-checks the stored key.
+    archiveForm.querySelector('button[data-action="retry"]').click();
+    const retryMessageId = payload?.messageId;
+
+    // Update key swaps the panel for the sign-in form (without changing `auth-state`).
+    archiveForm.querySelector('button[data-action="update-key"]').click();
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    return {
+      retryMessageId,
+      signInFormCount: archiveForm.querySelectorAll("form[action='#sign-in']").length,
+      panelCount: archiveForm.querySelectorAll(".invalid-key").length,
+    };
+  }, MESSAGE_IDS.AUTH_CHECK);
+
+  expect(result.retryMessageId).toBe(MESSAGE_IDS.AUTH_CHECK);
+  expect(result.signInFormCount).toBe(1);
+  expect(result.panelCount).toBe(0);
+});
+
 test('Sign-in form sends `AUTH_SIGN_IN` runtime message on submit.',  async ({ page, extensionId }) => {
   // Monkey-patch `chrome.runtime.sendMessage` to intercept message.
   const payload = await page.evaluate(async (MOCK_API_KEY) => {
     let payload = null;
     chrome.runtime.sendMessage = data => payload = data;
 
-    document.querySelector("archive-form").setAttribute("is-authenticated", "false");
+    document.querySelector("archive-form").setAttribute("auth-state", "signedout");
     await new Promise(resolve => requestAnimationFrame(resolve));
 
     const signInForm = document.querySelector("archive-form form[action='#sign-in']");
@@ -81,7 +133,7 @@ test("Sign-in form has a working link to Perma.cc's bookmarklet feature.",  asyn
   const tabUrl = MOCK_TAB_URL;
 
   await page.evaluate(async (tabUrl) => {
-    document.querySelector("archive-form").setAttribute("is-authenticated", "false");
+    document.querySelector("archive-form").setAttribute("auth-state", "signedout");
     document.querySelector("archive-form").setAttribute("tab-url", tabUrl);
     await new Promise(resolve => requestAnimationFrame(resolve));
   }, tabUrl);
@@ -98,7 +150,7 @@ test('Archive creation form sends `ARCHIVE_CREATE_PUBLIC` runtime message on sub
     chrome.runtime.sendMessage = data => payload = data;
 
     const archiveForm = document.querySelector("archive-form");
-    archiveForm.setAttribute("is-authenticated", "true");
+    archiveForm.setAttribute("auth-state", "valid");
     // A folder target is required for the "Create" button to be enabled (it sets `parentFolderId`).
     archiveForm.setAttribute("folders-cascade", JSON.stringify(cascade));
     await new Promise(resolve => requestAnimationFrame(resolve));
@@ -116,7 +168,7 @@ test('Archive creation renders the folder cascade (`folders-cascade`).',  async 
   const optionsHaveRendered = await page.evaluate(async ({ cascade }) => {
     const archiveForm = document.querySelector("archive-form");
 
-    archiveForm.setAttribute("is-authenticated", "true");
+    archiveForm.setAttribute("auth-state", "valid");
     archiveForm.setAttribute("folders-cascade", JSON.stringify(cascade));
 
     await new Promise(resolve => requestAnimationFrame(resolve));
@@ -140,7 +192,7 @@ test('Archive creation marks the picked folder (`cascade.pick`) as selected.',  
   const optionIsSelected = await page.evaluate(async ({ cascade }) => {
     const archiveForm = document.querySelector("archive-form");
 
-    archiveForm.setAttribute("is-authenticated", "true");
+    archiveForm.setAttribute("auth-state", "valid");
     archiveForm.setAttribute("folders-cascade", JSON.stringify(cascade));
 
     await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -159,7 +211,7 @@ test('Archive creation form sends `FOLDERS_PICK_ONE` runtime message on folder `
 
     const archiveForm = document.querySelector("archive-form");
 
-    archiveForm.setAttribute("is-authenticated", "true");
+    archiveForm.setAttribute("auth-state", "valid");
     archiveForm.setAttribute("folders-cascade", JSON.stringify(cascade));
 
     await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -181,11 +233,11 @@ test('Archive creation form sends `FOLDERS_PICK_ONE` runtime message on folder `
 test('Inputs are disabled when `is-loading` is "true"',  async ({ page, extensionId }) => {
   const scenarios = [
     {
-      isAuthenticated: "false", // Sign-in form
+      authState: "signedout", // Sign-in form
       cascade: null,
     },
     {
-      isAuthenticated: "true", // Archive creation form, with a rendered folder cascade
+      authState: "valid", // Archive creation form, with a rendered folder cascade
       cascade: MOCK_FOLDERS_CASCADE,
     }
   ];
@@ -194,7 +246,7 @@ test('Inputs are disabled when `is-loading` is "true"',  async ({ page, extensio
     const inputsAreDisabled = await page.evaluate(async (scenario) => {
       const archiveForm = document.querySelector("archive-form");
 
-      archiveForm.setAttribute("is-authenticated", scenario.isAuthenticated);
+      archiveForm.setAttribute("auth-state", scenario.authState);
       archiveForm.setAttribute("is-loading", "true");
 
       if (scenario.cascade) {

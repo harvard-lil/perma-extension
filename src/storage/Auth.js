@@ -31,6 +31,14 @@ export class Auth {
   #isChecked = false;
 
   /**
+   * Whether the stored API key was definitively rejected by the Perma.cc API (HTTP 401/403).
+   * When `true`, the key is kept on file (so it can be displayed / retried) but is not usable:
+   * the UI shows an "invalid key" panel rather than the sign-in or archive forms.
+   * @type {boolean}
+   */
+  #isInvalid = false;
+
+  /**
    * Date + time at which the API key was checked last.
    * @type {?Date}
    */
@@ -72,6 +80,7 @@ export class Auth {
     toSave[Auth.KEY] = {
       apiKey: this.#apiKey,
       isChecked: this.#isChecked,
+      isInvalid: this.#isInvalid,
       lastCheck: this.#lastCheck === null ? null : String(this.#lastCheck),
     };
 
@@ -109,6 +118,17 @@ export class Auth {
 
   get isChecked() {
     return this.#isChecked;
+  }
+
+  /**
+   * @param {any} newValue - Will be cast into a boolean
+   */
+  set isInvalid(newValue) {
+    this.#isInvalid = Boolean(newValue);
+  }
+
+  get isInvalid() {
+    return this.#isInvalid;
   }
 
   /**
