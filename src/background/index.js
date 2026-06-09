@@ -20,6 +20,30 @@ import { foldersPick } from "./foldersPick.js";
 import { foldersPullList } from "./foldersPullList.js";
 import { statusCleanUp } from "./statusCleanUp.js";
 import { tabSwitch } from "./tabSwitch.js";
+import { PERMA_API_BASE_URL } from "../constants/index.js";
+
+/**
+ * Tags every request the extension makes to the Perma.cc API with a `Perma-Client`
+ * header, so this traffic can be identified in server logs (the SDK has no hook for custom
+ * headers, and `Referer`/`User-Agent` can't be set from `fetch`). All API calls originate in
+ * this service worker via `perma-js-sdk`'s `fetch`, so wrapping `fetch` here covers them all.
+ *
+ * Requests to `api.perma.cc` are covered by `host_permissions`, so this non-safelisted header
+ * is exempt from CORS preflight and won't be stripped.
+ */
+const PERMA_CLIENT = `perma-extension/${BROWSER.runtime.getManifest().version}`;
+const originalFetch = globalThis.fetch;
+globalThis.fetch = (resource, options = {}) => {
+  const url = resource instanceof Request ? resource.url : String(resource);
+
+  if (url.startsWith(PERMA_API_BASE_URL)) {
+    const headers = new Headers(options.headers || (resource instanceof Request ? resource.headers : undefined));
+    headers.set("Perma-Client", PERMA_CLIENT);
+    options = { ...options, headers };
+  }
+
+  return originalFetch(resource, options);
+};
 
 /**
  * Set a 1-minute "alarm" cycle for this service worker.
