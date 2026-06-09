@@ -65,10 +65,52 @@ import { BROWSER } from "../constants/index.js"
   }
 
   /**
+   * Lock used by `update()` to serialize read-modify-write cycles. Each queued mutation runs only
+   * after the previous one has finished saving.
+   * @type {Promise<any>}
+   */
+  static #updateChain = Promise.resolve();
+
+  /**
+   * Atomically reads "status" from storage, applies `mutator`, and saves it back — serialized
+   * against every other `update()` call.
+   *
+   * The whole status blob is written as one object, so two handlers that each did
+   * `fromStorage()` → mutate → `save()` concurrently would clobber each other's fields with a
+   * stale snapshot (last write wins on the *entire* object). Several writers run on overlapping
+   * timers — the 2s capture-status poll, the 2.5s `statusCleanUp`, and archive create/delete/
+   * toggle — so this matters. Routing every mutation through this single chain guarantees each one
+   * sees the freshest stored value and no write is lost.
+   *
+   * The mutator receives the freshly-loaded `Status` and may be async. Return `false` from it to
+   * skip the save (e.g. nothing actually changed, to avoid a needless `storage.onChanged` event);
+   * any other return value (including `undefined`) saves.
+   *
+   * @param {(status: Status) => (boolean | void | Promise<boolean | void>)} mutator
+   * @returns {Promise<Status>} The (possibly mutated) status.
+   */
+  static update(mutator) {
+    const run = Status.#updateChain.then(async () => {
+      const status = await Status.fromStorage();
+      const result = await mutator(status);
+
+      if (result !== false) {
+        await status.save();
+      }
+
+      return status;
+    });
+
+    // Advance the chain even if this mutator throws, so one failure can't wedge the queue.
+    Status.#updateChain = run.catch(() => {});
+    return run;
+  }
+
+  /**
    * Saves the current object in store.
-   * 
+   *
    * @returns {Promise<boolean>}
-   * @async 
+   * @async
    */
   async save() {
     const toSave = {};

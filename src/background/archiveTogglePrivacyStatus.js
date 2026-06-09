@@ -25,30 +25,32 @@ import { PERMA_API_BASE_URL } from "../constants/index.js";
  * @async
  */
 export async function archiveTogglePrivacyStatus(guid, isPrivate = false) {
-  const status = await Status.fromStorage();
   const auth = await Auth.fromStorage();
 
   try {
-    status.isLoading = true;
-    status.message = "status_in_progress";
-    status.lastLoadingInit = new Date();
-    await status.save();
+    await Status.update((status) => {
+      status.isLoading = true;
+      status.message = "status_in_progress";
+      status.lastLoadingInit = new Date();
+    });
 
     const api = new PermaAPI(String(auth.apiKey), PERMA_API_BASE_URL);
 
     isPrivate = Boolean(isPrivate);
     await api.editArchive(guid, {isPrivate});
-    status.message = isPrivate ? "status_archive_made_private" : "status_archive_made_public";
 
-    await archivePullTimeline(); // Will update the timeline once the archive is created
+    await Status.update((status) => {
+      status.message = isPrivate ? "status_archive_made_private" : "status_archive_made_public";
+    });
+
+    await archivePullTimeline(); // Will update the timeline once the archive is updated.
   }
   catch(err) {
-    status.message = "error_toggling_archive_privacy_status";
+    await Status.update((status) => { status.message = "error_toggling_archive_privacy_status"; });
     //console.error(err);
     throw err;
   }
   finally {
-    status.isLoading = false;
-    await status.save();
+    await Status.update((status) => { status.isLoading = false; });
   }
 }
