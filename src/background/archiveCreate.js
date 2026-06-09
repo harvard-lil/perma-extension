@@ -24,16 +24,16 @@ import { PERMA_API_BASE_URL } from "../constants/index.js";
  * @async
  */
 export async function archiveCreate(isPrivate = false) {
-  const status = await Status.fromStorage();
   const auth = await Auth.fromStorage();
   const currentTab = await CurrentTab.fromStorage();
   const folders = await Folders.fromStorage();
 
   try {
-    status.isLoading = true;
-    status.lastLoadingInit = new Date();
-    status.message = "status_in_progress";
-    await status.save();
+    await Status.update((status) => {
+      status.isLoading = true;
+      status.lastLoadingInit = new Date();
+      status.message = "status_in_progress";
+    });
 
     const api = new PermaAPI(String(auth.apiKey), PERMA_API_BASE_URL);
 
@@ -41,22 +41,28 @@ export async function archiveCreate(isPrivate = false) {
       throw new Error("`currentTab.url` is not set.");
     }
 
-    await api.createArchive(currentTab.url, {
-      isPrivate: Boolean(isPrivate), 
+    const archive = await api.createArchive(currentTab.url, {
+      isPrivate: Boolean(isPrivate),
       parentFolderId: folders.pick
     });
 
-    status.message = "status_archive_created";
+    await Status.update((status) => {
+      status.message = "status_archive_created";
 
-    await archivePullTimeline(); // Will update the timeline once the archive is created
+      // Track the new capture so the popup can poll its capture-job status (instead of
+      // re-pulling the whole timeline on a fixed interval). See `archivePullCaptureStatus`.
+      status.captureGuid = archive?.guid;
+      status.captureStep = 0;
+    });
+
+    await archivePullTimeline(); // Shows the new (pending) archive in the timeline right away.
   }
   catch(err) {
-    status.message = "error_creating_archive";
+    await Status.update((status) => { status.message = "error_creating_archive"; });
     //console.error(err);
     throw err;
   }
   finally {
-    status.isLoading = false;
-    await status.save();
+    await Status.update((status) => { status.isLoading = false; });
   }
 }

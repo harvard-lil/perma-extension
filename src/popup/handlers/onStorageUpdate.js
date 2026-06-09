@@ -71,6 +71,9 @@ export async function onStorageUpdate(changes = {}) {
     statusBar?.setAttribute("message", status.message);
 
     archiveTimeline?.setAttribute("is-loading", status.isLoading);
+
+    // Reflect capture progress on the matching timeline item (if a capture is in progress).
+    archiveTimeline?.setActiveCapture(status.captureGuid, status.captureStep);
   }
 
   //
@@ -78,9 +81,18 @@ export async function onStorageUpdate(changes = {}) {
   //
   if (updatedKeys.indexOf(Auth.KEY) > -1) {
     const auth = await Auth.fromStorage();
-    archiveForm?.setAttribute("is-authenticated", auth.isChecked);
-    statusBar?.setAttribute("is-authenticated", auth.isChecked);
-    archiveTimeline?.setAttribute("is-authenticated", auth.isChecked);
+
+    // Tri-state auth, consumed by the components below:
+    // - "valid": signed in with a working key -> archive form, timeline, sign-out button.
+    // - "invalid": key on file but rejected (401/403) -> "invalid key" panel; timeline stays.
+    // - "signedout": no usable key -> sign-in form.
+    const authState = auth.isInvalid ? "invalid" : (auth.isChecked ? "valid" : "signedout");
+
+    archiveForm?.setAttribute("auth-state", authState);
+    // Last 4 chars of the key, shown in the "invalid key" panel so users can tell which key failed.
+    archiveForm?.setAttribute("key-hint", auth.apiKey ? auth.apiKey.slice(-4) : "");
+    statusBar?.setAttribute("auth-state", authState);
+    archiveTimeline?.setAttribute("auth-state", authState);
   }
 
   //
@@ -89,9 +101,13 @@ export async function onStorageUpdate(changes = {}) {
   if (updatedKeys.indexOf(Archives.KEY) > -1) {
     const archives = await Archives.fromStorage();
     const currentTab = await CurrentTab.fromStorage();
+    const status = await Status.fromStorage();
 
     // Add archives for the current url to `<archive-timeline>`
     archiveTimeline.addArchives(archives.byUrl[currentTab.url])
+
+    // Re-apply capture progress: `addArchives` rebuilds the items from scratch.
+    archiveTimeline.setActiveCapture(status.captureGuid, status.captureStep);
   }
 
   //
@@ -100,8 +116,11 @@ export async function onStorageUpdate(changes = {}) {
   if (updatedKeys.indexOf(Folders.KEY) > -1) {
     const folders = await Folders.fromStorage();
 
-    archiveForm?.setAttribute("folders-list", JSON.stringify(folders.available));
-    archiveForm?.setAttribute("folders-pick", folders.pick);
+    archiveForm?.setAttribute("folders-cascade", JSON.stringify({
+      levels: folders.levels,
+      path: folders.path,
+      pick: folders.pick,
+    }));
   }
   
 

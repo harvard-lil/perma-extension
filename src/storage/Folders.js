@@ -12,48 +12,49 @@ import { BROWSER } from "../constants/index.js"
 
 /**
  * This class directly interacts with `browser.storage.local` to push / pull and manage the "folders" key.
+ *
+ * Folders are navigated as a lazy cascade rather than loaded all at once: only the folders along
+ * the path the user has opened are fetched (top-level on open, a folder's children when it is
+ * selected). This keeps loading O(depth) instead of O(tree size) — registrar users can have very
+ * large trees. See `background/foldersPullList` and `background/foldersPick`.
  */
 export class Folders {
   /**
-   * Key given to this object in `browser.storage.local`. 
+   * Key given to this object in `browser.storage.local`.
    */
   static KEY = "folders";
 
   /**
-   * Id of the folder the user picked as its default.
+   * Id of the folder the user picked as the capture target (the deepest folder selected in the
+   * cascade). Read by `archiveCreate` as `parentFolderId`.
    * @type {?number}
    */
   #pick = null;
 
   /**
-   * List of all the folders the user can write into, sorted hierarchically.
-   * 
-   * Format: 
-   * [
-   *   { id: 158296, depth: 0, name: 'Personal Links' },
-   *   { id: 161019, depth: 1, name: 'Foo' },
-   *   { id: 161022, depth: 1, name: 'Lorem' },
-   *   { id: 161020, depth: 2, name: 'Bar' },
-   *   { id: 161021, depth: 2, name: 'Baz' },
-   *   { id: 161023, depth: 2, name: 'Ipsum' },
-   *   { id: 161026, depth: 3, name: 'Amet' },
-   *   { id: 161024, depth: 3, name: 'Dolor' },
-   *   { id: 161025, depth: 3, name: 'Sit' },
-   *   { id: 161029, depth: 4, name: 'Consequentur' }
-   * ]
-   * @type {Object[]}
+   * Selected folder id at each cascade level. `path[i]` is the folder chosen in the i-th select.
+   * The last entry is the current target (`pick`). Empty until a folder is chosen.
+   * @type {number[]}
    */
-  #available = [];
+  #path = [];
+
+  /**
+   * Option lists for each cascade level. `levels[0]` is the top-level folders; `levels[i]` (i > 0)
+   * is the children of `path[i - 1]`. Each entry is `{ id, name, hasChildren }` (read-only folders,
+   * which can't be capture targets, are filtered out upstream).
+   * @type {Array<Array<{id: number, name: string, hasChildren: boolean}>>}
+   */
+  #levels = [];
 
   /**
    * Creates and returns an instance of `Folders` using data from storage.
    * Use this static method to load "folders" from storage.
-   * 
+   *
    * Usage:
    * ```javascript
-   * const status = await Folders.fromStorage();
+   * const folders = await Folders.fromStorage();
    * ```
-   * 
+   *
    * @return {Promise<Folders>}
    * @static
    * @async
@@ -73,36 +74,15 @@ export class Folders {
 
   /**
    * Saves the current object in store.
-   * Checks and validates `this.#available` before saving to make sure it is an array of objects containing `id` and `name`.
-   * 
    * @returns {Promise<boolean>}
-   * @async 
+   * @async
    */
   async save() {
-    // Checks and filters `this.#available`
-    const availableFiltered = [];
-
-    for (let entry of this.#available) {
-      if (!("id" in entry) || !("name" in entry) || !("depth" in entry)) {
-        throw new Error(
-          "`available` must be an array of objects containing at least `id` and `name`."
-        );
-      }
-
-      availableFiltered.push({
-        id: parseInt(entry.id),
-        depth: parseInt(entry.depth),
-        name: entry.name,
-      });
-    }
-
-    this.#available = availableFiltered;
-
-    // Save
     const toSave = {};
     toSave[Folders.KEY] = {
       pick: this.#pick,
-      available: this.#available
+      path: this.#path,
+      levels: this.#levels
     };
 
     await BROWSER.storage.local.set(toSave);
@@ -112,7 +92,7 @@ export class Folders {
   /**
    * Replaces the current object in store with an "empty" one.
    * @returns {Promise<boolean>}
-   * @async 
+   * @async
    */
   async reset() {
     await new Folders().save();
@@ -131,18 +111,33 @@ export class Folders {
   }
 
   /**
-   * @param {Array} newValue
+   * @param {number[]} newValue - Selected folder id per cascade level.
    */
-  set available(newValue) {
+  set path(newValue) {
     if (!(newValue instanceof Array)) {
-      throw new Error("`available` must be an array.");
+      throw new Error("`path` must be an array.");
     }
 
-    this.#available = newValue;
+    this.#path = newValue.map((id) => parseInt(id));
   }
 
-  get available() {
-    return this.#available;
+  get path() {
+    return this.#path;
+  }
+
+  /**
+   * @param {Array} newValue - Option lists, one per cascade level.
+   */
+  set levels(newValue) {
+    if (!(newValue instanceof Array)) {
+      throw new Error("`levels` must be an array.");
+    }
+
+    this.#levels = newValue;
+  }
+
+  get levels() {
+    return this.#levels;
   }
 
 }

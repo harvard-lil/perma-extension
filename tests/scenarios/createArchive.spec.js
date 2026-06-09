@@ -33,7 +33,11 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
 test("App can request the creation of an archive and list the newly created entry.", async ({ page, extensionId }) => {
   const scenarios = [
     {
-      url: MOCK_TAB_URL,
+      // Use a unique URL per run so the timeline starts empty. The test account accumulates archives
+      // for any fixed URL across runs, and the timeline only pulls the first 100 for a given URL
+      // (see `archivePullTimeline`) — so on a reused URL the freshly created entry can fall outside
+      // that page and the count never increments. A unique URL sidesteps that and keeps the diff at 1.
+      url: `${MOCK_TAB_URL}?perma-extension-e2e=${Date.now()}`,
       title: MOCK_TAB_TITLE,
       expectedArchivesCountDiff: 1
     },
@@ -61,7 +65,9 @@ test("App can request the creation of an archive and list the newly created entr
       let archivesCountBefore = document.querySelectorAll("archive-timeline-item").length;
       let archivesCountAfter = 0;
   
-      document.querySelector("archive-form form[action='#create-archive'] button").click();
+      // Non-capturable pages (e.g. `chrome://extensions`) render the "can't be archived" panel
+      // instead of the create form, so there's no button to click — and no archive is created.
+      document.querySelector("archive-form form[action='#create-archive'] button")?.click();
       await new Promise(resolve => setTimeout(resolve, 5000));
   
       archivesCountAfter = document.querySelectorAll("archive-timeline-item").length;

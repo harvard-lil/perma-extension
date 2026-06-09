@@ -18,23 +18,24 @@ import { Status } from "../storage/index.js";
  * @async
  */
 export async function statusCleanUp() {
-  const status = await Status.fromStorage();
-  let wasUpdated = false;
-  const secondsSinceLastLoadingInit = (new Date() - status.lastLoadingInit) / 1000;
+  // Run the read + conditional write atomically against other status writers (the capture poll,
+  // archive create/delete/toggle) so we never reset a freshly-set loading state from a stale read.
+  await Status.update((status) => {
+    let wasUpdated = false;
+    const secondsSinceLastLoadingInit = (new Date() - status.lastLoadingInit) / 1000;
 
-  // If `isLoading` has been `true` for more than 60 seconds, force it back to false.
-  if (status.isLoading === true && secondsSinceLastLoadingInit > 60) {
-    status.isLoading = false;
-    wasUpdated = true;
-  }
+    // If `isLoading` has been `true` for more than 60 seconds, force it back to false.
+    if (status.isLoading === true && secondsSinceLastLoadingInit > 60) {
+      status.isLoading = false;
+      wasUpdated = true;
+    }
 
-  // If `isLoading` is `false` and the last `lastLoadingInit` happened more than 5 seconds ago, set the current status message to "status_default".
-  if (status.isLoading === false && secondsSinceLastLoadingInit > 5) {
-    status.message = "status_default";
-    wasUpdated = true;
-  }
+    // If `isLoading` is `false` and the last `lastLoadingInit` happened more than 5 seconds ago, set the current status message to "status_default".
+    if (status.isLoading === false && secondsSinceLastLoadingInit > 5) {
+      status.message = "status_default";
+      wasUpdated = true;
+    }
 
-  if (wasUpdated === true) {
-    await status.save();
-  }
+    return wasUpdated; // `false` -> skip the save (nothing changed), avoiding a needless storage event.
+  });
 }

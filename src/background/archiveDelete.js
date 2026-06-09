@@ -24,29 +24,31 @@ import { PERMA_API_BASE_URL } from "../constants/index.js";
  * @async
  */
 export async function archiveDelete(guid) {
-  const status = await Status.fromStorage();
   const auth = await Auth.fromStorage();
 
   try {
-    status.isLoading = true;
-    status.lastLoadingInit = new Date();
-    await status.save();
+    await Status.update((status) => {
+      status.isLoading = true;
+      status.lastLoadingInit = new Date();
+    });
 
     const api = new PermaAPI(String(auth.apiKey), PERMA_API_BASE_URL);
 
-    await api.deleteArchive(guid);
+    // `safeMode=false`: the extension only ever deletes archives the timeline already shows as
+    // finished, so skip the SDK's safe-mode pre-delete `pullArchive` + up-to-~60s polling for
+    // pending captures. The delete becomes a single request.
+    await api.deleteArchive(guid, false);
 
-    status.message = "status_archive_deleted";
-    
-    await archivePullTimeline(); // Will update the timeline once the archive is created
+    await Status.update((status) => { status.message = "status_archive_deleted"; });
+
+    await archivePullTimeline(); // Will update the timeline once the archive is deleted.
   }
   catch(err) {
-    status.message = "error_deleting_archive";
+    await Status.update((status) => { status.message = "error_deleting_archive"; });
     //console.error(err);
     throw err;
   }
   finally {
-    status.isLoading = false;
-    await status.save();
+    await Status.update((status) => { status.isLoading = false; });
   }
 }

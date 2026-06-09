@@ -1,5 +1,7 @@
 status-bar {
   grid-area: footer;
+  /* Stick to the bottom of the popup when content is short; scroll with content when it's tall. */
+  margin-top: auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

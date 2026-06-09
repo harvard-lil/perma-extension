@@ -26,9 +26,13 @@ export async function authSignOut() {
   const archives = await Archives.fromStorage();
   await archives.reset();
 
-  const status = await Status.fromStorage();
-  await status.reset();
-
-  status.message = "status_signed_out";
-  await status.save();
+  // Reset "status" through the serialized updater so a concurrent capture poll / cleanup can't
+  // re-populate it right after we wipe it.
+  await Status.update((status) => {
+    status.isLoading = false;
+    status.lastLoadingInit = null;
+    status.captureGuid = "";
+    status.captureStep = 0;
+    status.message = "status_signed_out";
+  });
 }

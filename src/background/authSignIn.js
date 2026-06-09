@@ -22,14 +22,14 @@ import { PERMA_API_BASE_URL } from "../constants/index.js";
  * @async
  */
 export async function authSignIn(apiKey) {
-  const status = await Status.fromStorage();
   const auth = await Auth.fromStorage();
 
   try {
-    status.isLoading = true;
-    status.message = "status_in_progress";
-    status.lastLoadingInit = new Date();
-    await status.save();
+    await Status.update((status) => {
+      status.isLoading = true;
+      status.message = "status_in_progress";
+      status.lastLoadingInit = new Date();
+    });
 
     const api = new PermaAPI(String(apiKey), PERMA_API_BASE_URL); // Will throw if API key is invalid
     await api.pullUser(); // Will throw if API key is invalid
@@ -37,21 +37,21 @@ export async function authSignIn(apiKey) {
     auth.apiKey = apiKey;
     auth.isChecked = true;
 
-    status.message = "status_signed_in";
+    await Status.update((status) => { status.message = "status_signed_in"; });
   }
   catch(err) {
     auth.apiKey = "";
     auth.isChecked = false;
 
-    status.message = "error_verifying_api_key";
+    await Status.update((status) => { status.message = "error_verifying_api_key"; });
     //console.log(err);
     throw err;
   }
   finally {
-    status.isLoading = false;
     auth.lastCheck = new Date();
+    auth.isInvalid = false; // A fresh sign-in attempt always supersedes a prior "invalid key" state.
 
-    await status.save();
+    await Status.update((status) => { status.isLoading = false; });
     await auth.save();
   }
 }

@@ -94,11 +94,13 @@ export default defineConfig({
 
   plugins: [
     viteStaticCopy({
+      // vite-plugin-static-copy preserves the source directory structure in the
+      // output, so strip the leading `src/` segment to land files at the dist root.
       targets: [
-        {src: "src/manifest.json", dest: "", transform: transformManifest},
-        {src: "src/assets", dest: ""},
-        {src: "src/_locales", dest: ""},
-        {src: "src/popup/index.html", dest: "popup"},
+        {src: "src/manifest.json", dest: "", transform: transformManifest, rename: {stripBase: true}},
+        {src: "src/assets", dest: "", rename: {stripBase: 1}},
+        {src: "src/_locales", dest: "", rename: {stripBase: 1}},
+        {src: "src/popup/index.html", dest: "popup", rename: {stripBase: true}},
       ]
     }),
     popupCSSBundle()

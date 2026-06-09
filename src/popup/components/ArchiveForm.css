@@ -65,6 +65,44 @@ archive-form > form[action="#sign-in"] a {
   text-align: center;
 }
 
+/* Invalid-key panel */
+archive-form > .invalid-key {
+  padding: 1rem;
+  background-color: var(--main-color);
+  text-align: center;
+}
+
+archive-form > .invalid-key p {
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: var(--letter-spacing);
+  margin-bottom: 1rem;
+  text-align: left;
+  color: var(--opposite-color);
+  overflow-wrap: anywhere;
+}
+
+archive-form > .invalid-key button {
+  display: inline-block;
+  margin: 0 0.25rem;
+}
+
+/* "Page can't be captured" panel */
+archive-form > .not-capturable {
+  padding: 1rem;
+  background-color: var(--main-color);
+}
+
+archive-form > .not-capturable p {
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: var(--letter-spacing);
+  margin: 0;
+  text-align: left;
+  color: var(--opposite-color);
+  overflow-wrap: anywhere;
+}
+
 /* Create archive form */
 archive-form > form[action="#create-archive"] {
   text-align: right;
@@ -112,6 +150,34 @@ archive-form > form[action="#create-archive"] > fieldset select {
 @media (prefers-color-scheme: dark) {
   archive-form > form[action="#create-archive"] > fieldset select {
     background-image: url("/assets/dropdown-arrow-white.svg");
+  }
+}
+
+/* Cascade: subfolder selects stack under their parent, slightly indented to read as nesting */
+archive-form > form[action="#create-archive"] > fieldset select.folders-pick-sub {
+  border-top: 1px solid var(--main-color--);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  padding-left: 1.75rem;
+}
+
+/* Breadcrumb: live confirmation of the folder the capture will be filed into */
+archive-form > form[action="#create-archive"] > fieldset .folders-breadcrumb {
+  text-align: left;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
+  color: var(--opposite-color--);
+  letter-spacing: var(--letter-spacing);
+  overflow-wrap: anywhere;
+}
+
+archive-form > form[action="#create-archive"] > fieldset .folders-breadcrumb strong {
+  color: var(--action-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  archive-form > form[action="#create-archive"] > fieldset .folders-breadcrumb strong {
+    color: var(--opposite-color);
   }
 }
 

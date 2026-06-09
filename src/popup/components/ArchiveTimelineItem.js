@@ -39,8 +39,8 @@ export class ArchiveTimelineItem extends HTMLElement {
   /**
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
-  static get observedAttributes() { 
-    return ["guid", "creation-timestamp", "capture-status"];
+  static get observedAttributes() {
+    return ["guid", "creation-timestamp", "capture-status", "capture-progress"];
   }
 
   /**
@@ -117,14 +117,33 @@ export class ArchiveTimelineItem extends HTMLElement {
       linkCaption = getMessage(`archive_timeline_item_capture_${captureStatus}`);
     }
 
+    // While a capture is pending, show a progress bar driven by the `capture-progress` attribute
+    // (0–100, set from the capture job's step count). See `ArchiveTimeline.setActiveCapture`.
+    let progressBarHtml = "";
+
+    if (captureStatus === "pending") {
+      let progress = parseInt(getAttribute("capture-progress"));
+      progress = Number.isNaN(progress) ? 0 : Math.max(0, Math.min(100, progress));
+
+      progressBarHtml = /*html*/`
+        <span class="capture-progress"
+              role="progressbar"
+              aria-valuenow="${progress}"
+              aria-valuemin="0"
+              aria-valuemax="100">
+          <span class="capture-progress-fill" style="width: ${progress}%"></span>
+        </span>`;
+    }
+
     this.innerHTML = /*html*/`
-      <a href="${getMessage("perma_base_url")}${guid}" 
-         target="_blank" 
+      <a href="${getMessage("perma_base_url")}${guid}"
+         target="_blank"
          rel="noopener noreferrer"
          title="${archiveLinkLabel}"
          aria-label="${archiveLinkLabel}">
          <strong>${guid}</strong><br>
          <span>${linkCaption}</span>
+         ${progressBarHtml}
       </a>
 
       <button aria-label="${archiveCopyLabel}" title="${archiveCopyLabel}">

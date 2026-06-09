@@ -56,6 +56,28 @@
   "error_toggling_archive_privacy_status": {
     "message": "⚠️ Couldn't edit Perma Link."
   },
+  "error_api_key_invalid": {
+    "message": "⚠️ Your API key is no longer valid."
+  },
+
+  "invalid_key_panel_intro": {
+    "message": "⚠️ Your API key is no longer valid. Retry, or update your key to continue."
+  },
+  "invalid_key_panel_intro_with_hint": {
+    "message": "⚠️ Your API key (ending …$hint$) is no longer valid. Retry, or update your key to continue.",
+    "placeholders": {
+      "hint": {
+        "content": "$1",
+        "example": "aB3z"
+      }
+    }
+  },
+  "invalid_key_panel_retry_button_label": {
+    "message": "Retry"
+  },
+  "invalid_key_panel_update_button_label": {
+    "message": "Update key"
+  },
 
   "app_header_title": {
     "message": "Create a new Perma Link"
@@ -89,14 +111,36 @@
   "create_archive_form_select_label": {
     "message": "Select the folder for this Perma Link."
   },
-  "create_archive_form_select_default": {
-    "message": "Unspecified folder"
+  "create_archive_form_subfolder_choose": {
+    "message": "[Choose subfolder]"
+  },
+  "create_archive_form_subfolder_parent": {
+    "message": "[$folder$]",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Personal Links"
+      }
+    }
+  },
+  "create_archive_form_folder_has_children": {
+    "message": "›"
+  },
+  "create_archive_form_breadcrumb_intro": {
+    "message": ">"
+  },
+  "create_archive_form_folders_loading": {
+    "message": "Loading folders …"
   },
   "create_archive_form_button_caption": {
     "message": "Archive this page"
   },
   "create_archive_form_button_label": {
     "message": "Create a public Perma Link for the current page."
+  },
+
+  "not_capturable_panel_message": {
+    "message": "Perma can only capture public web pages, so this page can’t be archived."
   },
 
   "archive_timeline_empty": {

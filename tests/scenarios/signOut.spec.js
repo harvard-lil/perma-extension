@@ -44,5 +44,8 @@ test("App switches back to the Sign-In form and clears user data from storage up
   expect(storage.auth.isChecked).toBe(false);
   expect(storage.auth.apiKey).toBe("");
   expect(Object.values(storage.archives.byUrl)).toHaveLength(0);
-  expect(Object.values(storage.folders.available)).toHaveLength(0);
+  // Folders are now a lazy cascade (`levels` / `path` / `pick`) rather than a flat `available` map.
+  expect(storage.folders.levels).toHaveLength(0);
+  expect(storage.folders.path).toHaveLength(0);
+  expect(storage.folders.pick).toBe(null);
 });

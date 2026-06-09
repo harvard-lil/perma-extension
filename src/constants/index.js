@@ -35,9 +35,10 @@
  * - `AUTH_SIGN_IN`: Request to register an API key. Params: `apiKey`.
  * - `AUTH_SIGN_OUT`: Request to remove the currently stored API key.
  * - `AUTH_CHECK`: Request to check that the API currently stored is (still) valid.
- * - `FOLDERS_PULL_LIST`: Request to pull the list of folders the user can create links into.
- * - `FOLDERS_PICK_ONE`: Request to update the "default" target folder. Params: `folderId`.
+ * - `FOLDERS_PULL_LIST`: Request to load the user's top-level folders into the folder cascade.
+ * - `FOLDERS_PICK_ONE`: Request to select a folder at a given cascade level (lazily loading its subfolders). Params: `level`, `folderId`.
  * - `ARCHIVE_PULL_TIMELINE`: Request to pull the list of user-owned archives available for the current url.
+ * - `ARCHIVE_PULL_CAPTURE_STATUS`: Request to pull the latest capture-job status for the archive currently being captured.
  * - `ARCHIVE_CREATE_PUBLIC`: Request to create a public archive for a given url.
  * - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url.
  * - `ARCHIVE_PRIVACY_STATUS_TOGGLE`: Request to toggle the privacy status of a given archive. Params: `guid`, `isPrivate`.
@@ -58,7 +59,8 @@ export const MESSAGE_IDS = {
   ARCHIVE_CREATE_PRIVATE: 9,
   ARCHIVE_PRIVACY_STATUS_TOGGLE: 10,
   ARCHIVE_DELETE: 11,
-  STATUS_CLEAN_UP: 12
+  STATUS_CLEAN_UP: 12,
+  ARCHIVE_PULL_CAPTURE_STATUS: 13
 };
 
 /**

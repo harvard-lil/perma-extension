@@ -55,12 +55,14 @@ flowchart RL
 
 ### Getting started
 
-- Make sure you have [the latest version of Node.js](https://nodejs.org/en/) installed on your machine _(18+ recommended)_.
-- Run `npm install` to install dependencies.
-- Use `npm run dev` to start _"development"_ mode. This effectively starts `vite build --watch`, creating a new build under `/dist` every time a file changes.
-  + Note: when developing for Mozilla Firefox, you must set the environment variable `TARGET=firefox` prior to executing `npm run dev`.
+- Make sure you have [the latest version of Node.js](https://nodejs.org/en/) installed on your machine _(Vite 8 requires Node 20.19+ or 22.12+; 22+ recommended)_, along with [`just`](https://github.com/casey/just) for running project tasks.
+- Run `just setup` to install dependencies (npm packages + the Chromium build Playwright uses for tests).
+- Use `just dev` to build the extension and launch it in a browser with the extension preloaded, auto-reloading on every source change. Use `just dev firefox` to do the same in Firefox.
+  + If you only want a rebuild-on-change loop without launching a browser, use `just watch` (or `just watch firefox`).
 
 ### Install the work-in-progress extension
+
+If you'd rather load the build into your own browser manually instead of using `just dev`:
 
 #### Google Chrome
 
@@ -86,12 +88,15 @@ flowchart RL
 
 ### Scope: E2E testing
 
-The following environment variables are only used in the context of [the test suites](#testing). They may be provided using an `.env` file, which the Playwright test runner will take into account.
+The following environment variables are only used in the context of [the test suites](#testing). They may be provided using an `.env` file, which both `just` and the Playwright test runner load.
 
 | Name | Context | Required | Description |
 | --- | --- | --- | --- |
-| `TESTS_API_KEY` | Test suite | Yes | API key to be used for E2E tests. |
+| `TESTS_API_KEY` | Test suite | Yes | API key to be used for E2E tests. Must belong to `perma-js-sdk-test-user` unless `TESTS_API_ALLOW_NON_TEST_USER=1` is set. |
+| `TESTS_API_ALLOW_NON_TEST_USER` | Test suite | No | Set to `"1"` only when intentionally running live API tests with a non-test account. |
 | `CI` | Test suite | No | Will alter test reporting if set _(see `playwright.config.js`)_. Used to run tests in a GitHub Action. |
+| `HEADLESS` | Test suite | No | Defaults to headless (Chromium's new headless mode, which loads the extension). Set to `"false"` to watch the browser; with `just`, run `just headful=1 test`. |
+| `FIREFOX_BIN` | Dev (`just dev firefox`) | No | Path to the Firefox binary web-ext should launch. Leave unset to use `firefox` on `PATH`; set it for a non-standard build like Firefox Developer Edition. |
 
 ### Scope: Building the extension
 
@@ -155,45 +160,87 @@ Automatically-generated API documentation. Uses [JSDoc](https://jsdoc.app/) comm
 
 ## CLI
 
-### dev
+Project tasks are run with [`just`](https://github.com/casey/just). Run `just` (or `just --list`) to see every recipe. Browser-specific recipes take a `target` argument (`chrome` or `firefox`) that defaults to `chrome` — e.g. `just build` builds for Chrome, `just build firefox` for Firefox.
 
-```
-npm run dev
+### setup
+
+```bash
+just setup
 ```
 
-Starts _"development"_ mode.  Effectively runs `vite build --watch`, creating a new build under `/dist` every time a file changes.
+Installs dependencies: npm packages + the Chromium build used by the test suite.
 
 ### build
 
-```
-npm run build
-```
-
-Generates a new extension build under `/dist`.
-
-### build-and-zip
-
-```
-npm run build-and-zip
+```bash
+just build          # or: just build firefox
 ```
 
-Generates a new extension build under `/dist` and generates a zip from it _(`perma-extension.zip`)_.
+Generates a new extension build under `/dist` for the target browser.
 
-### docgen
+### dev
 
 ```bash
-npm run docgen
+just dev            # or: just dev firefox
 ```
 
-Generates documentation using [`JSDoc` comments](https://jsdoc.app/). Outputs as Markdown to `doc`. To update which files should be taken into account, check `/scripts/docgen.sh`.
+Builds the target variant and launches it in a browser via web-ext, with the extension preloaded and auto-reloading on every source change. For Firefox, set `FIREFOX_BIN` in `.env` if you use a non-standard build (e.g. Developer Edition).
+
+### watch
+
+```bash
+just watch          # or: just watch firefox
+```
+
+Rebuilds into `/dist` on every source change, without launching a browser.
 
 ### test
 
 ```bash
-npm run test
+just test           # or: just headful=1 test  (to watch the browser)
 ```
 
-Runs the end-to-end tests suite using [playwright](https://playwright.dev/).
+Runs the end-to-end test suite using [Playwright](https://playwright.dev/). Headless by default; the scenario specs require a live `TESTS_API_KEY`.
+
+### test-components
+
+```bash
+just test-components
+```
+
+Runs only the self-contained component tests (no API key required).
+
+### lint
+
+```bash
+just lint           # or: just lint firefox
+```
+
+Lints the built extension with web-ext (validates the manifest, etc.).
+
+### package
+
+```bash
+just package        # or: just package firefox
+```
+
+Builds the target variant and packages `/dist` into `perma-extension-<target>.zip` for distribution.
+
+### docs
+
+```bash
+just docs
+```
+
+Generates documentation using [`JSDoc` comments](https://jsdoc.app/). Outputs as Markdown to `doc`. To update which files should be taken into account, check `/scripts/docgen.sh`.
+
+### clean
+
+```bash
+just clean
+```
+
+Removes build output (`dist/` and any `perma-extension*.zip`).
 
 [☝️ Back to summary](#summary)
 
@@ -201,11 +248,11 @@ Runs the end-to-end tests suite using [playwright](https://playwright.dev/).
 
 ## Building and distributing the extension
 
-Note: to build for Mozilla Firefox, you must set the environment variable `TARGET=firefox` when executing the following steps.
+Note: to build for Mozilla Firefox, pass the `firefox` target to the `just` recipes below (e.g. `just package firefox`).
 
 **Step-by-step**:
 - On `develop`:
-  - Update documentation (`npm run docgen`)
+  - Update documentation (`just docs`)
   - Update version number in:
     - [`manifest.json`](https://github.com/harvard-lil/perma-extension/blob/develop/src/manifest.json#L5)
     - This README
@@ -216,9 +263,9 @@ Note: to build for Mozilla Firefox, you must set the environment variable `TARGE
       - Using the `main` branch
       - Using [semver](https://semver.org/) as a title and tag _(i.e: `2.0.1`)_
   - Locally:
-    - Run `npm run build-and-zip` to generate `perma-extension.zip`.
+    - Run `just package` to generate `perma-extension-chrome.zip` (or `just package firefox` for `perma-extension-firefox.zip`).
 - On the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions) or [Add-ons for Firefox](https://addons.mozilla.org/en-US/firefox/)
-  - Upload `perma-extension.zip`
+  - Upload the generated `.zip`
 
 [☝️ Back to summary](#summary)
 

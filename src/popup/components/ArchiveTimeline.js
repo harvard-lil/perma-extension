@@ -18,7 +18,8 @@ import { BROWSER } from "../../constants/index.js";
  * - Use `addArchives()` to feed this component an array of archive objects (See: PermaArchive objects from `perma-js-sdk`).
  * 
  * Available HTML attributes:
- * - `is-authenticated`: If not "true", this component is hidden.
+ * - `auth-state`: One of "valid" | "invalid" | "signedout". Hidden only when "signedout"; the
+ *   already-fetched timeline stays visible while a key is invalid so the user keeps their context.
  * - `is-loading`: If "true", disables all nested form elements.
  * 
  * Note: 
@@ -29,7 +30,7 @@ export class ArchiveTimeline extends HTMLElement {
    * Defines which HTML attributes should be observed by `attributeChangedCallback`.
    */
   static get observedAttributes() {
-    return ["is-authenticated", "is-loading"];
+    return ["auth-state", "is-loading"];
   }
 
   /**
@@ -96,6 +97,28 @@ export class ArchiveTimeline extends HTMLElement {
   }
 
   /**
+   * Reflects the progress of an in-progress capture on its matching `<archive-timeline-item>`.
+   * Sets `capture-progress` (a 0–100 percentage) on the item whose `guid` matches, and clears
+   * it on all others. Perma capture jobs report ~5 steps, so progress is `step / 5`.
+   *
+   * @param {string} guid - GUID of the archive being captured, or "" if none.
+   * @param {number} step - Capture steps completed (`PermaCaptureJob.step_count`).
+   */
+  setActiveCapture(guid, step) {
+    const TOTAL_STEPS = 5;
+    const percent = Math.max(0, Math.min(100, Math.round((Number(step) / TOTAL_STEPS) * 100)));
+
+    for (let item of this.querySelectorAll("archive-timeline-item")) {
+      if (guid && item.getAttribute("guid") === guid) {
+        item.setAttribute("capture-progress", String(percent));
+      }
+      else {
+        item.removeAttribute("capture-progress");
+      }
+    }
+  }
+
+  /**
    * Assembles a template and injects it into `innerHTML`.
    */
   renderInnerHTML() {
@@ -107,16 +130,17 @@ export class ArchiveTimeline extends HTMLElement {
     // [1] Assemble and inject template 
     //
 
-    // If not authenticated:
+    // If there is no key on file yet (signed out, or auth state not hydrated):
     // - Element should be `aria-hidden`
     // - InnerHTML should be empty.
-    if (getAttribute("is-authenticated") !== "true") {
+    const authState = getAttribute("auth-state");
+    if (authState !== "valid" && authState !== "invalid") {
       setAttribute("aria-hidden", "true");
       this.innerHTML = ``;
       return;
     }
 
-    // If authenticated:
+    // If there is a key on file (valid or invalid):
     // - This element should behave like a list
     // - This element should only accept `<archive-timeline-item>` and `<h3>` as direct children (filter everything else out)
     // - This element should display a message if there are no archives to display (inject it)
