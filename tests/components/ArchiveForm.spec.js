@@ -143,14 +143,42 @@ test("Sign-in form has a working link to Perma.cc's bookmarklet feature.",  asyn
   expect(href).toContain(tabUrl);
 });
 
+test('Non-capturable tabs show the "can\'t be archived" panel instead of the create form.', async ({ page, extensionId }) => {
+  // A representative non-capturable url per category Perma refuses (see `isCapturableUrl`).
+  const nonCapturableUrls = [
+    "about:blank",                 // browser-internal page
+    "chrome://extensions",         // non-http scheme
+    "https://perma.cc/ABCD-1234",  // perma link (not re-capturable)
+    "http://localhost:3000/",      // address Perma's servers can't reach
+  ];
+
+  for (let tabUrl of nonCapturableUrls) {
+    const result = await page.evaluate(async (tabUrl) => {
+      const archiveForm = document.querySelector("archive-form");
+      archiveForm.setAttribute("auth-state", "valid");
+      archiveForm.setAttribute("tab-url", tabUrl);
+      await new Promise(resolve => requestAnimationFrame(resolve));
+
+      return {
+        panelCount: archiveForm.querySelectorAll(".not-capturable").length,
+        createFormCount: archiveForm.querySelectorAll("form[action='#create-archive']").length,
+      };
+    }, tabUrl);
+
+    expect(result.panelCount, tabUrl).toBe(1);
+    expect(result.createFormCount, tabUrl).toBe(0);
+  }
+});
+
 test('Archive creation form sends `ARCHIVE_CREATE_PUBLIC` runtime message on submit.',  async ({ page, extensionId }) => {
   // Monkey-patch `chrome.runtime.sendMessage` to intercept message.
-  const payload = await page.evaluate(async ({ cascade }) => {
+  const payload = await page.evaluate(async ({ cascade, tabUrl }) => {
     let payload = null;
     chrome.runtime.sendMessage = data => payload = data;
 
     const archiveForm = document.querySelector("archive-form");
     archiveForm.setAttribute("auth-state", "valid");
+    archiveForm.setAttribute("tab-url", tabUrl); // Capturable url -> the create form renders.
     // A folder target is required for the "Create" button to be enabled (it sets `parentFolderId`).
     archiveForm.setAttribute("folders-cascade", JSON.stringify(cascade));
     await new Promise(resolve => requestAnimationFrame(resolve));
@@ -159,16 +187,17 @@ test('Archive creation form sends `ARCHIVE_CREATE_PUBLIC` runtime message on sub
     createForm.querySelector("button").click();
 
     return payload;
-  }, { cascade: MOCK_FOLDERS_CASCADE });
+  }, { cascade: MOCK_FOLDERS_CASCADE, tabUrl: MOCK_TAB_URL });
 
   expect(payload.messageId).toBe(MESSAGE_IDS.ARCHIVE_CREATE_PUBLIC);
 });
 
 test('Archive creation renders the folder cascade (`folders-cascade`).',  async ({ page, extensionId }) => {
-  const optionsHaveRendered = await page.evaluate(async ({ cascade }) => {
+  const optionsHaveRendered = await page.evaluate(async ({ cascade, tabUrl }) => {
     const archiveForm = document.querySelector("archive-form");
 
     archiveForm.setAttribute("auth-state", "valid");
+    archiveForm.setAttribute("tab-url", tabUrl); // Capturable url -> the create form renders.
     archiveForm.setAttribute("folders-cascade", JSON.stringify(cascade));
 
     await new Promise(resolve => requestAnimationFrame(resolve));
@@ -183,35 +212,37 @@ test('Archive creation renders the folder cascade (`folders-cascade`).',  async 
     }
 
     return optionsHaveRendered;
-  }, { cascade: MOCK_FOLDERS_CASCADE });
+  }, { cascade: MOCK_FOLDERS_CASCADE, tabUrl: MOCK_TAB_URL });
 
   expect(optionsHaveRendered).toBe(true);
 });
 
 test('Archive creation marks the picked folder (`cascade.pick`) as selected.',  async ({ page, extensionId }) => {
-  const optionIsSelected = await page.evaluate(async ({ cascade }) => {
+  const optionIsSelected = await page.evaluate(async ({ cascade, tabUrl }) => {
     const archiveForm = document.querySelector("archive-form");
 
     archiveForm.setAttribute("auth-state", "valid");
+    archiveForm.setAttribute("tab-url", tabUrl); // Capturable url -> the create form renders.
     archiveForm.setAttribute("folders-cascade", JSON.stringify(cascade));
 
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
     return Boolean(archiveForm.querySelector(`option[value="${cascade.pick}"][selected]`));
-  }, { cascade: MOCK_FOLDERS_CASCADE });
+  }, { cascade: MOCK_FOLDERS_CASCADE, tabUrl: MOCK_TAB_URL });
 
   expect(optionIsSelected).toBe(true);
 });
 
 test('Archive creation form sends `FOLDERS_PICK_ONE` runtime message on folder `<select>` change.',  async ({ page, extensionId }) => {
   // Monkey-patch `chrome.runtime.sendMessage` to intercept message.
-  const payload = await page.evaluate(async ({ cascade }) => {
+  const payload = await page.evaluate(async ({ cascade, tabUrl }) => {
     let payload = null;
     chrome.runtime.sendMessage = data => payload = data;
 
     const archiveForm = document.querySelector("archive-form");
 
     archiveForm.setAttribute("auth-state", "valid");
+    archiveForm.setAttribute("tab-url", tabUrl); // Capturable url -> the create form renders.
     archiveForm.setAttribute("folders-cascade", JSON.stringify(cascade));
 
     await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -223,7 +254,7 @@ test('Archive creation form sends `FOLDERS_PICK_ONE` runtime message on folder `
 
     return payload;
 
-  }, { cascade: MOCK_FOLDERS_CASCADE });
+  }, { cascade: MOCK_FOLDERS_CASCADE, tabUrl: MOCK_TAB_URL });
 
   expect(payload.messageId).toBe(MESSAGE_IDS.FOLDERS_PICK_ONE);
   expect(payload.level).toBe(0);
@@ -239,6 +270,7 @@ test('Inputs are disabled when `is-loading` is "true"',  async ({ page, extensio
     {
       authState: "valid", // Archive creation form, with a rendered folder cascade
       cascade: MOCK_FOLDERS_CASCADE,
+      tabUrl: MOCK_TAB_URL, // Capturable url -> the create form (with its inputs) renders.
     }
   ];
 
@@ -248,6 +280,10 @@ test('Inputs are disabled when `is-loading` is "true"',  async ({ page, extensio
 
       archiveForm.setAttribute("auth-state", scenario.authState);
       archiveForm.setAttribute("is-loading", "true");
+
+      if (scenario.tabUrl) {
+        archiveForm.setAttribute("tab-url", scenario.tabUrl);
+      }
 
       if (scenario.cascade) {
         archiveForm.setAttribute("folders-cascade", JSON.stringify(scenario.cascade));

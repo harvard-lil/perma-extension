@@ -139,6 +139,10 @@
     "message": "Create a public Perma Link for the current page."
   },
 
+  "not_capturable_panel_message": {
+    "message": "Perma can only capture public web pages, so this page can’t be archived."
+  },
+
   "archive_timeline_empty": {
     "message": "You have no Perma Links for this page."
   },

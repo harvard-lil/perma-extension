@@ -87,6 +87,22 @@ archive-form > .invalid-key button {
   margin: 0 0.25rem;
 }
 
+/* "Page can't be captured" panel */
+archive-form > .not-capturable {
+  padding: 1rem;
+  background-color: var(--main-color);
+}
+
+archive-form > .not-capturable p {
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: var(--letter-spacing);
+  margin: 0;
+  text-align: left;
+  color: var(--opposite-color);
+  overflow-wrap: anywhere;
+}
+
 /* Create archive form */
 archive-form > form[action="#create-archive"] {
   text-align: right;

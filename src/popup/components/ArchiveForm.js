@@ -9,6 +9,55 @@
 import { BROWSER, MESSAGE_IDS } from "../../constants/index.js";
 
 /**
+ * Determines whether a given tab URL can be captured by Perma.
+ *
+ * Perma captures happen server-side, so only public http(s) pages can be archived. This rules out:
+ * - browser-internal / non-web pages (`about:blank`, `chrome://`, `file://`, `data:`, …),
+ * - addresses Perma's servers can't reach (localhost, private IP ranges, bare intranet hostnames),
+ * - and — for now — perma.cc links themselves (re-capturing a Perma Link isn't allowed).
+ *
+ * The local check can't do DNS resolution the way Perma's servers do, so the "private address"
+ * matching is a best-effort approximation of what the server will refuse.
+ *
+ * @param {string} tabUrl
+ * @returns {boolean}
+ */
+export function isCapturableUrl(tabUrl) {
+  let url;
+  try {
+    url = new URL(tabUrl);
+  } catch {
+    return false; // Empty / malformed (e.g. the popup's initial unset "tab-url").
+  }
+
+  // Server-side capture needs a public http(s) page.
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    return false;
+  }
+
+  const host = url.hostname;
+
+  // Perma Links themselves can't be re-captured.
+  if (host === "perma.cc" || host.endsWith(".perma.cc")) {
+    return false;
+  }
+
+  // Addresses Perma's servers can't reach.
+  const isLocal =
+    host === "localhost" ||
+    host.endsWith(".local") ||
+    !host.includes(".") || // Bare intranet hostnames, e.g. "wiki".
+    host === "0.0.0.0" ||
+    host === "[::1]" ||
+    /^127\./.test(host) ||
+    /^10\./.test(host) ||
+    /^192\.168\./.test(host) ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(host);
+
+  return !isLocal;
+}
+
+/**
  * Custom Element: `<archive-form>`.
  * Allows users to sign-in and create archives.
  *
@@ -34,6 +83,7 @@ export class ArchiveForm extends HTMLElement {
 
     this.generateSignInForm = this.generateSignInForm.bind(this);
     this.generateInvalidKeyPanel = this.generateInvalidKeyPanel.bind(this);
+    this.generateNotCapturablePanel = this.generateNotCapturablePanel.bind(this);
     this.generateCreateArchiveForm = this.generateCreateArchiveForm.bind(this);
 
     this.handleSignInFormSubmit = this.handleSignInFormSubmit.bind(this);
@@ -207,9 +257,12 @@ export class ArchiveForm extends HTMLElement {
     //
     // [1] Prepare and inject template
     //
-    // Valid key: Archive creation form
+    // Valid key: Archive creation form — unless the current page can't be captured, in which case
+    // we explain why instead of offering a button that would only fail server-side.
     if (authState === "valid") {
-      this.innerHTML = this.generateCreateArchiveForm();
+      this.innerHTML = isCapturableUrl(String(getAttribute("tab-url")))
+        ? this.generateCreateArchiveForm()
+        : this.generateNotCapturablePanel();
     }
     // Invalid key (and not updating it): "invalid key" panel.
     else if (authState === "invalid" && !this.showSignIn) {
@@ -320,21 +373,29 @@ export class ArchiveForm extends HTMLElement {
   }
 
   /**
+   * Generates the "page can't be captured" panel, shown for non-capturable tabs (browser-internal
+   * pages, private addresses, perma.cc links). See `isCapturableUrl`. The current URL itself is
+   * already shown in `<app-header>`, so this panel only needs to explain why there's no button.
+   *
+   * @returns {string} HTML
+   */
+  generateNotCapturablePanel() {
+    const getMessage = BROWSER.i18n.getMessage;
+
+    return /*html*/ `
+    <div class="not-capturable">
+      <p>${getMessage("not_capturable_panel_message")}</p>
+    </div>
+    `;
+  }
+
+  /**
    * Generates the archive creation form.
-   * Will be disabled when visiting "perma.cc/{guid}".
    *
    * @returns {string} HTML
    */
   generateCreateArchiveForm() {
     const getMessage = BROWSER.i18n.getMessage;
-    const getAttribute = this.getAttribute.bind(this);
-
-    const tabUrl = String(getAttribute("tab-url"));
-    let forceDisabled = false;
-
-    if (tabUrl.match(/^https:\/\/perma\.cc\/[A-Z0-9]{4}\-[A-Z0-9]{4}\/?$/)) {
-      forceDisabled = true;
-    }
 
     const cascade = this.getCascade();
     const hasFolders = cascade.levels.length > 0 && cascade.levels[0].length > 0;
@@ -342,7 +403,7 @@ export class ArchiveForm extends HTMLElement {
 
     // Don't let the user capture before folders have loaded and a real target is set:
     // a capture needs a target folder for link accounting.
-    const disableButton = forceDisabled || !hasTarget;
+    const disableButton = !hasTarget;
 
     return /*html*/ `
     <form action="#create-archive">
