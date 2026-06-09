@@ -31,6 +31,8 @@ export async function authSignOut() {
   await Status.update((status) => {
     status.isLoading = false;
     status.lastLoadingInit = null;
+    status.captureGuid = "";
+    status.captureStep = 0;
     status.message = "status_signed_out";
   });
 }

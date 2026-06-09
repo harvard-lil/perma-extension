@@ -41,16 +41,21 @@ export async function archiveCreate(isPrivate = false) {
       throw new Error("`currentTab.url` is not set.");
     }
 
-    await api.createArchive(currentTab.url, {
+    const archive = await api.createArchive(currentTab.url, {
       isPrivate: Boolean(isPrivate),
       parentFolderId: folders.pick
     });
 
     await Status.update((status) => {
       status.message = "status_archive_created";
+
+      // Track the new capture so the popup can poll its capture-job status (instead of
+      // re-pulling the whole timeline on a fixed interval). See `archivePullCaptureStatus`.
+      status.captureGuid = archive?.guid;
+      status.captureStep = 0;
     });
 
-    await archivePullTimeline(); // Will update the timeline once the archive is created
+    await archivePullTimeline(); // Shows the new (pending) archive in the timeline right away.
   }
   catch(err) {
     await Status.update((status) => { status.message = "error_creating_archive"; });

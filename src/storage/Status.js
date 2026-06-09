@@ -39,6 +39,20 @@ import { BROWSER } from "../constants/index.js"
   #message = "";
 
   /**
+   * GUID of the archive whose capture is currently in progress, if any.
+   * Empty string when no capture is being tracked. Used to drive capture-status polling.
+   * @type {string}
+   */
+  #captureGuid = "";
+
+  /**
+   * Number of capture steps completed for the archive being captured (`PermaCaptureJob.step_count`).
+   * Used to render a progress bar. Perma capture jobs report ~5 steps.
+   * @type {number}
+   */
+  #captureStep = 0;
+
+  /**
    * Creates and returns an instance of `Status` using data from storage.
    * Use this static method to load "status" from storage.
    * 
@@ -117,7 +131,9 @@ import { BROWSER } from "../constants/index.js"
     toSave[Status.KEY] = {
       isLoading: this.#isLoading,
       lastLoadingInit: String(this.#lastLoadingInit),
-      message: this.#message
+      message: this.#message,
+      captureGuid: this.#captureGuid,
+      captureStep: this.#captureStep
     };
 
     await BROWSER.storage.local.set(toSave);
@@ -169,6 +185,29 @@ import { BROWSER } from "../constants/index.js"
 
   get message() {
     return this.#message;
+  }
+
+  /**
+   * @param {any} newValue - Will be cast into a string.
+   */
+  set captureGuid(newValue) {
+    this.#captureGuid = newValue ? String(newValue) : "";
+  }
+
+  get captureGuid() {
+    return this.#captureGuid;
+  }
+
+  /**
+   * @param {any} newValue - Will be cast into a number (0 if not parseable).
+   */
+  set captureStep(newValue) {
+    const parsed = parseInt(newValue);
+    this.#captureStep = Number.isNaN(parsed) ? 0 : parsed;
+  }
+
+  get captureStep() {
+    return this.#captureStep;
   }
 
 }

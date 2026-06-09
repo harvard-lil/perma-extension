@@ -12,6 +12,7 @@ import { BROWSER, MESSAGE_IDS } from "../constants/index.js";
 import { archiveCreate } from "./archiveCreate.js";
 import { archiveDelete } from "./archiveDelete.js";
 import { archivePullTimeline } from "./archivePullTimeline.js";
+import { archivePullCaptureStatus } from "./archivePullCaptureStatus.js";
 import { archiveTogglePrivacyStatus } from "./archiveTogglePrivacyStatus.js";
 import { authCheck } from "./authCheck.js";
 import { authSignIn } from "./authSignIn.js";
@@ -141,6 +142,10 @@ function backgroundMessageHandler(message, sender = {}, sendResponse = ()=>{}) {
 
     case MESSAGE_IDS.ARCHIVE_PULL_TIMELINE:
       respondAuthed(archivePullTimeline(), sendResponse);
+      break;
+
+    case MESSAGE_IDS.ARCHIVE_PULL_CAPTURE_STATUS:
+      respondAuthed(archivePullCaptureStatus(), sendResponse);
       break;
 
     case MESSAGE_IDS.ARCHIVE_CREATE_PUBLIC:

@@ -71,6 +71,9 @@ export async function onStorageUpdate(changes = {}) {
     statusBar?.setAttribute("message", status.message);
 
     archiveTimeline?.setAttribute("is-loading", status.isLoading);
+
+    // Reflect capture progress on the matching timeline item (if a capture is in progress).
+    archiveTimeline?.setActiveCapture(status.captureGuid, status.captureStep);
   }
 
   //
@@ -98,9 +101,13 @@ export async function onStorageUpdate(changes = {}) {
   if (updatedKeys.indexOf(Archives.KEY) > -1) {
     const archives = await Archives.fromStorage();
     const currentTab = await CurrentTab.fromStorage();
+    const status = await Status.fromStorage();
 
     // Add archives for the current url to `<archive-timeline>`
     archiveTimeline.addArchives(archives.byUrl[currentTab.url])
+
+    // Re-apply capture progress: `addArchives` rebuilds the items from scratch.
+    archiveTimeline.setActiveCapture(status.captureGuid, status.captureStep);
   }
 
   //

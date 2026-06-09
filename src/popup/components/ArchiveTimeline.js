@@ -97,6 +97,28 @@ export class ArchiveTimeline extends HTMLElement {
   }
 
   /**
+   * Reflects the progress of an in-progress capture on its matching `<archive-timeline-item>`.
+   * Sets `capture-progress` (a 0–100 percentage) on the item whose `guid` matches, and clears
+   * it on all others. Perma capture jobs report ~5 steps, so progress is `step / 5`.
+   *
+   * @param {string} guid - GUID of the archive being captured, or "" if none.
+   * @param {number} step - Capture steps completed (`PermaCaptureJob.step_count`).
+   */
+  setActiveCapture(guid, step) {
+    const TOTAL_STEPS = 5;
+    const percent = Math.max(0, Math.min(100, Math.round((Number(step) / TOTAL_STEPS) * 100)));
+
+    for (let item of this.querySelectorAll("archive-timeline-item")) {
+      if (guid && item.getAttribute("guid") === guid) {
+        item.setAttribute("capture-progress", String(percent));
+      }
+      else {
+        item.removeAttribute("capture-progress");
+      }
+    }
+  }
+
+  /**
    * Assembles a template and injects it into `innerHTML`.
    */
   renderInnerHTML() {
