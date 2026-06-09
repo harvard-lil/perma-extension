@@ -35,8 +35,8 @@
  * - `AUTH_SIGN_IN`: Request to register an API key. Params: `apiKey`.
  * - `AUTH_SIGN_OUT`: Request to remove the currently stored API key.
  * - `AUTH_CHECK`: Request to check that the API currently stored is (still) valid.
- * - `FOLDERS_PULL_LIST`: Request to pull the list of folders the user can create links into.
- * - `FOLDERS_PICK_ONE`: Request to update the "default" target folder. Params: `folderId`.
+ * - `FOLDERS_PULL_LIST`: Request to load the user's top-level folders into the folder cascade.
+ * - `FOLDERS_PICK_ONE`: Request to select a folder at a given cascade level (lazily loading its subfolders). Params: `level`, `folderId`.
  * - `ARCHIVE_PULL_TIMELINE`: Request to pull the list of user-owned archives available for the current url.
  * - `ARCHIVE_CREATE_PUBLIC`: Request to create a public archive for a given url.
  * - `ARCHIVE_CREATE_PRIVATE`: Request to create a private archive for a given url.

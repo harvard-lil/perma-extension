@@ -115,6 +115,34 @@ archive-form > form[action="#create-archive"] > fieldset select {
   }
 }
 
+/* Cascade: subfolder selects stack under their parent, slightly indented to read as nesting */
+archive-form > form[action="#create-archive"] > fieldset select.folders-pick-sub {
+  border-top: 1px solid var(--main-color--);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  padding-left: 1.75rem;
+}
+
+/* Breadcrumb: live confirmation of the folder the capture will be filed into */
+archive-form > form[action="#create-archive"] > fieldset .folders-breadcrumb {
+  text-align: left;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
+  color: var(--opposite-color--);
+  letter-spacing: var(--letter-spacing);
+  overflow-wrap: anywhere;
+}
+
+archive-form > form[action="#create-archive"] > fieldset .folders-breadcrumb strong {
+  color: var(--action-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  archive-form > form[action="#create-archive"] > fieldset .folders-breadcrumb strong {
+    color: var(--opposite-color);
+  }
+}
+
 archive-form > form[action="#create-archive"] > button {
   display: inline-block;
   border-top-left-radius: 0px;

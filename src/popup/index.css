@@ -60,19 +60,21 @@ body {
   border: var(--body-border-width) solid var(--main-color--);
   background-color: var(--main-color);
   color: var(--opposite-color);
-  overflow: hidden;
 
-  display: grid;
-  grid-template-areas: "header"
-                       "main-top"
-                       "main-bottom"
-                       "footer";
-  grid-template-columns: 1fr;
-  grid-template-rows: 0.75fr repeat(2, 1fr) 3.25rem;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  
+  /* Scroll the whole popup when its content (e.g. a deep folder cascade) is taller than the
+     fixed popup height, instead of scrolling only the timeline. */
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+
   animation: body-fade-in 0.35s normal forwards ease-in-out;
+}
+
+/* Keep each section at its natural height so the body (not a section) is what scrolls. */
+body > * {
+  flex-shrink: 0;
 }
 
 @keyframes body-fade-in {

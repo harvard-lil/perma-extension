@@ -1,9 +1,7 @@
 archive-timeline {
   display: block;
   grid-area: main-bottom;
-  height: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
 
   opacity: 0;
   animation: archive-timeline-fade-in 0.35s normal forwards ease-in-out;
@@ -34,7 +32,7 @@ archive-timeline h3 {
 /* Empty message */
 archive-timeline aside.empty {
   display: flex;
-  height: 100%;
+  min-height: 6rem;
   border-top: 1px solid var(--main-color-);
 }
 

@@ -89,8 +89,26 @@
   "create_archive_form_select_label": {
     "message": "Select the folder for this Perma Link."
   },
-  "create_archive_form_select_default": {
-    "message": "Unspecified folder"
+  "create_archive_form_subfolder_choose": {
+    "message": "[Choose subfolder]"
+  },
+  "create_archive_form_subfolder_parent": {
+    "message": "[$folder$]",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Personal Links"
+      }
+    }
+  },
+  "create_archive_form_folder_has_children": {
+    "message": "›"
+  },
+  "create_archive_form_breadcrumb_intro": {
+    "message": ">"
+  },
+  "create_archive_form_folders_loading": {
+    "message": "Loading folders …"
   },
   "create_archive_form_button_caption": {
     "message": "Archive this page"

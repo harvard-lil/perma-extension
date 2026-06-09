@@ -100,8 +100,11 @@ export async function onStorageUpdate(changes = {}) {
   if (updatedKeys.indexOf(Folders.KEY) > -1) {
     const folders = await Folders.fromStorage();
 
-    archiveForm?.setAttribute("folders-list", JSON.stringify(folders.available));
-    archiveForm?.setAttribute("folders-pick", folders.pick);
+    archiveForm?.setAttribute("folders-cascade", JSON.stringify({
+      levels: folders.levels,
+      path: folders.path,
+      pick: folders.pick,
+    }));
   }
   
 

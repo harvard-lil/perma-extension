@@ -63,12 +63,9 @@ export async function onPopupOpen(e = null) {
   // [4] If authenticated, send the following messages on schedule: 
   // 
 
-  // `FOLDERS_PULL_LIST` to refresh the list of available folders.
-  // Once + every 20 seconds.
-  sendMessageIfAuth(MESSAGE_IDS.FOLDERS_PULL_LIST)
-  setInterval(async () => {
-    await sendMessageIfAuth(MESSAGE_IDS.FOLDERS_PULL_LIST);
-  }, 20000);
+  // `FOLDERS_PULL_LIST` to populate the folder picker. Once on open: the folder list is
+  // stable within a popup session (it is also refreshed on sign-in).
+  sendMessageIfAuth(MESSAGE_IDS.FOLDERS_PULL_LIST);
 
   // `ARCHIVE_PULL_TIMELINE` to fetch user-created archives for the current tab.
   // Once + every 5 seconds.

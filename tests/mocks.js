@@ -7,20 +7,21 @@
  */
 
 /**
- * Valid mock for a folders list.
+ * Valid mock for the folder cascade, as consumed by `<archive-form>`'s `folders-cascade` attribute
+ * (see `storage/Folders`). A single opened level (top-level folders) with "Blog Posts" picked.
  * @constant
  */
-export const MOCK_FOLDERS_LIST = [
-  { "id": 1, "depth": 0, "name": "Personal Links" },
-  { "id": 3, "depth": 0, "name": "Blog Posts" },
-  { "id": 2, "depth": 0, "name": "Other links" },
-];
-
-/**
- * Valid mock for folder pick.
- * @constant
- */
-export const MOCK_FOLDERS_PICK = 3;
+export const MOCK_FOLDERS_CASCADE = {
+  levels: [
+    [
+      { id: 1, name: "Personal Links", hasChildren: false },
+      { id: 3, name: "Blog Posts", hasChildren: false },
+      { id: 2, name: "Other links", hasChildren: false },
+    ],
+  ],
+  path: [3],
+  pick: 3,
+};
 
 /**
  * Valid mock for archive timeline.
