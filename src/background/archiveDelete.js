@@ -34,7 +34,10 @@ export async function archiveDelete(guid) {
 
     const api = new PermaAPI(String(auth.apiKey), PERMA_API_BASE_URL);
 
-    await api.deleteArchive(guid);
+    // `safeMode=false`: the extension only ever deletes archives the timeline already shows as
+    // finished, so skip the SDK's safe-mode pre-delete `pullArchive` + up-to-~60s polling for
+    // pending captures. The delete becomes a single request.
+    await api.deleteArchive(guid, false);
 
     await Status.update((status) => { status.message = "status_archive_deleted"; });
 
