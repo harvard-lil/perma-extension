@@ -10,7 +10,7 @@ import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
 import { MOCK_TAB_URL, MOCK_TAB_TITLE } from "../mocks.js";
 import { MESSAGE_IDS } from "../../src/constants/index.js";
 
-// These tests sign in to the live Perma API, so they need a real key. CI doesn't have one.
+// Skip this test if a live Perma API key is not available (for example, in CI)
 test.skip(!process.env["TESTS_API_KEY"], "TESTS_API_KEY is not set");
  
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.

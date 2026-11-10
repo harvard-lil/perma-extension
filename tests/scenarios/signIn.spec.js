@@ -41,7 +41,7 @@ test("App stays on Sign-In when invalid credentials are provided.", async ({ pag
 });
 
 test("App switches between Sign-In and Archive Creation when valid credentials are provided.", async ({ page, extensionId }) => {
-  // Signs in to the live Perma API, so it needs a real key. CI doesn't have one.
+  // Skip this test if a live Perma API key is not available (for example, in CI)
   test.skip(!process.env["TESTS_API_KEY"], "TESTS_API_KEY is not set");
 
   expect(await signInAndGetFormAction(page, process.env["TESTS_API_KEY"])).toBe("#create-archive");
