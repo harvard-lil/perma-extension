@@ -90,7 +90,7 @@ The following environment variables are only used in the context of [the test su
 
 | Name | Context | Required | Description |
 | --- | --- | --- | --- |
-| `TESTS_API_KEY` | Test suite | Yes | API key to be used for E2E tests. |
+| `TESTS_API_KEY` | Test suite | No | API key for the E2E tests that sign in to the live Perma API. Those tests are skipped when it isn't set. CI doesn't set it. |
 | `CI` | Test suite | No | Will alter test reporting if set _(see `playwright.config.js`)_. Used to run tests in a GitHub Action. |
 
 ### Scope: Building the extension
