@@ -8,6 +8,9 @@
 import { expect } from "@playwright/test";
 import { test, WAIT_MS_AFTER_BOOT } from "../index.js";
 
+// These tests sign in to the live Perma API, so they need a real key. CI doesn't have one.
+test.skip(!process.env["TESTS_API_KEY"], "TESTS_API_KEY is not set");
+
 // Refresh extension page and wait `WAIT_MS_AFTER_BOOT` ms before each test.
 // Clears `chrome.storage.local` before each test.
 // Signs in before each test.
