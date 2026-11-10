@@ -18,30 +18,31 @@ test.beforeEach(async ({ page, extensionId }, testInfo) => {
   await page.waitForTimeout(WAIT_MS_AFTER_BOOT);
 });
 
+/**
+ * Submits `apiKey` through the sign-in form, then returns the `action` of the form shown afterwards.
+ * @param {import("@playwright/test").Page} page
+ * @param {string} apiKey
+ * @returns {Promise<string|null>}
+ */
+async function signInAndGetFormAction(page, apiKey) {
+  await page.evaluate( async(apiKey) => {
+    const signInForm = document.querySelector('archive-form [action="#sign-in"]');
+    signInForm.querySelector("input[name='api-key']").value = apiKey;
+    signInForm.querySelector("button").click();
+  }, apiKey);
+
+  await page.waitForTimeout(WAIT_MS_AFTER_BOOT * 10);
+
+  return await page.getAttribute("archive-form > form", "action");
+}
+
+test("App stays on Sign-In when invalid credentials are provided.", async ({ page, extensionId }) => {
+  expect(await signInAndGetFormAction(page, MOCK_API_KEY)).toBe("#sign-in");
+});
+
 test("App switches between Sign-In and Archive Creation when valid credentials are provided.", async ({ page, extensionId }) => {
-  // Notes:
-  // - `expectedFormAction`: Expected value for the `action` attribute of archive-form > form after signing-in.
-  const scenarios = [
-    {
-      apiKey: MOCK_API_KEY,
-      expectedFormAction: "#sign-in"
-    },
-    {
-      apiKey: process.env["TESTS_API_KEY"],
-      expectedFormAction: "#create-archive"
-    }
-  ];
+  // Skip this test if a live Perma API key is not available (for example, in CI)
+  test.skip(!process.env["TESTS_API_KEY"], "TESTS_API_KEY is not set");
 
-  for (let scenario of scenarios) {
-    await page.evaluate( async(apiKey) => {
-      const signInForm = document.querySelector('archive-form [action="#sign-in"]');
-      signInForm.querySelector("input[name='api-key']").value = apiKey;
-      signInForm.querySelector("button").click();
-    }, scenario.apiKey);
-
-    await page.waitForTimeout(WAIT_MS_AFTER_BOOT * 10);
-  
-    const formAction = await page.getAttribute("archive-form > form", "action")
-    expect(formAction).toBe(scenario.expectedFormAction);
-  }
+  expect(await signInAndGetFormAction(page, process.env["TESTS_API_KEY"])).toBe("#create-archive");
 });
